@@ -1,0 +1,1279 @@
+{
+  "generatedFor": "dubaipipes.com captures",
+  "pages": [
+    {
+      "slug": "home",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：28：25 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "w": 2000,
+          "h": 935
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "w": 14,
+          "h": 119
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "w": 63,
+          "h": 32
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "w": 63,
+          "h": 32
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "w": 250,
+          "h": 64
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "w": 168,
+          "h": 21
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "w": 190,
+          "h": 21
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "w": 151,
+          "h": 21
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "w": 213,
+          "h": 22
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "w": 142,
+          "h": 22
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "w": 138,
+          "h": 22
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "w": 871,
+          "h": 284
+        },
+        {
+          "path": "/assets/images/home/8e6e884643.jpg",
+          "mime": "image/jpeg",
+          "bytes": 55942,
+          "w": 243,
+          "h": 175
+        },
+        {
+          "path": "/assets/images/home/202b6dcc6e.png",
+          "mime": "image/png",
+          "bytes": 6146,
+          "w": 233,
+          "h": 66
+        }
+      ]
+    },
+    {
+      "slug": "contact-us",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：29：27 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/202b6dcc6e.png",
+          "mime": "image/png",
+          "bytes": 6146,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/contact-us/09a0694682.jpg",
+          "mime": "image/jpeg",
+          "bytes": 123191,
+          "w": 450,
+          "h": 338
+        }
+      ]
+    },
+    {
+      "slug": "certifications-approvals",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：30：00 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/certifications-approvals/1341f5d08c.jpg",
+          "mime": "image/jpeg",
+          "bytes": 38726,
+          "w": 220,
+          "h": 165
+        },
+        {
+          "path": "/assets/images/certifications-approvals/ccc1b521ae.jpg",
+          "mime": "image/jpeg",
+          "bytes": 40886,
+          "w": 220,
+          "h": 165
+        },
+        {
+          "path": "/assets/images/certifications-approvals/9a7af5f8c8.jpg",
+          "mime": "image/jpeg",
+          "bytes": 9649,
+          "w": 150,
+          "h": 93
+        },
+        {
+          "path": "/assets/images/certifications-approvals/e1857f2cd7.jpg",
+          "mime": "image/jpeg",
+          "bytes": 13230,
+          "w": 150,
+          "h": 186
+        },
+        {
+          "path": "/assets/images/certifications-approvals/51a9831822.jpg",
+          "mime": "image/jpeg",
+          "bytes": 10514,
+          "w": 150,
+          "h": 48
+        },
+        {
+          "path": "/assets/images/certifications-approvals/eaf1db14dd.jpg",
+          "mime": "image/jpeg",
+          "bytes": 13168,
+          "w": 150,
+          "h": 100
+        }
+      ]
+    },
+    {
+      "slug": "grp-pipe-installation",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：30：31 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/5c52125f9a.jpg",
+          "mime": "image/jpeg",
+          "bytes": 23170,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/28523128f2.jpg",
+          "mime": "image/jpeg",
+          "bytes": 22886,
+          "w": 160,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/1b04a520f9.jpg",
+          "mime": "image/jpeg",
+          "bytes": 24024,
+          "w": 160,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/b7dd504114.jpg",
+          "mime": "image/jpeg",
+          "bytes": 22038,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/ca1b860396.jpg",
+          "mime": "image/jpeg",
+          "bytes": 8570,
+          "w": 165,
+          "h": 117
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/79be4f3743.jpg",
+          "mime": "image/jpeg",
+          "bytes": 6811,
+          "w": 165,
+          "h": 98
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/9dcc8393cb.gif",
+          "mime": "image/gif",
+          "bytes": 613,
+          "w": 87,
+          "h": 22
+        }
+      ]
+    },
+    {
+      "slug": "grp-pipes-benefits",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：30：55 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/2c90b36e5a.jpg",
+          "mime": "image/jpeg",
+          "bytes": 28073,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/3f4c897a5b.jpg",
+          "mime": "image/jpeg",
+          "bytes": 22619,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/71d320744a.jpg",
+          "mime": "image/jpeg",
+          "bytes": 17971,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/e7d8c3b214.jpg",
+          "mime": "image/jpeg",
+          "bytes": 15323,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/91a6375468.jpg",
+          "mime": "image/jpeg",
+          "bytes": 23712,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/46acae9e0d.jpg",
+          "mime": "image/jpeg",
+          "bytes": 23656,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/925bbe0799.jpg",
+          "mime": "image/jpeg",
+          "bytes": 26367,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/26395abc58.jpg",
+          "mime": "image/jpeg",
+          "bytes": 28126,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-benefits/7ae9db0cc0.jpg",
+          "mime": "image/jpeg",
+          "bytes": 21532,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/9dcc8393cb.gif",
+          "mime": "image/gif",
+          "bytes": 613,
+          "dupe": true
+        }
+      ]
+    },
+    {
+      "slug": "grp-pipes-general-information",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：31：41 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/grp-pipes-general-information/e6544093bb.jpg",
+          "mime": "image/jpeg",
+          "bytes": 24603,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/9dcc8393cb.gif",
+          "mime": "image/gif",
+          "bytes": 613,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/a9c67aa055.jpg",
+          "mime": "image/jpeg",
+          "bytes": 24603,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/184b7ca33f.jpg",
+          "mime": "image/jpeg",
+          "bytes": 17407,
+          "w": 132,
+          "h": 99
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/ad3a70d327.jpg",
+          "mime": "image/jpeg",
+          "bytes": 20127,
+          "w": 165,
+          "h": 165
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/bf44303e65.jpg",
+          "mime": "image/jpeg",
+          "bytes": 7900,
+          "w": 88,
+          "h": 88
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/00466df074.jpg",
+          "mime": "image/jpeg",
+          "bytes": 25951,
+          "w": 165,
+          "h": 165
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/14cc4f9cc1.jpg",
+          "mime": "image/jpeg",
+          "bytes": 17331,
+          "w": 167,
+          "h": 123
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/45bb0d8676.jpg",
+          "mime": "image/jpeg",
+          "bytes": 28965,
+          "w": 173,
+          "h": 134
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/e2ae34a4f4.jpg",
+          "mime": "image/jpeg",
+          "bytes": 25966,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/5564516a8b.jpg",
+          "mime": "image/jpeg",
+          "bytes": 22138,
+          "w": 165,
+          "h": 157
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/d4a22914ca.jpg",
+          "mime": "image/jpeg",
+          "bytes": 22955,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/13458b07f6.jpg",
+          "mime": "image/jpeg",
+          "bytes": 11400,
+          "w": 165,
+          "h": 96
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/f99d4c9471.jpg",
+          "mime": "image/jpeg",
+          "bytes": 10655,
+          "w": 165,
+          "h": 98
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/59a5ca7275.jpg",
+          "mime": "image/jpeg",
+          "bytes": 24660,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/5ca5b50ea2.jpg",
+          "mime": "image/jpeg",
+          "bytes": 28321,
+          "w": 165,
+          "h": 165
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/db9c281042.jpg",
+          "mime": "image/jpeg",
+          "bytes": 22477,
+          "w": 165,
+          "h": 220
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/c9e8f6f926.jpg",
+          "mime": "image/jpeg",
+          "bytes": 24135,
+          "w": 165,
+          "h": 220
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/a08ed651dd.jpg",
+          "mime": "image/jpeg",
+          "bytes": 23421,
+          "w": 165,
+          "h": 220
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/c7d208d2a4.jpg",
+          "mime": "image/jpeg",
+          "bytes": 24036,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/cf27bbc67e.jpg",
+          "mime": "image/jpeg",
+          "bytes": 374845,
+          "w": 750,
+          "h": 563
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/fc44679b00.jpg",
+          "mime": "image/jpeg",
+          "bytes": 25200,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/cbf4b57d3d.jpg",
+          "mime": "image/jpeg",
+          "bytes": 18736,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/grp-pipes-general-information/5396450c67.jpg",
+          "mime": "image/jpeg",
+          "bytes": 18181,
+          "w": 165,
+          "h": 124
+        }
+      ]
+    },
+    {
+      "slug": "know-how-supplier",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：32：07 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/know-how-supplier/ef5038d80d.jpg",
+          "mime": "image/jpeg",
+          "bytes": 27708,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/know-how-supplier/230fe81219.jpg",
+          "mime": "image/jpeg",
+          "bytes": 26152,
+          "w": 165,
+          "h": 123
+        }
+      ]
+    },
+    {
+      "slug": "product-testing",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：32：42 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/product-testing/2dc4c522e3.jpg",
+          "mime": "image/jpeg",
+          "bytes": 17731,
+          "w": 165,
+          "h": 88
+        },
+        {
+          "path": "/assets/images/product-testing/0649f5787c.jpg",
+          "mime": "image/jpeg",
+          "bytes": 23503,
+          "w": 182,
+          "h": 131
+        },
+        {
+          "path": "/assets/images/product-testing/d9cd42f1ce.jpg",
+          "mime": "image/jpeg",
+          "bytes": 8166,
+          "w": 165,
+          "h": 85
+        },
+        {
+          "path": "/assets/images/product-testing/ed65794cc9.jpg",
+          "mime": "image/jpeg",
+          "bytes": 10331,
+          "w": 160,
+          "h": 80
+        },
+        {
+          "path": "/assets/images/product-testing/3a7673cfbe.jpg",
+          "mime": "image/jpeg",
+          "bytes": 37630,
+          "w": 165,
+          "h": 338
+        },
+        {
+          "path": "/assets/images/product-testing/f329900c87.jpg",
+          "mime": "image/jpeg",
+          "bytes": 25778,
+          "w": 165,
+          "h": 199
+        },
+        {
+          "path": "/assets/images/product-testing/066e342169.jpg",
+          "mime": "image/jpeg",
+          "bytes": 21773,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/product-testing/bd5f920a92.jpg",
+          "mime": "image/jpeg",
+          "bytes": 8164,
+          "w": 165,
+          "h": 124
+        },
+        {
+          "path": "/assets/images/product-testing/3846a47bca.jpg",
+          "mime": "image/jpeg",
+          "bytes": 6785,
+          "w": 150,
+          "h": 133
+        },
+        {
+          "path": "/assets/images/product-testing/b410affe13.jpg",
+          "mime": "image/jpeg",
+          "bytes": 7395,
+          "w": 150,
+          "h": 150
+        },
+        {
+          "path": "/assets/images/product-testing/0b7e6b13b5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 6907,
+          "w": 150,
+          "h": 150
+        },
+        {
+          "path": "/assets/images/grp-pipe-installation/9dcc8393cb.gif",
+          "mime": "image/gif",
+          "bytes": 613,
+          "dupe": true
+        }
+      ]
+    },
+    {
+      "slug": "download-catalog",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：33：24 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/download-catalog/2b8f8cefb4.png",
+          "mime": "image/png",
+          "bytes": 6325,
+          "w": 266,
+          "h": 86
+        },
+        {
+          "path": "/assets/images/home/8e6e884643.jpg",
+          "mime": "image/jpeg",
+          "bytes": 55942,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/202b6dcc6e.png",
+          "mime": "image/png",
+          "bytes": 6146,
+          "dupe": true
+        }
+      ]
+    },
+    {
+      "slug": "services",
+      "source": "Dubai Pipes Factory Company (7_10_2026 6：33：54 PM).html",
+      "images": [
+        {
+          "path": "/assets/images/home/ccfb5d9d36.jpg",
+          "mime": "image/jpeg",
+          "bytes": 53176,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ac03cf35b0.gif",
+          "mime": "image/gif",
+          "bytes": 622,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8a83b5cdc1.gif",
+          "mime": "image/gif",
+          "bytes": 1264,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/1237cef0fe.gif",
+          "mime": "image/gif",
+          "bytes": 1252,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/78feaf54e5.gif",
+          "mime": "image/gif",
+          "bytes": 10761,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/b690725621.gif",
+          "mime": "image/gif",
+          "bytes": 661,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8087305b83.gif",
+          "mime": "image/gif",
+          "bytes": 725,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/ab79957abc.gif",
+          "mime": "image/gif",
+          "bytes": 566,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/5e12a0a6c3.gif",
+          "mime": "image/gif",
+          "bytes": 790,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/86a0d1abdd.gif",
+          "mime": "image/gif",
+          "bytes": 579,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/02aff087da.gif",
+          "mime": "image/gif",
+          "bytes": 577,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/e9462a85d5.jpg",
+          "mime": "image/jpeg",
+          "bytes": 65013,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/8e6e884643.jpg",
+          "mime": "image/jpeg",
+          "bytes": 55942,
+          "dupe": true
+        },
+        {
+          "path": "/assets/images/home/202b6dcc6e.png",
+          "mime": "image/png",
+          "bytes": 6146,
+          "dupe": true
+        }
+      ]
+    }
+  ]
+}

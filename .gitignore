@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# build scratch (the generator output is committed to public/, but these temp
+# files are only used while parsing fonts during the initial asset build)
+scripts/_gf.css
+scripts/_latin-fonts.json
+scripts/_font-urls.txt
+
+# logs
+*.log

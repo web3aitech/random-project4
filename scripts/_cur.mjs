@@ -1,0 +1,13 @@
+import { chromium } from "playwright";
+const page = await (await chromium.launch()).newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto("http://localhost:5180/", { waitUntil: "load" });
+await page.waitForTimeout(2500);
+const zoom = await page.evaluate(() => getComputedStyle(document.documentElement).zoom);
+await page.mouse.move(100, 50); await page.waitForTimeout(300);
+const a = await page.evaluate(() => { const r = document.querySelector(".demo2-cursor").getBoundingClientRect(); return {x: r.left + r.width/2}; });
+await page.mouse.move(1400, 50); await page.waitForTimeout(300);
+const b = await page.evaluate(() => { const r = document.querySelector(".demo2-cursor").getBoundingClientRect(); return {x: r.left + r.width/2}; });
+console.log("html zoom:", zoom);
+console.log("pointer(100,50)  -> cursor center x:", a.x);
+console.log("pointer(1400,50) -> cursor center x:", b.x, " (expected ~1400 if no zoom scaling)");
+await (await chromium.launch()).close?.();

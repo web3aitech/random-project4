@@ -1,0 +1,19 @@
+{
+  "name": "dubaipipes-redesign",
+  "version": "1.0.0",
+  "description": "Redesign of dubaipipes.com - static, conversion-optimized GRP pipe manufacturer site (Demo 1).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pages.mjs",
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "localize": "node scripts/localize-assets.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}

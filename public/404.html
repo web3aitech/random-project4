@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add("demo2")</script>
+  <title>404 — Page off the line · Dubai Pipes Factory Co.</title>
+  <meta name="description" content="This page rolled off the production line. Return to the Dubai Pipes Factory Co. homepage.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+  <link rel="stylesheet" href="/assets/css/fonts.css?v=6">
+  <link rel="stylesheet" href="/assets/css/styles.css?v=7">
+  <link rel="stylesheet" href="/assets/css/demo2.css?v=12">
+  <style>
+    /* 404 page — standalone cinematic. The shared motion stack (gsap/Lenis/
+       demo2-motion.js) gives it the fluid bg + custom cursor + reveals. */
+    body.d2-404 { min-height: 100vh; }
+    body.d2-404 .to-top { display: none; }
+    .nf {
+      position: relative; z-index: 2;
+      min-height: 100vh; max-height: 100vh; overflow: hidden;
+      display: grid; grid-template-columns: 1.05fr 1fr; align-items: center;
+      gap: clamp(24px, 4vw, 64px);
+      padding: clamp(24px, 4vw, 48px) clamp(24px, 5vw, 80px);
+      color: #fff;
+    }
+    .nf__msg { display: flex; flex-direction: column; gap: 0.9rem; max-width: 30rem; }
+    .nf__act { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+    @media (max-width: 880px) {
+      .nf { grid-template-columns: 1fr; max-height: none; overflow: visible;
+            justify-content: center; text-align: center; }
+      .nf__msg { align-items: center; max-width: 46ch; }
+      .nf__act { order: -1; } /* pipe on top, message+button below on small screens */
+    }
+    .nf__eyebrow {
+      font: 600 0.8rem/1 var(--font-mono, "Inter"), sans-serif;
+      letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent, #DBB85C);
+    }
+    .nf__num {
+      font: 700 clamp(3.6rem, 9vw, 6.6rem)/0.9 var(--font-display, "DM Sans"), sans-serif;
+      letter-spacing: -0.04em; margin: 0; color: #fff;
+      display: inline-flex; align-items: baseline; gap: 0.1em;
+    }
+    .nf__num span { font-size: 0.26em; color: var(--accent, #DBB85C); letter-spacing: 0.04em; font-weight: 600; }
+    .nf__title {
+      font: 700 clamp(1.6rem, 4vw, 2.8rem)/1 var(--font-display, "DM Sans"), sans-serif;
+      margin: 0; max-width: 18ch; color: #fff;
+    }
+    .nf__sub {
+      font: 400 clamp(1rem, 1.5vw, 1.2rem)/1.5 var(--font-body, "DM Sans"), sans-serif;
+      color: #AEBDCD; max-width: 48ch; margin: 0;
+    }
+    .nf__pipe { width: min(440px, 38vw); height: auto; }
+    @media (max-width: 880px) { .nf__pipe { width: min(360px, 80vw); } }
+    /* Return button — a pipe coupling that threads (rotates) on hover. */
+    .nf__back {
+      position: relative; display: inline-flex; align-items: center; gap: 0.7rem;
+      padding: 0.95rem 1.6rem; margin: 0;
+      font: 600 0.95rem/1 var(--font-display, "DM Sans"), sans-serif;
+      letter-spacing: 0.02em; color: #060D2E; text-decoration: none;
+      background: var(--accent, #DBB85C); border-radius: 999px;
+      border: 1px solid var(--accent, #DBB85C);
+      transition: background 240ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+                  color 240ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+                  transform 240ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+      overflow: hidden;
+    }
+    .nf__back:hover { background: #fff; transform: translateY(-2px); }
+    .nf__back svg { width: 22px; height: 22px; transition: transform 600ms var(--ease-out, cubic-bezier(.16,1,.3,1)); }
+    .nf__back:hover svg { transform: rotate(-360deg); /* the coupling unthreads, rolling back to the line */ }
+    /* drip + broken-piece animation fallback (CSS) if JS fails */
+    .nf__drip { transform-box: fill-box; transform-origin: center; animation: nf-drip 2.4s ease-in infinite; }
+    .nf__drip:nth-child(2){ animation-delay: 0.8s; }
+    .nf__drip:nth-child(3){ animation-delay: 1.6s; }
+    @keyframes nf-drip { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(70px); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .nf__drip { animation: none; } .nf__back svg { transition: none; } }
+  </style>
+</head>
+<body class="d2-404">
+  <main class="nf">
+   <div class="nf__msg">
+    <span class="nf__eyebrow" data-motion="fade-up">Spec not found</span>
+    <h1 class="nf__num" data-motion="mask-reveal">404<span>mm</span></h1>
+    <h2 class="nf__title" data-motion="fade-up">This page rolled off the line.</h2>
+    <p class="nf__sub" data-motion="fade-up">The section you were looking for didn't make it through inspection. Let's get you back to the production floor.</p>
+   </div>
+   <div class="nf__act">
+    <!-- Broken-pipe diagram: a GRP pipe with a clean break; the right piece
+         is broken away, resin dripping from the fracture. -->
+    <svg class="nf__pipe" viewBox="0 0 620 240" role="img" aria-label="A broken GRP pipe with resin dripping from the fracture." data-motion="scale-in">
+      <!-- left segment (intact) -->
+      <g class="nf__pipe-left">
+        <rect x="20"  y="80" width="250" height="80" rx="8" fill="#B7C2CF"/>
+        <rect x="20"  y="88" width="250" height="64" fill="#214B6E"/>
+        <rect x="20"  y="96" width="250" height="48" fill="#DBB85C"/>
+        <rect x="20"  y="106" width="250" height="28" fill="#0E3045"/>
+        <rect x="20"  y="80" width="14" height="80" rx="6" fill="#0C1B64"/>
+      </g>
+      <!-- jagged fracture line -->
+      <polyline class="nf__crack" points="270,80 278,96 272,112 280,128 274,144 270,160" fill="none" stroke="#03060f" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- right segment (broken away, offset + tilted) -->
+      <g class="nf__pipe-right" transform="translate(36 22) rotate(7 470 120)">
+        <rect x="300" y="80" width="250" height="80" rx="8" fill="#B7C2CF"/>
+        <rect x="300" y="88" width="250" height="64" fill="#214B6E"/>
+        <rect x="300" y="96" width="250" height="48" fill="#DBB85C"/>
+        <rect x="300" y="106" width="250" height="28" fill="#0E3045"/>
+        <polyline points="300,80 308,96 302,112 310,128 304,144 300,160" fill="none" stroke="#03060f" stroke-width="2.5" stroke-linejoin="round"/>
+      </g>
+      <!-- resin drips from the fracture -->
+      <g fill="#DBB85C">
+        <circle class="nf__drip" cx="276" cy="120" r="5"/>
+        <circle class="nf__drip" cx="288" cy="128" r="4"/>
+        <circle class="nf__drip" cx="270" cy="134" r="3.5"/>
+      </g>
+    </svg>
+
+    <a class="nf__back" href="/" data-magnetic>
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <!-- a pipe coupling / flange that unthreads on hover -->
+        <circle cx="16" cy="16" r="11"/>
+        <circle cx="16" cy="16" r="5"/>
+        <line x1="16" y1="3" x2="16" y2="9"/><line x1="16" y1="23" x2="16" y2="29"/>
+        <line x1="3" y1="16" x2="9" y2="16"/><line x1="23" y1="16" x2="29" y2="16"/>
+      </svg>
+      Return to the line
+    </a>
+   </div>
+  </main>
+
+  <script src="/assets/js/script.js" defer></script>
+  <script src="/assets/vendor/gsap/gsap.min.js" defer></script>
+  <script src="/assets/vendor/gsap/ScrollTrigger.min.js" defer></script>
+  <script src="/assets/vendor/lenis/lenis.min.js" defer></script>
+  <script src="/assets/js/demo2-motion.js" defer></script>
+  <script>
+    // 404-specific motion: the broken right piece wobbles, drips fall on a loop.
+    // Runs after load so gsap + demo2-motion are ready. No-op under reduced motion.
+    window.addEventListener("load", function () {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce || !window.gsap) return;
+      var right = document.querySelector(".nf__pipe-right");
+      if (right) {
+        // gentle wobble of the broken piece (it never quite settles)
+        gsap.to(right, {
+          rotation: "+=2.2", transformOrigin: "470px 120px",
+          duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: -1
+        });
+      }
+      // GSAP-driven drips (smoother than CSS alone) — re-target the drip circles
+      var drips = gsap.utils.toArray(".nf__drip");
+      drips.forEach(function (d, i) {
+        gsap.set(d, { transformOrigin: "center", y: 0, opacity: 0 });
+        gsap.to(d, {
+          y: 70, opacity: 1, duration: 1.8, ease: "power1.in",
+          repeat: -1, delay: i * 0.7, repeatDelay: 0.6,
+          onStart: function () { gsap.set(d, { opacity: 1 }); },
+          onRepeat: function () { gsap.set(d, { y: 0, opacity: 0 }); }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

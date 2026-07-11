@@ -1,0 +1,539 @@
+/* =========================================================================
+   Demo 2 — premium motion layer (earcouture / cyclemon tier)
+   All rules gated under .demo2 (added to <html> by the inline boot script
+   BEFORE first paint). Demo 1's styles.css is never touched. Content-hiding
+   rules additionally require .demo2-motion (added by demo2-motion.js only
+   after it confirms gsap/Lenis are present) so the site stays fully usable
+   if the motion layer fails to load.
+   ========================================================================= */
+
+/* --------- Lenis smooth-scroll (inert without the .lenis classes) --------- */
+html.lenis,
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* Lenis owns scrolling under .demo2; neutralize styles.css L61 smooth-scroll. */
+html.demo2 { scroll-behavior: auto; }
+
+/* --------- Motion hide state (two-class gate — progressive enhancement) ----
+   Hidden only when BOTH .demo2 AND .demo2-motion are on <html>. If the JS
+   fails, .demo2-motion never lands and content stays visible.
+   Only opacity (and mask-reveal's clip-path) are set here — NOT per-variant
+   transforms. Reason: GSAP reads the element's "natural" computed values as
+   the tween end-state; if the gate set e.g. translateY(32px), gsap.from would
+   treat 32px as natural and animate 40→32 (broken). GSAP uses explicit fromTo
+   end-values instead, so the gate only needs to hide for FOUC pre-GSAP. */
+html.demo2.demo2-motion [data-motion] { opacity: 0; will-change: opacity, transform; }
+html.demo2.demo2-motion [data-motion="mask-reveal"] { clip-path: inset(0 0 100% 0); }
+
+/* Pinned chapter stages (ScrollTrigger manages pinning; this just sets up the
+   stage geometry). */
+html.demo2 .pipe-build {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 40%, #0B1650 0%, #060D2E 70%, #03060f 100%);
+  color: #fff;
+}
+html.demo2 .pipe-build__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+html.demo2 .pipe-build__ui {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: clamp(28px, 6vw, 80px);
+  pointer-events: none;
+  z-index: 2;
+}
+html.demo2 .pipe-build__eyebrow {
+  font: 600 0.8rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent, #DBB85C);
+}
+/* Smaller title above the main — sits between the eyebrow and the big title. */
+html.demo2 .pipe-build__kicker {
+  font: 600 clamp(1.05rem, 1.7vw, 1.4rem)/1.1 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+html.demo2 .pipe-build__title {
+  font: 700 clamp(2.4rem, 6vw, 5.2rem)/0.96 var(--font-display, "DM Sans"), sans-serif;
+  margin: 0;
+  max-width: 16ch;
+  letter-spacing: -0.02em;
+  color: #fff;   /* override styles.css base h2 { color: var(--navy) } which camos on the dark pipe-build bg */
+}
+html.demo2 .pipe-build__caption {
+  font: 400 clamp(0.95rem, 1.4vw, 1.15rem)/1.5 var(--font-body, "DM Sans"), sans-serif;
+  color: #AEBDCD;
+  margin: 0.4rem 0 0;
+  max-width: 44ch;
+  transition: opacity 320ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .pipe-build__progress {
+  position: absolute;
+  top: 50%;
+  right: clamp(20px, 4vw, 56px);
+  transform: translateY(-50%);
+  font: 600 0.75rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.2em;
+  color: #54657A;
+  z-index: 2;
+}
+html.demo2 .pipe-build__progress span { color: var(--accent, #DBB85C); }
+/* No-WebGL fallback: keep the stage readable with just the UI + a CSS pipe motif. */
+html.demo2.demo2-no-webgl .pipe-build__canvas { display: none; }
+
+/* --------- Specs reel (cinematic metric tour) --------- */
+html.demo2 .specs-reel {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 45%, #0B1650 0%, #060D2E 70%, #03060f 100%);
+  color: #fff;
+}
+html.demo2 .specs-reel__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+html.demo2 .specs-reel__ui {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  gap: 0.5rem; padding: clamp(28px, 6vw, 80px); pointer-events: none; z-index: 2;
+}
+html.demo2 .specs-reel__eyebrow {
+  font: 600 0.78rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent, #DBB85C);
+}
+html.demo2 .specs-reel__metric {
+  font: 500 clamp(0.95rem, 1.4vw, 1.15rem)/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.18em; text-transform: uppercase; color: #8294a8; margin: 0.2rem 0 0;
+}
+html.demo2 .specs-reel__num {
+  font: 700 clamp(3rem, 8vw, 6.4rem)/0.92 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: -0.03em; margin: 0; color: #fff;
+}
+html.demo2 .specs-reel__num span { font-size: 0.34em; color: var(--accent, #DBB85C); margin-left: 0.15em; letter-spacing: 0.04em; }
+html.demo2 .specs-reel__caption {
+  font: 400 clamp(0.95rem, 1.4vw, 1.15rem)/1.5 var(--font-body, "DM Sans"), sans-serif;
+  color: #AEBDCD; margin: 0.3rem 0 0; max-width: 46ch;
+  transition: opacity 320ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .specs-reel__progress {
+  position: absolute; top: 50%; right: clamp(20px, 4vw, 56px); transform: translateY(-50%);
+  font: 600 0.75rem/1 var(--font-mono, "Inter"), sans-serif; letter-spacing: 0.2em; color: #54657A; z-index: 2;
+}
+html.demo2 .specs-reel__progress span { color: var(--accent, #DBB85C); }
+html.demo2.demo2-no-webgl .specs-reel__canvas { display: none; }
+
+/* --------- Fixed WebGL background canvas (shader bg + post) --------- */
+html.demo2 .demo2-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+}
+/* CSS gradient fallback shown when WebGL is unavailable or skipped.
+   Visible only when JS adds .demo2-no-webgl (or always, beneath the canvas). */
+html.demo2 .demo2-bg-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 80% 0%, rgba(12, 27, 100, 0.10), transparent 60%),
+    radial-gradient(90% 70% at 0% 100%, rgba(201, 162, 39, 0.06), transparent 55%),
+    var(--bg, #fff);
+}
+
+/* Neutralize Demo 1's `html { zoom: 0.8 }` calibration on the one-pager.
+   That hack (styles.css, desktop ≥1024px) is a B2B-layout calibration the
+   one-pager doesn't need, and it breaks fixed/pinned elements: ScrollTrigger
+   sizes the pinned pipe-build to innerWidth in layout px but zoom renders it
+   at 80%, so the section only fills 80%×64% of the viewport and content shifts;
+   the fixed cursor was likewise scaled 0.8× (compensated elsewhere, but the pin
+   can't be). At natural scale the one-pager's big type + full-viewport chapters
+   fill correctly. Scoped to the home via :has(body.d2-home). */
+html:has(body.d2-home),
+html:has(body.d2-404) { zoom: 1 !important; }
+
+/* Let the fluid shader show through. CRITICAL: the body's default white
+   background (from styles.css) paints OVER the fixed canvas (z-index:-1) in
+   the root stacking context, hiding the fluid entirely and making translucent
+   dark sections read as muddy gray. Make the body transparent under .demo2 so
+   the canvas is visible; the html holds a deep-ink safety net for any gaps. */
+html.demo2.demo2-motion { background: #060D2E; }
+html.demo2.demo2-motion body { background: transparent !important; }
+
+/* One-pager chapters: dark, cinematic, full-viewport, centered, big type.
+   The fluid bg is continuous behind them (transparent chapter bgs). */
+html.demo2 .d2-chapter,
+html.demo2 .d2-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: clamp(32px, 5vw, 64px) clamp(20px, 5vw, 80px);
+  color: #fff;
+  background: transparent;
+}
+html.demo2 .d2-chapter__inner,
+html.demo2 .d2-hero__inner {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+html.demo2 .d2-eyebrow {
+  font: 600 0.78rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--accent, #DBB85C);
+}
+html.demo2 .d2-chapter h2,
+html.demo2 .d2-hero h1 {
+  font: 700 clamp(2.3rem, 7vw, 5.6rem)/0.94 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: -0.025em;
+  margin: 0;
+  max-width: 18ch;
+  color: #fff;   /* override styles.css base h1/h2 { color: var(--navy) } which camos on the fluid bg */
+}
+html.demo2 .d2-hero h1 em { color: var(--accent, #DBB85C); font-style: normal; }
+/* Hero logo: big, centered, above the eyebrow. */
+html.demo2 .d2-hero__logo {
+  height: clamp(64px, 9vw, 116px);
+  width: auto;
+  max-width: 90%;
+  object-fit: contain;
+  margin-bottom: 0.4rem;
+}
+html.demo2 .d2-chapter p,
+html.demo2 .d2-hero p {
+  color: #AEBDCD;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  max-width: 54ch;
+  margin: 0;
+}
+html.demo2 .d2-hero__actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; margin-top: .6rem; }
+html.demo2 .d2-scroll-cue {
+  position: absolute;
+  bottom: clamp(20px, 4vw, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  font: 600 0.7rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #54657A;
+}
+
+/* Specs: big gold numbers in a row */
+html.demo2 .d2-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(24px, 5vw, 64px); margin-top: 1.5rem; }
+html.demo2 .d2-stat { min-width: 120px; }
+html.demo2 .d2-stat__num {
+  font: 700 clamp(2.8rem, 6vw, 4.6rem)/1 var(--font-display, "DM Sans"), sans-serif;
+  color: var(--accent, #DBB85C);
+  letter-spacing: -0.03em;
+}
+html.demo2 .d2-stat__num span { font-size: 0.36em; color: #AEBDCD; margin-left: .15em; letter-spacing: 0.05em; }
+html.demo2 .d2-stat__label { font: 500 0.78rem/1 var(--font-mono, "Inter"), sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8294a8; margin-top: .6rem; }
+
+/* Anatomy: 2-col on wide, stacked on narrow */
+html.demo2 .d2-anatomy-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px);
+  align-items: center; margin-top: 1.5rem; width: 100%; max-width: 1000px;
+}
+@media (max-width: 820px) { html.demo2 .d2-anatomy-grid { grid-template-columns: 1fr; } }
+html.demo2 .d2-anatomy-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; text-align: left; color: #AEBDCD; font-size: .98rem; }
+html.demo2 .d2-anatomy-list strong { display: block; font-size: 1.05rem; margin-bottom: .15rem; }
+html.demo2 .d2-anatomy-list .l1 strong { color: var(--accent, #DBB85C); }
+html.demo2 .d2-anatomy-list .l2 strong { color: #fff; }
+html.demo2 .d2-anatomy-list .l3 strong { color: #B7C2CF; }
+html.demo2 .d2-anatomy-grid .pipe-diagram { max-width: 520px; width: 100%; height: auto; margin: 0 auto; }
+
+/* The anatomy chapter is PINNED (position:fixed during scrub). While pinned,
+   the previous (opaque) pipe-build section scrolls up behind it — if anatomy
+   were transparent, pipe-build would bleed through as a moving dark block.
+   Give the pinned anatomy chapter an opaque dark canvas (matching the other
+   cinematic chapters) so it covers pipe-build cleanly during the transition.
+   Also constrain padding/heading/gap so all content fits within 100vh. */
+html.demo2 .d2-chapter[data-motion-chapter="anatomy"] {
+  background: radial-gradient(120% 90% at 50% 45%, #0B1650 0%, #060D2E 70%, #03060f 100%);
+  padding-top: clamp(16px, 2vw, 28px);
+  padding-bottom: clamp(16px, 2vw, 28px);
+  justify-content: flex-start;
+  padding-top: max(var(--header-h, 72px), clamp(16px, 2vw, 28px));
+}
+html.demo2 .d2-chapter[data-motion-chapter="anatomy"] h2 {
+  font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+}
+html.demo2 .d2-chapter[data-motion-chapter="anatomy"] .d2-chapter__inner {
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+html.demo2 .d2-chapter[data-motion-chapter="anatomy"] .d2-anatomy-grid {
+  margin-top: 0.4rem;
+}
+html.demo2 .d2-chapter[data-motion-chapter="anatomy"] .pipe-diagram {
+  max-height: min(38vh, 300px);
+  width: auto;
+  max-width: 100%;
+}
+
+/* Anatomy build gate (Phase G): hide the cross-section layers, callouts and
+   list items until the scrubbed build runs. Progressive enhancement — under
+   reduced motion (.demo2-motion never lands) the diagram shows fully. */
+html.demo2.demo2-motion .pipe-diagram circle,
+html.demo2.demo2-motion .pipe-diagram .callout,
+html.demo2.demo2-motion .d2-anatomy-list li { opacity: 0; }
+html.demo2.demo2-motion .pipe-diagram .dim { stroke-dasharray: 300; stroke-dashoffset: 300; }
+
+/* Enquire: 2-col form layout on wide */
+html.demo2 .d2-enquire { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 64px); align-items: center; text-align: left; max-width: 1180px; }
+@media (max-width: 860px) { html.demo2 .d2-enquire { grid-template-columns: 1fr; } }
+html.demo2 .d2-enquire h2 { max-width: 14ch; }
+html.demo2 .d2-enquire .d2-eyebrow { align-self: start; }
+
+/* Cert strip on dark */
+html.demo2 .d2-chapter .cert-marquee { width: 100%; max-width: 900px; margin-top: 1.5rem; }
+
+/* Force the legacy dark sections transparent so the one-pager reads continuous
+   (only applies if any old .section--navy/--ink remain). */
+html.demo2.demo2-motion .section--navy,
+html.demo2.demo2-motion .section--ink,
+html.demo2.demo2-motion .stat-band { background: transparent; }
+html.demo2.demo2-motion .site-footer { background: rgba(6, 13, 46, 0.92); }
+
+/* =========================================================================
+   Minimal header + clean full-screen menu (home one-pager)
+   - Header: transparent, logo + a single menu icon only (no inline nav,
+     no language picker, no inline CTA — those move into the menu).
+   - Menu icon: thin 3-line hamburger that morphs to an X; stays on top of
+     the overlay so it remains the close control.
+   - Menu: full-screen dark overlay, big centered links, elegant.
+   Scoped to body.d2-home so interior pages keep their full header for now.
+   ========================================================================= */
+body.d2-home .site-header {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+  z-index: 201;                /* stay above the menu overlay so the icon remains the close control */
+}
+body.d2-home .primary-nav,
+body.d2-home .lang-picker,
+body.d2-home .header-actions .btn--primary { display: none !important; }
+body.d2-home .header-actions { margin-left: auto; }
+/* Top-left brand = favicon mark only (the icon shape), square. */
+body.d2-home .brand__logo { height: 38px; width: 38px; object-fit: contain; }
+
+/* Menu icon — visible on all viewports, borderless, thin lines. */
+body.d2-home .nav-toggle {
+  display: flex !important;
+  border: none;
+  background: none;
+  width: auto;
+  height: 40px;
+  gap: 6px;
+  padding: 8px 2px;
+}
+body.d2-home .nav-toggle span { width: 28px; height: 1.5px; background: #fff; border-radius: 1px; }
+body.d2-home .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+body.d2-home .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+body.d2-home .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* Full-screen menu overlay (replaces the right-side drawer). */
+body.d2-home .mobile-nav {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(6, 13, 46, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transform: translateY(-100%);
+  transition: transform 560ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(40px, 8vw, 96px) clamp(20px, 5vw, 48px);
+  z-index: 200;
+}
+body.d2-home .mobile-nav.open { transform: translateY(0); }
+/* The overlay's own close button is redundant — the morphing icon closes. */
+body.d2-home .mobile-nav__close { display: none; }
+
+body.d2-home .mobile-nav > ul { text-align: center; width: 100%; max-width: 640px; }
+body.d2-home .mobile-nav > ul > li { border-bottom: 1px solid rgba(255,255,255,.08); }
+body.d2-home .mobile-nav > ul > li:first-child { border-top: 1px solid rgba(255,255,255,.08); }
+body.d2-home .mobile-nav a {
+  font-family: var(--font-display, "DM Sans"), sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  padding: clamp(0.55rem, 1.1vw, 0.8rem) 0.25rem;
+}
+body.d2-home .mobile-nav .mobile-sub {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem 1.1rem;
+  padding: 0.4rem 0 0.9rem;
+}
+body.d2-home .mobile-nav .mobile-sub a {
+  font-size: 0.95rem;
+  font-family: var(--font-body, "DM Sans"), sans-serif;
+  text-transform: none;
+  font-weight: 500;
+  color: #8294a8;
+  padding: 0.2rem 0.4rem;
+}
+body.d2-home .mobile-nav .mobile-sub a:hover { color: var(--accent, #DBB85C); }
+body.d2-home .mobile-nav__cta {
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2.2rem;
+  gap: 0.75rem;
+}
+body.d2-home .mobile-nav__cta .btn--block { width: auto; }
+
+/* Hide the footer on the one-pager for a cleaner cinematic close. */
+body.d2-home .site-footer { display: none; }
+
+/* Inline links (the "call +971…" tel link) in the enquire chapter — dune so
+   they don't camo into the dark fluid. Excludes .btn links (those keep their
+   button styling). */
+body.d2-home #enquire a:not(.btn) { color: var(--accent, #DBB85C); }
+body.d2-home #enquire a:not(.btn):hover { color: #fff; }
+
+/* --------- Custom cursor --------- */
+html.demo2 .demo2-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--primary, #C9A227);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: width 200ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              height 200ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              margin 200ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              opacity 200ms linear;
+  will-change: transform;
+}
+html.demo2 .demo2-cursor.is-hover {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  background: transparent;
+  border: 1.5px solid var(--primary, #C9A227);
+}
+html.demo2 .demo2-cursor.is-hidden { opacity: 0; }
+/* Hide the OS cursor only when the custom one is active (pointer-fine + motion). */
+@media (hover: hover) and (pointer: fine) {
+  html.demo2.demo2-motion.cursor-on,
+  html.demo2.demo2-motion.cursor-on a,
+  html.demo2.demo2-motion.cursor-on button { cursor: none; }
+}
+
+/* --------- Chapter transition wipe --------- */
+html.demo2 .demo2-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  transform-origin: top;
+  transform: scaleY(0);
+  background: var(--ink, #060D2E);
+}
+
+/* --------- Grain overlay (film texture) --------- */
+html.demo2 .demo2-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --------- Reduced motion — kill all Demo 2 motion, force content visible ----
+   demo2's responsibility (script.js has no matchMedia guard). The .demo2 root
+   class is still added by the boot script under reduced motion, so these rules
+   must make [data-motion] visible and hide the canvas/cursor. */
+@media (prefers-reduced-motion: reduce) {
+  html.demo2 [data-motion] { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; will-change: auto !important; }
+  html.demo2 .demo2-canvas,
+  html.demo2 .demo2-cursor,
+  html.demo2 .demo2-wipe,
+  html.demo2 .demo2-grain { display: none !important; }
+  html.demo2 { scroll-behavior: auto !important; }
+}
+
+/* --------- Low-power / coarse-pointer fallbacks --------- */
+@media (hover: none), (pointer: coarse) {
+  html.demo2 .demo2-cursor { display: none !important; }
+}
+
+/* =========================================================================
+   Phase C — reveal / parallax / count / chapter support
+   ========================================================================= */
+
+/* Parallax: the moving element is scaled up so the yPercent shift never
+   reveals a gap. Its nearest ancestor should clip (overflow hidden). */
+html.demo2 [data-motion="parallax"] {
+  transform: scale(1.12);
+  will-change: transform;
+}
+html.demo2 .hero__media,
+html.demo2 .media-card,
+html.demo2 a[data-lightbox] { overflow: hidden; }
+
+/* Count-up: the wrapped numeric span inherits the parent's type styling. */
+html.demo2 .d2-count { display: inline; }
+
+/* mask-reveal needs the element to not clip its own box-shadow / descenders
+   oddly — keep a tiny bottom inset floor while animating. */
+html.demo2 [data-motion="mask-reveal"] { will-change: clip-path, opacity; }
+
+/* Chapter mood: subtle accent-emphasis + grain-intensity shifts keyed off
+   <html data-chapter="...">. Stays within the locked brand palette. Dark
+   chapters (anatomy / enquire) get a warmer grain; light chapters stay clean. */
+html.demo2[data-chapter="anatomy"] .demo2-grain,
+html.demo2[data-chapter="enquire"] .demo2-grain { opacity: 0.06; }
+html.demo2[data-chapter="hero"] .demo2-grain { opacity: 0.025; }
+
+/* Reveal initial states are driven by GSAP (inline styles) once .demo2-motion
+   is active. The CSS gate above hides [data-motion] until then. For mask-reveal
+   we set a CSS fallback initial so there is no flash before GSAP applies inline. */
+html.demo2.demo2-motion [data-motion="mask-reveal"] { clip-path: inset(0 0 100% 0); opacity: 1; }
+
+/* Ensure GSAP's inline opacity/transform on [data-motion] wins over the
+   base gate once it has run (the gate only sets opacity:0 + transform as a
+   pre-GSAP default; GSAP overrides via inline). No rule needed — inline wins. */
