@@ -157,6 +157,16 @@ html.demo2 .demo2-bg-fallback {
     radial-gradient(90% 70% at 0% 100%, rgba(201, 162, 39, 0.06), transparent 55%),
     var(--bg, #fff);
 }
+/* On the dark one-pager + 404, the no-WebGL fallback must be DARK (the white
+   base above would render the page white on mobile, where WebGL is gated off
+   and no fluid canvas covers this layer). */
+body.d2-home .demo2-bg-fallback,
+body.d2-404 .demo2-bg-fallback {
+  background:
+    radial-gradient(120% 80% at 80% 0%, rgba(12, 27, 100, 0.50), transparent 60%),
+    radial-gradient(90% 70% at 0% 100%, rgba(201, 162, 39, 0.10), transparent 55%),
+    #060D2E;
+}
 
 /* Neutralize Demo 1's `html { zoom: 0.8 }` calibration on the one-pager.
    That hack (styles.css, desktop ≥1024px) is a B2B-layout calibration the

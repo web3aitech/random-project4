@@ -278,6 +278,10 @@
     enquire:     [0x060D2E, 0x0B1650]
   };
   function initFluidBackground() {
+    // Always-on fluid shader is desktop-only — on phones it would drain GPU/
+    // battery for a background. Mobile falls back to the dark .demo2-bg-fallback
+    // gradient; the pinned pipe-build + specs scenes still load on mobile.
+    if (window.matchMedia("(max-width: 767px)").matches) return;
     var canvas = document.querySelector(".demo2-canvas");
     if (!canvas) {
       canvas = document.createElement("canvas");

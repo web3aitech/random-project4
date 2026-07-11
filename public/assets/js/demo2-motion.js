@@ -30,15 +30,13 @@
     phase: "C"
   };
 
-  // ---- Reduced motion: no Lenis, no WebGL, native scroll, content visible. ----
-  // .demo2-motion is NOT added → the two-class hide gate stays open → [data-motion]
-  // remains visible (the CSS @media reduced-motion block also force-shows it).
-  if (reduce || !hasGSAP || !hasLenis) {
+  // ---- Bail only if GSAP is missing or reduced motion is requested. ----
+  // Lenis is OPTIONAL now: on touch devices Lenis fights native touch scroll
+  // (the mobile scroll-stuck bug), so we skip it there and use native scroll;
+  // ScrollTrigger drives off the window scroller directly either way.
+  if (reduce || !hasGSAP) {
     window.__demo2.lenis = false;
-    if (!hasGSAP || !hasLenis) {
-      // Lib failed to load — log so QA can see why motion degraded.
-      console.info("[demo2] motion layer idle:", !hasGSAP ? "gsap missing" : "", !hasLenis ? "lenis missing" : "");
-    }
+    if (!hasGSAP) console.info("[demo2] motion layer idle: gsap missing");
     return;
   }
 
@@ -52,46 +50,52 @@
   var ScrollTrigger = window.ScrollTrigger;
   gsap.registerPlugin(ScrollTrigger);
 
-  // ---- Lenis + GSAP ticker wiring ----
-  // Lenis 1.x drives native window scroll (not a transformed wrapper), so
-  // ScrollTrigger uses the window scroller directly — NO scrollerProxy.
-  var lenis = new Lenis({
-    duration: 1.1,
-    easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
-    smoothWheel: true
-  });
-  window.__demo2.lenis = true;
-  window.__demo2.lenisInstance = lenis;
+  // ---- Lenis (desktop / non-touch only) ----
+  // On touch we use native scroll; ScrollTrigger still works (window scroller).
+  var isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  var lenis = null;
+  if (!isTouch && hasLenis) {
+    lenis = new Lenis({
+      duration: 1.1,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      smoothWheel: true
+    });
+    window.__demo2.lenis = true;
+    window.__demo2.lenisInstance = lenis;
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0); // prevent catch-up jumps on frame lag
+  } else {
+    window.__demo2.lenis = false;
+  }
 
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
-  gsap.ticker.lagSmoothing(0); // prevent catch-up jumps on frame lag
+  // Smooth-scroll helper: Lenis if available, else native.
+  function smoothTo(target, opts) {
+    if (lenis) { lenis.scrollTo(target, opts || {}); return; }
+    if (target && target.nodeType) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    else window.scrollTo({ top: (typeof target === "number" ? target : 0), behavior: "smooth" });
+  }
 
-  // ---- Intercept Demo 1's native smooth-scroll calls → route through Lenis ----
-  // script.js back-to-top (L~131) calls window.scrollTo({behavior:"smooth"});
-  // the contact form success calls element.scrollIntoView({behavior:"smooth"}).
-  // Under Lenis those native smooth scrolls jank. Intercept in capture phase
-  // (no edit to script.js).
+  // ---- Intercept Demo 1's native smooth-scroll calls ----
   var toTop = document.querySelector(".to-top");
   if (toTop) {
     toTop.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      lenis.scrollTo(0, { duration: 1.2 });
+      smoothTo(0, { duration: 1.2 });
     }, { capture: true });
   }
-  // Scoped monkey-patch: smooth-behavior scrollIntoView delegates to Lenis.
-  // auto/instant behavior passes through untouched. Only active while lenis lives.
   var origScrollIntoView = Element.prototype.scrollIntoView;
   Element.prototype.scrollIntoView = function (opts) {
     if (opts && opts.behavior === "smooth") {
-      lenis.scrollTo(this, { offset: -100, duration: 1.2 });
+      if (lenis) lenis.scrollTo(this, { offset: -100, duration: 1.2 });
+      else { var o = Object.assign({}, opts, { behavior: "smooth" }); return origScrollIntoView.call(this, o); }
     } else {
       return origScrollIntoView.call(this, opts);
     }
   };
 
-  // Smooth-scroll in-page anchors (e.g. hero CTA href="#enquire") via Lenis.
+  // Smooth-scroll in-page anchors (e.g. hero CTA href="#enquire").
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[href^="#"]');
     if (!a) return;
@@ -100,13 +104,13 @@
     var target = document.querySelector(id);
     if (!target) return;
     e.preventDefault();
-    lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+    smoothTo(target, { offset: 0, duration: 1.4 });
   });
 
   // Menu toggle: script.js's nav-toggle handler always opens (setMobile(true));
   // intercept in capture + stopImmediatePropagation so the morphing X icon
   // TOGGLES (open on first click, close on second). Esc + link clicks still
-  // close (separate listeners). Also pauses Lenis while the overlay is open.
+  // close (separate listeners). Pauses Lenis while the overlay is open.
   (function () {
     var nt = document.querySelector(".nav-toggle");
     var mn = document.querySelector(".mobile-nav");
@@ -119,7 +123,7 @@
       mn.classList.toggle("open", next);
       document.body.style.overflow = next ? "hidden" : "";
       if (next && mn.focus) mn.focus();
-      if (next) lenis.stop(); else lenis.start();
+      if (lenis) { if (next) lenis.stop(); else lenis.start(); }
       if (window.__demo2) window.__demo2.menuOpen = next;
     }, { capture: true });
   })();
@@ -138,6 +142,7 @@
   window.addEventListener("orientationchange", debouncedRefresh);
   // Pause Lenis render loop when the tab is hidden (GPU/CPU courtesy).
   document.addEventListener("visibilitychange", function () {
+    if (!lenis) return;
     if (document.hidden) { lenis.stop(); } else { lenis.start(); }
   });
 
@@ -151,7 +156,9 @@
   function shouldInitWebGL() {
     if (!WEBGL_READY) return false;
     if (reduce) return false;
-    if (!window.matchMedia("(min-width: 768px)").matches) return false;
+    // Note: no min-width gate — modern phones (4+ cores, WebGL) load the
+    // pipe-build + specs reel scenes. The always-on fluid bg is gated to
+    // desktop inside demo2-webgl (initFluidBackground) to save mobile GPU.
     var cores = navigator.hardwareConcurrency || 2;
     if (cores < 4) return false;
     // Quick WebGL1 probe.
