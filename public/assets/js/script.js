@@ -24,12 +24,26 @@
     mobileNav.classList.toggle("open", open);
     document.body.style.overflow = open ? "hidden" : "";
     if (open) mobileNav.focus?.();
+    if (!open) {
+      $$(".mobile-has-sub").forEach((li) => li.classList.remove("is-open"));
+      $$(".mobile-parent-btn").forEach((btn) => btn.setAttribute("aria-expanded", "false"));
+    }
   }
   navToggle?.addEventListener("click", () => setMobile(true));
   mobileClose?.addEventListener("click", () => setMobile(false));
   $$(".mobile-nav a").forEach((a) =>
     a.addEventListener("click", () => setMobile(false))
   );
+
+  /* Mobile nav sub-menu accordion (Products toggle) */
+  $$(".mobile-parent-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const li = btn.closest(".mobile-has-sub");
+      if (!li) return;
+      const isOpen = li.classList.toggle("is-open");
+      btn.setAttribute("aria-expanded", String(isOpen));
+    });
+  });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && mobileNav?.classList.contains("open")) setMobile(false);
   });
@@ -96,7 +110,7 @@
 
   /* ---------- active nav link by path ---------- */
   const path = location.pathname.replace(/\/index\.html$/, "/").replace(/index\.html$/, "/");
-  $$(".primary-nav__link, .mobile-nav a").forEach((a) => {
+  $$(".primary-nav__link, .mobile-nav a, .hf-item").forEach((a) => {
     const href = a.getAttribute("href") || "";
     const target = href.replace(/\/index\.html$/, "/");
     if (target === path || (target !== "/" && path.indexOf(target) === 0)) {

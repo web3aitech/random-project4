@@ -49,6 +49,9 @@
   var gsap = window.gsap;
   var ScrollTrigger = window.ScrollTrigger;
   gsap.registerPlugin(ScrollTrigger);
+  // iOS Safari fires resize when the address bar shows/hides — ignore those
+  // so ScrollTrigger doesn't refresh() and jolt mid-scroll on mobile.
+  if (ScrollTrigger.config) ScrollTrigger.config({ ignoreMobileResize: true });
 
   // ---- Lenis (desktop / non-touch only) ----
   // On touch we use native scroll; ScrollTrigger still works (window scroller).
@@ -107,24 +110,71 @@
     smoothTo(target, { offset: 0, duration: 1.4 });
   });
 
-  // Menu toggle: script.js's nav-toggle handler always opens (setMobile(true));
-  // intercept in capture + stopImmediatePropagation so the morphing X icon
-  // TOGGLES (open on first click, close on second). Esc + link clicks still
-  // close (separate listeners). Pauses Lenis while the overlay is open.
+  // Header flyout menu: script.js's nav-toggle handler always opens the mobile
+  // drawer, so intercept in capture and spill the header links out of the
+  // hamburger instead. Reduced-motion/no-GSAP users keep the drawer fallback
+  // because this file bails before .demo2-motion is added.
   (function () {
     var nt = document.querySelector(".nav-toggle");
-    var mn = document.querySelector(".mobile-nav");
-    if (!nt || !mn) return;
+    var flyout = document.querySelector(".header-flyout");
+    if (!nt || !flyout || !document.body.classList.contains("d2-home")) return;
+    var items = gsap.utils.toArray(".hf-item", flyout);
+    if (!items.length) return;
+    var open = false;
+    var tl = null;
+
+    gsap.set(items, { opacity: 0, x: 20 });
+    gsap.set(nt, { rotation: 0 });
+
+    function syncA11y(next) {
+      nt.setAttribute("aria-expanded", String(next));
+      nt.setAttribute("aria-label", next ? "Close menu" : "Open menu");
+      flyout.setAttribute("aria-hidden", String(!next));
+      if (window.__demo2) window.__demo2.menuOpen = next;
+    }
+
+    function openMenu() {
+      if (open) return;
+      open = true;
+      if (tl) tl.kill();
+      flyout.classList.add("is-open");
+      syncA11y(true);
+      tl = gsap.timeline();
+      tl.to(nt, { rotation: 180, duration: 0.55, ease: "power3.inOut" }, 0)
+        .fromTo(items,
+          { opacity: 0, x: 20 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out", stagger: { amount: 0.32, from: "end" } },
+          0.08
+        );
+    }
+
+    function closeMenu() {
+      if (!open) return;
+      open = false;
+      if (tl) tl.kill();
+      syncA11y(false);
+      tl = gsap.timeline({
+        onComplete: function () {
+          flyout.classList.remove("is-open");
+          gsap.set(items, { opacity: 0, x: 20 });
+        }
+      });
+      tl.to(items,
+          { opacity: 0, x: 15, duration: 0.32, ease: "power2.in", stagger: { amount: 0.28, from: "end" } },
+          0
+        )
+        .to(nt, { rotation: 0, duration: 0.55, ease: "power3.inOut" }, 0);
+    }
+
     nt.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      var next = !mn.classList.contains("open");
-      nt.setAttribute("aria-expanded", String(next));
-      mn.classList.toggle("open", next);
-      document.body.style.overflow = next ? "hidden" : "";
-      if (next && mn.focus) mn.focus();
-      if (lenis) { if (next) lenis.stop(); else lenis.start(); }
-      if (window.__demo2) window.__demo2.menuOpen = next;
+      if (open) closeMenu();
+      else openMenu();
+    }, { capture: true });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenu();
     }, { capture: true });
   })();
 
@@ -154,19 +204,21 @@
   // the probe + injection are skipped entirely (no 404, no stray WebGL context).
   var WEBGL_READY = true;
   function shouldInitWebGL() {
-    if (!WEBGL_READY) return false;
-    if (reduce) return false;
-    // Note: no min-width gate — modern phones (4+ cores, WebGL) load the
-    // pipe-build + specs reel scenes. The always-on fluid bg is gated to
-    // desktop inside demo2-webgl (initFluidBackground) to save mobile GPU.
-    var cores = navigator.hardwareConcurrency || 2;
-    if (cores < 4) return false;
-    // Quick WebGL1 probe.
+    if (!WEBGL_READY) { window.__demo2.webglGate = "ready-off"; return false; }
+    if (reduce) { window.__demo2.webglGate = "reduce"; return false; }
+    // WebGL 3D scenes are DESSKTOP-ONLY. On phones they're unreliable (low core
+    // counts, GPU/thermal limits, iOS pin jank) — mobile shows a CSS/SVG
+    // fallback animation instead (guaranteed to render). The fallback is shown
+    // via CSS @media (max-width: 767px) which hides the canvas + reveals the
+    // .pipe-build__fallback / .specs-reel__fallback elements.
+    if (!window.matchMedia("(min-width: 768px)").matches) { window.__demo2.webglGate = "mobile-fallback"; return false; }
     try {
       var c = document.createElement("canvas");
       var gl = c.getContext("webgl") || c.getContext("experimental-webgl");
-      return !!gl;
-    } catch (e) { return false; }
+      if (!gl) { window.__demo2.webglGate = "no-webgl"; return false; }
+      window.__demo2.webglGate = "ok";
+      return true;
+    } catch (e) { window.__demo2.webglGate = "err"; return false; }
   }
   function loadScript(src, ordered) {
     var s = document.createElement("script");
@@ -442,6 +494,23 @@
   initChapters();          // Phase C: reveals + chapters + parallax + count-up + wipe
   initAnatomy();           // Phase G: scrubbed cross-section build with labels
   initMicroInteractions(); // Phase F: custom cursor + magnetic CTAs
+
+  // ?debug overlay — visit /?debug to see the live motion state (helps diagnose
+  // mobile: is WebGL loading? is the pipe-build pin active? etc.)
+  if (/[?&]debug/.test(location.search)) {
+    var dbg = document.createElement("div");
+    dbg.style.cssText = "position:fixed;bottom:0;left:0;z-index:99999;background:rgba(0,0,0,.85);color:#7CFC00;font:11px/1.4 monospace;padding:6px 8px;max-width:92vw;word-break:break-all;pointer-events:none;";
+    document.body.appendChild(dbg);
+    setInterval(function () {
+      var d = window.__demo2 || {};
+      dbg.textContent = JSON.stringify({
+        lenis: d.lenis, webgl: d.webgl, webglGate: d.webglGate, fluidBg: d.fluidBg,
+        pipeBuild: d.pipeBuild, specsReel: d.specsReel, stCount: d.scrollTriggerCount,
+        ua: (navigator.userAgent||"").slice(0,40), cores: navigator.hardwareConcurrency,
+        mem: navigator.deviceMemory, vw: window.innerWidth, scrollY: Math.round(window.scrollY)
+      });
+    }, 400);
+  }
 
   console.info("[demo2] core ready: lenis=" + window.__demo2.lenis + " reducedMotion=" + reduce + " scrollTriggers=" + window.__demo2.scrollTriggerCount);
 })();

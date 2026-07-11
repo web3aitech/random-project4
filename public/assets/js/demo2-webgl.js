@@ -6,7 +6,7 @@
    Phase D: the signature "pipes building as you scroll" chapter — a pinned
    ScrollTrigger scrubs a procedural GRP pipe build (mandrel rotation →
    filament helix winding → resin cure → saw cut to length → finished pipe
-   advances). All geometry is procedural; no external 3D model.
+   stays put). All geometry is procedural; no external 3D model.
    Phase E (shader bg + post) will be added here too.
    ========================================================================= */
 (function () {
@@ -39,7 +39,7 @@
     { at: 0.15, text: "Glass roving, impregnated with resin, is wound onto the mandrel in a prescribed pattern." },
     { at: 0.45, text: "Layers build up — inner liner, structural wall, outer liner — as the resin cures." },
     { at: 0.72, text: "After curing, a synchronized saw cuts the pipe to length." },
-    { at: 0.90, text: "The finished GRP pipe advances off the line — ready for testing and dispatch." }
+    { at: 0.90, text: "The finished GRP pipe is ready for testing and dispatch." }
   ];
 
   function initPipeBuild() {
@@ -143,10 +143,7 @@
     saw.visible = false;
     scene.add(saw);
 
-    // ---- Group for finished-pipe advance ----
-    var build = new THREE.Group(); build.name = "build";
-    scene.add(build);
-    // (mandrel/pipe/filaments stay where they are; camera nudges for the advance)
+    // ---- (No end advance — the finished pipe stays put; scroll continues.) ----
 
     // ---- Sizing ----
     function resize() {
@@ -208,10 +205,8 @@
       sawMat.opacity = sawFade;
       saw.visible = sawFade > 0.02;
 
-      // Finished pipe advances off-line: camera nudges +X at the very end.
-      var advance = smoothstep(0.92, 1.0, p);
-      camera.position.x = 0.6 + advance * 1.2;
-      camera.lookAt(advance * 0.8, 0, 0);
+      // No end slide — the finished pipe stays put and the scroll continues to
+      // the next section. (Camera fixed at its build position.)
 
       updateCaption(p);
     }
@@ -282,6 +277,9 @@
     // battery for a background. Mobile falls back to the dark .demo2-bg-fallback
     // gradient; the pinned pipe-build + specs scenes still load on mobile.
     if (window.matchMedia("(max-width: 767px)").matches) return;
+    // The home one-pager uses opaque chaining section gradients (navy→black)
+    // for its background, so the fluid would be hidden — skip it to save GPU.
+    if (document.body && document.body.classList.contains("d2-home")) return;
     var canvas = document.querySelector(".demo2-canvas");
     if (!canvas) {
       canvas = document.createElement("canvas");
@@ -432,7 +430,7 @@
 
     // ---- Camera keyframes (3 stops) ----
     var stops = [
-      { px: 9.0, py: 0.6, pz: 0.8, lx: 6, ly: 0, lz: 0 },   // 0: diameter — close on +X end face
+      { px: 10.5, py: 0.4, pz: 0.6, lx: 6, ly: 0, lz: 0 },  // 0: diameter — end face; pulled back so full Ø2400 circle fits
       { px: 0.0, py: 2.6, pz: 4.4, lx: 0, ly: 0, lz: 0 },   // 1: pressure — mid wall, outside
       { px: 0.0, py: 6.5, pz: 18,  lx: 0, ly: 0, lz: 0 }    // 2: length — far back, full pipe
     ];
@@ -464,8 +462,10 @@
 
     // progress-driven viz (pressure glow + length dimension)
     function applyViz(p) {
+      // Pressure glow (stop 2)
       var pres = smoothstep(0.25, 0.45, p) * (1 - smoothstep(0.55, 0.75, p));
       pressure.material.opacity = pres * 0.4;
+      // Length dimension (stop 3)
       var len = smoothstep(0.7, 0.85, p);
       dimMat.opacity = len;
     }

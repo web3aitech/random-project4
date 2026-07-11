@@ -16,7 +16,7 @@
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="stylesheet" href="/assets/css/fonts.css?v=6">
   <link rel="stylesheet" href="/assets/css/styles.css?v=7">
-  <link rel="stylesheet" href="/assets/css/demo2.css?v=13">
+  <link rel="stylesheet" href="/assets/css/demo2.css?v=17">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -67,6 +67,16 @@
       <img class="brand__logo" src="/assets/images/favicon.png" alt="Dubai Pipes Factory Co." width="64" height="64">
     </a>
 
+    <nav class="header-flyout" aria-label="Header menu" aria-hidden="true">
+      <a class="hf-item" href="/">Home</a>
+      <a class="hf-item" href="/grp-pipes-benefits/">Products</a>
+      <a class="hf-item" href="/certifications-approvals/">Certifications</a>
+      <a class="hf-item" href="/know-how-supplier/">Know-How</a>
+      <a class="hf-item" href="/services/">Services</a>
+      <a class="hf-item" href="/download-catalog/">Catalog</a>
+      <a class="hf-item" href="/contact-us/">Contact</a>
+    </nav>
+
     <nav class="primary-nav" aria-label="Primary">
       <div class="primary-nav__item">
         <button class="primary-nav__toggle" aria-expanded="false" aria-haspopup="true">
@@ -108,8 +118,11 @@
   <button class="mobile-nav__close" aria-label="Close menu">&times;</button>
   <ul>
     <li><a href="/">Home</a></li>
-    <li>
-      <a href="/grp-pipes-benefits/">Products</a>
+    <li class="mobile-has-sub">
+      <button class="mobile-parent-btn" aria-expanded="false">
+        Products
+        <svg class="mobile-chevron" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <ul class="mobile-sub">
         <li><a href="/grp-pipes-benefits/">GRP Pipes Benefits</a></li>
         <li><a href="/grp-pipes-general-information/">General Information</a></li>
@@ -147,12 +160,22 @@
   <!-- ===================== PIPE BUILD (signature) ===================== -->
   <section class="pipe-build" data-motion-chapter="pipe-build" data-pipe-build-stage>
     <canvas class="pipe-build__canvas" data-pipe-build-canvas aria-hidden="true"></canvas>
+    <div class="pipe-build__fallback" aria-hidden="true">
+      <span class="pipe-build__eyebrow">The making of a GRP pipe</span>
+      <svg viewBox="0 0 240 240" role="img" aria-label="Cross-section of a GRP pipe with glass filament winding around it.">
+        <circle cx="120" cy="120" r="100" fill="#B7C2CF"/>
+        <circle cx="120" cy="120" r="96" fill="#214B6E"/>
+        <circle cx="120" cy="120" r="86" fill="#DBB85C"/>
+        <circle cx="120" cy="120" r="82" fill="#0E3045"/>
+        <circle class="pb-fil" cx="120" cy="120" r="100" fill="none" stroke="#DBB85C" stroke-width="3.5"/>
+      </svg>
+      <h2 class="pipe-build__title">one filament at a time.</h2>
+    </div>
     <div class="pipe-build__ui">
       <span class="pipe-build__eyebrow">The making of a GRP pipe</span>
       <h2 class="pipe-build__title">one filament at a time.</h2>
       <p class="pipe-build__caption" data-pipe-build-caption>Scroll to build a pipe from raw mandrel to finished line.</p>
     </div>
-    <div class="pipe-build__progress" data-pipe-build-progress aria-hidden="true"><span>00</span> / 100</div>
   </section>
 
   <!-- ========================= ANATOMY ========================= -->
@@ -189,13 +212,20 @@
   <!-- ========================= SPECS REEL (cinematic) ========================= -->
   <section class="specs-reel" data-motion-chapter="specs" data-specs-stage>
     <canvas class="specs-reel__canvas" data-specs-canvas aria-hidden="true"></canvas>
+    <div class="specs-reel__fallback" aria-hidden="true">
+      <span class="specs-reel__eyebrow">Built to scale</span>
+      <div class="sf-rows">
+        <div class="sf-row"><span class="sf-num">2400<span>mm</span></span><span class="sf-label">Max diameter</span></div>
+        <div class="sf-row"><span class="sf-num">32<span>bar</span></span><span class="sf-label">Pressure rating</span></div>
+        <div class="sf-row"><span class="sf-num">12<span>m</span></span><span class="sf-label">Standard length</span></div>
+      </div>
+    </div>
     <div class="specs-reel__ui">
       <span class="specs-reel__eyebrow">Built to scale</span>
       <p class="specs-reel__metric" data-specs-metric>Max diameter</p>
       <p class="specs-reel__num" data-specs-num>2400<span>mm</span></p>
       <p class="specs-reel__caption" data-specs-caption>The bore carries the Gulf's largest water and sewerage flows.</p>
     </div>
-    <div class="specs-reel__progress" data-specs-progress aria-hidden="true"><span>01</span> / 03</div>
   </section>
 
   <!-- ========================= CERTS ========================= -->

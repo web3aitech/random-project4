@@ -172,7 +172,7 @@ function render(page) {
     `  <link rel="icon" type="image/png" href="${FAVICON}">`,
     `  <link rel="stylesheet" href="/assets/css/fonts.css?v=6">`,
     `  <link rel="stylesheet" href="/assets/css/styles.css?v=7">`,
-    `  <link rel="stylesheet" href="/assets/css/demo2.css?v=13">`,
+    `  <link rel="stylesheet" href="/assets/css/demo2.css?v=17">`,
     page.leaflet ? `  <link rel="stylesheet" href="/assets/vendor/leaflet/leaflet.css">` : null,
     jsonldBlock(page.jsonld || { '@type': 'WebPage' }, page.slug),
   ].filter(Boolean).join('\n  ');

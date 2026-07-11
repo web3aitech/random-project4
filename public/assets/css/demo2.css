@@ -135,6 +135,59 @@ html.demo2 .specs-reel__progress {
 html.demo2 .specs-reel__progress span { color: var(--accent, #DBB85C); }
 html.demo2.demo2-no-webgl .specs-reel__canvas { display: none; }
 
+/* Mobile fallback for the WebGL scenes (phones < 768px). Desktop shows the 3D
+   canvas; phones show a CSS/SVG animation that always renders reliably. */
+@media (max-width: 767px) {
+  html.demo2 .pipe-build__canvas,
+  html.demo2 .specs-reel__canvas { display: none; }
+  html.demo2 .pipe-build__ui,
+  html.demo2 .specs-reel__ui { display: none; }
+  html.demo2 .pipe-build__progress,
+  html.demo2 .specs-reel__progress { display: none; }
+  html.demo2 .pipe-build__fallback,
+  html.demo2 .specs-reel__fallback { display: flex; }
+}
+@media (min-width: 768px) {
+  html.demo2 .pipe-build__fallback,
+  html.demo2 .specs-reel__fallback { display: none; }
+}
+/* pipe-build fallback: a GRP pipe with a filament winding over it (CSS draw). */
+html.demo2 .pipe-build__fallback {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  flex-direction: column; justify-content: center; align-items: center; gap: 1rem;
+  padding: 24px; text-align: center;
+}
+html.demo2 .pipe-build__fallback svg { width: min(260px, 62vw); height: auto; }
+html.demo2 .pb-fil {
+  fill: none; stroke: #DBB85C; stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 700; stroke-dashoffset: 700;
+  animation: pb-wind 3.6s cubic-bezier(.4,0,.2,1) infinite;
+  filter: drop-shadow(0 0 4px rgba(219,184,92,.5));
+}
+@keyframes pb-wind {
+  0% { stroke-dashoffset: 700; }
+  55% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -700; opacity: .35; }
+}
+/* specs fallback: the three metrics as a clean stacked layout. */
+html.demo2 .specs-reel__fallback {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  flex-direction: column; justify-content: center; align-items: center; gap: 1.4rem;
+  padding: 24px; text-align: center;
+}
+html.demo2 .specs-reel__fallback .sf-rows { display: flex; flex-direction: column; gap: 1rem; }
+html.demo2 .specs-reel__fallback .sf-row { display: flex; align-items: baseline; gap: 1rem; justify-content: center; }
+html.demo2 .specs-reel__fallback .sf-num {
+  font: 700 clamp(2.2rem, 8vw, 3rem)/1 var(--font-display, "DM Sans"), sans-serif;
+  color: #fff; letter-spacing: -0.03em;
+}
+html.demo2 .specs-reel__fallback .sf-num span { font-size: 0.46em; color: var(--accent, #DBB85C); margin-left: .1em; }
+html.demo2 .specs-reel__fallback .sf-label {
+  font: 500 0.74rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.18em; text-transform: uppercase; color: #8294a8;
+}
+@media (prefers-reduced-motion: reduce) { html.demo2 .pb-fil { animation: none; stroke-dashoffset: 0; } }
+
 /* --------- Fixed WebGL background canvas (shader bg + post) --------- */
 html.demo2 .demo2-canvas {
   position: fixed;
@@ -333,27 +386,56 @@ html.demo2.demo2-motion .stat-band { background: transparent; }
 html.demo2.demo2-motion .site-footer { background: rgba(6, 13, 46, 0.92); }
 
 /* =========================================================================
-   Minimal header + clean full-screen menu (home one-pager)
-   - Header: transparent, logo + a single menu icon only (no inline nav,
-     no language picker, no inline CTA — those move into the menu).
-   - Menu icon: thin 3-line hamburger that morphs to an X; stays on top of
-     the overlay so it remains the close control.
-   - Menu: full-screen dark overlay, big centered links, elegant.
+   Minimal header + flyout menu (home one-pager)
+   - Header: brand + hidden inline nav + hamburger.
+   - Menu icon: thin 3-line hamburger; GSAP rotates the whole control.
+   - Menu: items spill left from the hamburger into the top bar.
    Scoped to body.d2-home so interior pages keep their full header for now.
    ========================================================================= */
 body.d2-home .site-header {
-  background: transparent;
+  background: #0C1B64;          /* match the hero's navy top color */
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-bottom: none;
-  z-index: 201;                /* stay above the menu overlay so the icon remains the close control */
+  z-index: 201;
 }
 body.d2-home .primary-nav,
 body.d2-home .lang-picker,
 body.d2-home .header-actions .btn--primary { display: none !important; }
-body.d2-home .header-actions { margin-left: auto; }
+body.d2-home .header-actions { margin-left: clamp(0.8rem, 2vw, 1.4rem); }
 /* Top-left brand = favicon mark only (the icon shape), square. */
 body.d2-home .brand__logo { height: 38px; width: 38px; object-fit: contain; }
+
+body.d2-home .header-flyout {
+  display: none;
+  align-items: center;
+  gap: clamp(0.9rem, 2vw, 2rem);
+  margin-left: auto;
+  min-width: 0;
+  overflow: hidden;
+}
+html.demo2.demo2-motion body.d2-home .header-flyout { display: flex; }
+body.d2-home .hf-item {
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  font: 600 clamp(0.75rem, 1vw, 0.88rem)/1 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.82);
+  text-decoration: none;
+  transform: translateX(20px);
+  will-change: opacity, transform;
+}
+body.d2-home .hf-item:hover,
+body.d2-home .hf-item[aria-current="page"] { color: var(--accent, #DBB85C); }
+body.d2-home .header-flyout.is-open .hf-item { pointer-events: auto; }
+@media (max-width: 500px) {
+  body.d2-home .header-flyout {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  body.d2-home .header-flyout::-webkit-scrollbar { display: none; }
+}
 
 /* Menu icon — visible on all viewports, borderless, thin lines. */
 body.d2-home .nav-toggle {
@@ -364,13 +446,12 @@ body.d2-home .nav-toggle {
   height: 40px;
   gap: 6px;
   padding: 8px 2px;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 body.d2-home .nav-toggle span { width: 28px; height: 1.5px; background: #fff; border-radius: 1px; }
-body.d2-home .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-body.d2-home .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-body.d2-home .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
-/* Full-screen menu overlay (replaces the right-side drawer). */
+/* Full-screen menu overlay fallback (used when Demo 2 motion is unavailable). */
 body.d2-home .mobile-nav {
   position: fixed;
   inset: 0;
@@ -388,9 +469,10 @@ body.d2-home .mobile-nav {
   padding: clamp(40px, 8vw, 96px) clamp(20px, 5vw, 48px);
   z-index: 200;
 }
+html.demo2.demo2-motion body.d2-home .mobile-nav { display: none !important; }
 body.d2-home .mobile-nav.open { transform: translateY(0); }
-/* The overlay's own close button is redundant — the morphing icon closes. */
-body.d2-home .mobile-nav__close { display: none; }
+/* The overlay close is only redundant in the GSAP flyout path. */
+html.demo2.demo2-motion body.d2-home .mobile-nav__close { display: none; }
 
 body.d2-home .mobile-nav > ul { text-align: center; width: 100%; max-width: 640px; }
 body.d2-home .mobile-nav > ul > li { border-bottom: 1px solid rgba(255,255,255,.08); }
@@ -419,14 +501,69 @@ body.d2-home .mobile-nav .mobile-sub a {
   padding: 0.2rem 0.4rem;
 }
 body.d2-home .mobile-nav .mobile-sub a:hover { color: var(--accent, #DBB85C); }
-body.d2-home .mobile-nav__cta {
-  flex-direction: row;
+/* Products accordion in mobile nav */
+body.d2-home .mobile-parent-btn {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 2.2rem;
-  gap: 0.75rem;
+  gap: 0.45rem;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: var(--font-display, "DM Sans"), sans-serif;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: clamp(0.55rem, 1.1vw, 0.8rem) 0.25rem;
+  cursor: pointer;
+  text-align: center;
 }
-body.d2-home .mobile-nav__cta .btn--block { width: auto; }
+body.d2-home .mobile-parent-btn:hover { color: var(--accent, #DBB85C); }
+body.d2-home .mobile-chevron {
+  transition: transform 380ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+body.d2-home .mobile-has-sub.is-open .mobile-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+body.d2-home .mobile-has-sub .mobile-sub {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 420ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+body.d2-home .mobile-has-sub.is-open .mobile-sub {
+  max-height: 260px;
+}
+
+/* CTA buttons — stacked pills */
+body.d2-home .mobile-nav__cta {
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.4rem;
+  gap: 0.55rem;
+  width: 100%;
+  max-width: 300px;
+}
+body.d2-home .mobile-nav__cta .btn {
+  width: 100%;
+  justify-content: center;
+  border-radius: 50px;
+  padding: 0.8rem 1.5rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+body.d2-home .mobile-nav__cta .btn--ghost {
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.75);
+}
+body.d2-home .mobile-nav__cta .btn--ghost:hover {
+  border-color: #fff;
+  color: #fff;
+  background: rgba(255,255,255,0.07);
+}
 
 /* Hide the footer on the one-pager for a cleaner cinematic close. */
 body.d2-home .site-footer { display: none; }
@@ -547,3 +684,18 @@ html.demo2.demo2-motion [data-motion="mask-reveal"] { clip-path: inset(0 0 100% 
 /* Ensure GSAP's inline opacity/transform on [data-motion] wins over the
    base gate once it has run (the gate only sets opacity:0 + transform as a
    pre-GSAP default; GSAP overrides via inline). No rule needed — inline wins. */
+
+/* =========================================================================
+   Progressive darkening — a continuous navy→black gradient chained across the
+   home one-pager. Each section's bottom color = the next section's top color,
+   so they chain into one smooth gradient (no hard steps). Opaque so it works
+   on desktop AND mobile (no fluid needed). Specs = fully black.
+   ========================================================================= */
+html.demo2 body.d2-home .d2-hero { background: linear-gradient(to bottom, #0C1B64 0%, #0A1547 100%); }
+html.demo2 body.d2-home .pipe-build { background: linear-gradient(to bottom, #0A1547 0%, #060D2E 100%); }
+html.demo2 body.d2-home .d2-chapter[data-motion-chapter="anatomy"] { background: linear-gradient(to bottom, #060D2E 0%, #03060f 100%); }
+html.demo2 body.d2-home .specs-reel { background: linear-gradient(to bottom, #03060f 0%, #000000 100%); }
+html.demo2 body.d2-home .d2-chapter[data-motion-chapter="certs"] { background: #000000; }
+html.demo2 body.d2-home .d2-chapter[data-motion-chapter="enquire"] { background: #000000; }
+/* Pin a dark base behind everything (in case of any sub-pixel gaps). */
+html.demo2 body.d2-home { background: #000; }

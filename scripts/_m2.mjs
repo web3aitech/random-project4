@@ -1,0 +1,11 @@
+import { chromium } from "playwright";
+const page = await (await chromium.launch()).newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+await page.goto("http://localhost:5180/?debug", { waitUntil: "load" });
+await page.waitForTimeout(4000);
+const r = await page.evaluate(()=>{ const d=window.__demo2||{}; const pb=document.querySelector('[data-pipe-build-stage]').getBoundingClientRect().top+window.scrollY; return {webglGate:d.webglGate, webgl:d.webgl, pipeBuild:d.pipeBuild, specs:d.specsReel, cores:navigator.hardwareConcurrency, ua:navigator.userAgent.slice(0,30)}; });
+const pbTop = await page.evaluate(()=>document.querySelector('[data-pipe-build-stage]').getBoundingClientRect().top + window.scrollY);
+await page.evaluate((t)=>window.scrollTo(0, t+900), pbTop); await page.waitForTimeout(1200);
+const pbMid = await page.evaluate(()=>window.__demo2?.pipeBuild);
+console.log("init:", JSON.stringify(r));
+console.log("pipe-build at mid:", JSON.stringify(pbMid));
+await page.close();
