@@ -463,11 +463,20 @@
       // reset to 0 happens here on the next enter, never on the way out.
       if (stage) stage.classList.toggle("is-pressure", idx === 1);
       if (gaugeNeedle && gaugeFill && idx === 1) {
-        // Sweep the needle tip 0 -> 32 bar by animating its x2/y2 attributes
-        // (trig, not a CSS transform) — bulletproof, no transform-origin or
-        // filter-blur interaction. 32 bar = 54° from up, radius 74.
-        gsap.fromTo(gaugeNeedle, { attr: { x2: 26, y2: 100 } }, { attr: { x2: 160, y2: 56.5 }, duration: 1.3, ease: "power3.out" });
-        gsap.fromTo(gaugeFill, { strokeDashoffset: 100 }, { strokeDashoffset: 20, duration: 1.3, ease: "power3.out" });
+        // Needle: tween an angle proxy and write the SVG transform attribute
+        // each frame — rotate(angle 100 100) pivots around the base (100,100).
+        // The SVG-native transform repaints reliably (CSS transform-origin and
+        // attr x2/y2 tweens both proved flaky in-browser). 0 bar = -90°,
+        // 32 bar = 54°. The gold arc (strokeDashoffset, a CSS property) uses
+        // the same ease/delay so the needle stays in sync with the fill.
+        var ang = { v: -90 };
+        gsap.fromTo(ang, { v: -90 }, {
+          v: 54, duration: 1.0, delay: 0.15, ease: "power2.out",
+          onUpdate: function () {
+            gaugeNeedle.setAttribute("transform", "rotate(" + ang.v.toFixed(2) + " 100 100)");
+          }
+        });
+        gsap.fromTo(gaugeFill, { strokeDashoffset: 100 }, { strokeDashoffset: 20, duration: 1.0, delay: 0.15, ease: "power2.out" });
       }
     }
 
@@ -490,15 +499,31 @@
     resize();
     window.addEventListener("resize", resize);
 
+    // On leaving the pin (either direction) the render loop stops, which would
+    // freeze the canvas on whatever mid-progress frame the fast scroll left it
+    // on. Snap to the boundary frame + render once so the frozen frame is
+    // always the start (leaving back) or end (leaving forward), and re-entering
+    // shows the correct first/last frame — not a random mid-frame.
+    function leaveSpecs(boundary) {
+      active = false;
+      updateMetric(boundary); // set the boundary metric + hide the gauge (is-pressure off); sets lastMetric so re-entering pressure re-sweeps
+      var stop = boundary >= 1 ? stops[2] : stops[0];
+      cam.px = stop.px; cam.py = stop.py; cam.pz = stop.pz;
+      cam.lx = stop.lx; cam.ly = stop.ly; cam.lz = stop.lz;
+      applyCam();
+      applyViz(boundary);
+      renderer.render(scene, camera);
+    }
+
     // ---- Camera timeline (scrubbed, pinned) ----
     var active = false;
     var tl = gsap.timeline({
       scrollTrigger: {
         trigger: stage, start: "top top", end: "+=200%", pin: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
         onEnter: function () { active = true; },
-        onLeave: function () { active = false; },
+        onLeave: function () { leaveSpecs(1); },
         onEnterBack: function () { active = true; },
-        onLeaveBack: function () { active = false; },
+        onLeaveBack: function () { leaveSpecs(0); },
         onUpdate: function (self) { updateMetric(self.progress); applyViz(self.progress); window.__demo2.specsReel.progress = self.progress; }
       }
     });

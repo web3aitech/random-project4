@@ -499,28 +499,15 @@
     var rail = document.querySelector(".d2-jumprail");
     if (!rail) return;
     if (initJumprail._sts) { initJumprail._sts.forEach(function (s) { try { s.kill(); } catch (e) {} }); }
+    if (initJumprail._mo) { try { initJumprail._mo.disconnect(); } catch (e) {} }
     initJumprail._sts = [];
     var chips = gsap.utils.toArray(".d2-jumprail__chip");
+    chips.forEach(function (chip) { chip.classList.remove("is-active"); });
     initJumprail._sts.push(ScrollTrigger.create({
       trigger: document.body,
       start: "top -" + Math.max(80, window.innerHeight * 0.4) + "px",
       onToggle: function (self) { rail.classList.toggle("is-visible", self.isActive); }
     }));
-    chips.forEach(function (chip) {
-      var id = chip.getAttribute("href");
-      if (!id || id === "#") return;
-      var target = document.querySelector(id);
-      if (!target) return;
-      initJumprail._sts.push(ScrollTrigger.create({
-        trigger: target, start: "top 45%", end: "bottom 45%",
-        onToggle: function (self) {
-          if (self.isActive) {
-            chips.forEach(function (c) { c.classList.remove("is-active"); });
-            chip.classList.add("is-active");
-          }
-        }
-      }));
-    });
   }
   window.__demo2.initJumprail = initJumprail;
 
