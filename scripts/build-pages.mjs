@@ -114,7 +114,7 @@ const FOOTER = `<footer class="site-footer">
       <div class="footer-col"><h4>Company</h4><ul><li><a href="/certifications-approvals/">Certifications</a></li><li><a href="/know-how-supplier/">Know-How Supplier</a></li><li><a href="/services/">Services</a></li><li><a href="/contact-us/">Contact</a></li></ul></div>
       <div class="footer-col"><h4>Resources</h4><ul><li><a href="/download-catalog/">Download Catalog</a></li><li><a href="/blog/">Blog</a></li><li><a href="/projects/">Projects</a></li><li><a href="/contact-us/">Request a Quote</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><span>© 2011–2026 Dubai Pipes Factory Co. All Rights Reserved.</span><span>Jebel Ali Industrial Area · Dubai · UAE</span></div>
+    <div class="footer-bottom"><span>© 2026 Dubai Pipes Factory Co. All Rights Reserved.</span><span>Designed by Kelvo Designs</span></div>
   </div>
 </footer>
 

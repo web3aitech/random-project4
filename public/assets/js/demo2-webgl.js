@@ -46,7 +46,6 @@
     var stage = document.querySelector("[data-pipe-build-stage]");
     var canvasEl = document.querySelector("[data-pipe-build-canvas]");
     var captionEl = document.querySelector("[data-pipe-build-caption]");
-    var progressEl = document.querySelector("[data-pipe-build-progress]");
     if (!stage || !canvasEl) return;
 
     var renderer;
@@ -166,10 +165,6 @@
           gsap.fromTo(captionEl, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
           captionEl.textContent = STEPS[idx].text;
         }
-      }
-      if (progressEl) {
-        var span = progressEl.querySelector("span");
-        if (span) span.textContent = String(Math.floor(p * 100)).padStart(2, "0");
       }
     }
 
@@ -442,7 +437,10 @@
     var metricEl = document.querySelector("[data-specs-metric]");
     var numEl = document.querySelector("[data-specs-num]");
     var capEl = document.querySelector("[data-specs-caption]");
-    var progEl = document.querySelector("[data-specs-progress] span");
+    var stepEl = document.querySelector("[data-specs-step]");
+    var gaugeEl = document.querySelector("[data-specs-gauge]");
+    var gaugeNeedle = gaugeEl ? gaugeEl.querySelector(".sg-needle") : null;
+    var gaugeFill = gaugeEl ? gaugeEl.querySelector(".sg-fill") : null;
     var METRICS = [
       { metric: "Max diameter", num: "2400<span>mm</span>", cap: "The bore carries the Gulf's largest water and sewerage flows." },
       { metric: "Pressure rating", num: "32<span>bar</span>", cap: "Engineered to hold extreme internal pressure without yielding." },
@@ -457,7 +455,20 @@
       if (metricEl) { gsap.fromTo(metricEl, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }); metricEl.textContent = m.metric; }
       if (numEl) { gsap.fromTo(numEl, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }); numEl.innerHTML = m.num; }
       if (capEl) { gsap.fromTo(capEl, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }); capEl.textContent = m.cap; }
-      if (progEl) progEl.textContent = "0" + (idx + 1);
+      if (stepEl) stepEl.textContent = "0" + (idx + 1) + " / 0" + METRICS.length;
+      // Pressure gauge: sweep the needle 0->32 bar and fill the arc when
+      // entering the pressure beat. The "from" values reset to 0 at tween start
+      // (invisible — the gauge is fading/blur in), so leaving the beat just
+      // fades + blurs the gauge out with the needle still at 32 (no snap). The
+      // reset to 0 happens here on the next enter, never on the way out.
+      if (stage) stage.classList.toggle("is-pressure", idx === 1);
+      if (gaugeNeedle && gaugeFill && idx === 1) {
+        // Sweep the needle tip 0 -> 32 bar by animating its x2/y2 attributes
+        // (trig, not a CSS transform) — bulletproof, no transform-origin or
+        // filter-blur interaction. 32 bar = 54° from up, radius 74.
+        gsap.fromTo(gaugeNeedle, { attr: { x2: 26, y2: 100 } }, { attr: { x2: 160, y2: 56.5 }, duration: 1.3, ease: "power3.out" });
+        gsap.fromTo(gaugeFill, { strokeDashoffset: 100 }, { strokeDashoffset: 20, duration: 1.3, ease: "power3.out" });
+      }
     }
 
     // progress-driven viz (pressure glow + length dimension)

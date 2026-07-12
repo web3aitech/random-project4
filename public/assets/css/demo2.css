@@ -45,16 +45,13 @@ html.demo2 .pipe-build__canvas {
   display: block;
 }
 html.demo2 .pipe-build__ui {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 0.6rem;
-  padding: clamp(28px, 6vw, 80px);
-  pointer-events: none;
-  z-index: 2;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  gap: 0.8rem; padding: clamp(28px, 6vw, 80px);
+  pointer-events: none; z-index: 2;
+}
+html.demo2 .pipe-build__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
 }
 html.demo2 .pipe-build__eyebrow {
   font: 600 0.8rem/1 var(--font-mono, "Inter"), sans-serif;
@@ -82,17 +79,6 @@ html.demo2 .pipe-build__caption {
   max-width: 44ch;
   transition: opacity 320ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
-html.demo2 .pipe-build__progress {
-  position: absolute;
-  top: 50%;
-  right: clamp(20px, 4vw, 56px);
-  transform: translateY(-50%);
-  font: 600 0.75rem/1 var(--font-mono, "Inter"), sans-serif;
-  letter-spacing: 0.2em;
-  color: #54657A;
-  z-index: 2;
-}
-html.demo2 .pipe-build__progress span { color: var(--accent, #DBB85C); }
 /* No-WebGL fallback: keep the stage readable with just the UI + a CSS pipe motif. */
 html.demo2.demo2-no-webgl .pipe-build__canvas { display: none; }
 
@@ -107,8 +93,12 @@ html.demo2 .specs-reel {
 html.demo2 .specs-reel__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 html.demo2 .specs-reel__ui {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
-  gap: 0.5rem; padding: clamp(28px, 6vw, 80px); pointer-events: none; z-index: 2;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start;
+  gap: 0.5rem; padding: clamp(28px, 6vw, 80px);
+  pointer-events: none; z-index: 2;
+}
+html.demo2 .specs-reel__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%;
 }
 html.demo2 .specs-reel__eyebrow {
   font: 600 0.78rem/1 var(--font-mono, "Inter"), sans-serif;
@@ -116,7 +106,7 @@ html.demo2 .specs-reel__eyebrow {
 }
 html.demo2 .specs-reel__metric {
   font: 500 clamp(0.95rem, 1.4vw, 1.15rem)/1 var(--font-mono, "Inter"), sans-serif;
-  letter-spacing: 0.18em; text-transform: uppercase; color: #8294a8; margin: 0.2rem 0 0;
+  letter-spacing: 0.18em; text-transform: uppercase; color: #8294a8; margin: 0.3rem 0 0;
 }
 html.demo2 .specs-reel__num {
   font: 700 clamp(3rem, 8vw, 6.4rem)/0.92 var(--font-display, "DM Sans"), sans-serif;
@@ -124,16 +114,27 @@ html.demo2 .specs-reel__num {
 }
 html.demo2 .specs-reel__num span { font-size: 0.34em; color: var(--accent, #DBB85C); margin-left: 0.15em; letter-spacing: 0.04em; }
 html.demo2 .specs-reel__caption {
-  font: 400 clamp(0.95rem, 1.4vw, 1.15rem)/1.5 var(--font-body, "DM Sans"), sans-serif;
-  color: #AEBDCD; margin: 0.3rem 0 0; max-width: 46ch;
+  font: 400 clamp(1.05rem, 1.4vw, 1.25rem)/1.5 var(--font-body, "DM Sans"), sans-serif;
+  color: #fff; margin: 0.4rem 0 0; max-width: 42ch;
   transition: opacity 320ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
-html.demo2 .specs-reel__progress {
-  position: absolute; top: 50%; right: clamp(20px, 4vw, 56px); transform: translateY(-50%);
-  font: 600 0.75rem/1 var(--font-mono, "Inter"), sans-serif; letter-spacing: 0.2em; color: #54657A; z-index: 2;
-}
-html.demo2 .specs-reel__progress span { color: var(--accent, #DBB85C); }
 html.demo2.demo2-no-webgl .specs-reel__canvas { display: none; }
+
+/* Pressure gauge dial — shown only during the pressure beat (is-pressure on
+   the section). Needle + arc sweep to 32 bar. */
+html.demo2 .specs-reel__gauge {
+  position: absolute;
+  bottom: clamp(28px, 5vw, 64px);
+  right: clamp(28px, 5vw, 64px);
+  width: clamp(170px, 18vw, 230px);
+  opacity: 0; filter: blur(8px); pointer-events: none; z-index: 2;
+  transition: opacity 500ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              filter 500ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .specs-reel.is-pressure .specs-reel__gauge { opacity: 1; filter: blur(0); }
+html.demo2 .specs-reel__gauge svg { width: 100%; height: auto; display: block; overflow: visible; }
+html.demo2 .specs-reel__gauge .sg-fill { filter: drop-shadow(0 0 6px rgba(219,184,92,0.45)); }
+@media (max-width: 767px) { html.demo2 .specs-reel__gauge { display: none; } }
 
 /* Mobile fallback for the WebGL scenes (phones < 768px). Desktop shows the 3D
    canvas; phones show a CSS/SVG animation that always renders reliably. */
@@ -142,8 +143,6 @@ html.demo2.demo2-no-webgl .specs-reel__canvas { display: none; }
   html.demo2 .specs-reel__canvas { display: none; }
   html.demo2 .pipe-build__ui,
   html.demo2 .specs-reel__ui { display: none; }
-  html.demo2 .pipe-build__progress,
-  html.demo2 .specs-reel__progress { display: none; }
   html.demo2 .pipe-build__fallback,
   html.demo2 .specs-reel__fallback { display: flex; }
 }
@@ -566,8 +565,24 @@ body.d2-home .mobile-nav__cta .btn--ghost:hover {
   background: rgba(255,255,255,0.07);
 }
 
-/* Hide the footer on the one-pager for a cleaner cinematic close. */
+/* Keep the full legacy footer off the one-pager; show only the small legal
+   line directly after the Enquire chapter. */
 body.d2-home .site-footer { display: none; }
+body.d2-home .d2-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  padding: 1.1rem clamp(20px, 5vw, 80px) 1.6rem;
+  background: #060D2E;
+  color: var(--accent, #DBB85C);
+  font: 600 0.72rem/1.5 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
 
 /* Inline links (the "call +971…" tel link) in the enquire chapter — dune so
    they don't camo into the dark fluid. Excludes .btn links (those keep their
@@ -1066,3 +1081,6 @@ html.demo2 .d2-jumprail__chip--cta.is-active { background: var(--accent, #DBB85C
 @media (prefers-reduced-motion: reduce) {
   html.demo2 .d2-jumprail { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
 }
+
+/* Footer legal/credit line — use the dune accent so it reads on the dark base. */
+html.demo2 .site-footer .footer-bottom { color: var(--accent, #DBB85C); }

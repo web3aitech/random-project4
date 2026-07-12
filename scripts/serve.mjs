@@ -3,13 +3,13 @@
 // /contact-us/index.html), matching Vercel's cleanUrls. No build step needed
 // for content changes - only re-run `npm run build` if you edit src-pages/.
 //
-// Usage:  npm run dev   (then open http://localhost:5173)
+// Usage:  npm run dev   (then open http://localhost:4000)
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 
 const ROOT = join(process.cwd(), 'public');
-const PORT = process.env.PORT || 5173;
+const PORT = process.env.PORT || 4000;
 const MIME = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
