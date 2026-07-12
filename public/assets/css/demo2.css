@@ -340,17 +340,14 @@ html.demo2 .d2-anatomy-grid .pipe-diagram { max-width: 520px; width: 100%; heigh
    Also constrain padding/heading/gap so all content fits within 100vh. */
 html.demo2 .d2-chapter[data-motion-chapter="anatomy"] {
   background: radial-gradient(120% 90% at 50% 45%, #0B1650 0%, #060D2E 70%, #03060f 100%);
-  padding-top: clamp(16px, 2vw, 28px);
-  padding-bottom: clamp(16px, 2vw, 28px);
-  justify-content: flex-start;
-  padding-top: max(var(--header-h, 72px), clamp(16px, 2vw, 28px));
+  justify-content: center;
 }
 html.demo2 .d2-chapter[data-motion-chapter="anatomy"] h2 {
   font-size: clamp(1.8rem, 4.2vw, 3.4rem);
 }
 html.demo2 .d2-chapter[data-motion-chapter="anatomy"] .d2-chapter__inner {
-  gap: 0.5rem;
-  justify-content: flex-start;
+  gap: 0.6rem;
+  justify-content: center;
 }
 html.demo2 .d2-chapter[data-motion-chapter="anatomy"] .d2-anatomy-grid {
   margin-top: 0.4rem;
@@ -364,7 +361,11 @@ html.demo2 .d2-chapter[data-motion-chapter="anatomy"] .pipe-diagram {
 /* Anatomy build gate (Phase G): hide the cross-section layers, callouts and
    list items until the scrubbed build runs. Progressive enhancement — under
    reduced motion (.demo2-motion never lands) the diagram shows fully. */
-html.demo2.demo2-motion .pipe-diagram circle,
+/* Anatomy build gate: hide the inner layers, callouts and list items until the
+   scrubbed build runs — but keep the OUTER liner (the first circle) visible
+   from the start so the section never reads as blank space before you scroll.
+   Progressive enhancement: under reduced motion the diagram shows fully. */
+html.demo2.demo2-motion .pipe-diagram circle:nth-child(n+2),
 html.demo2.demo2-motion .pipe-diagram .callout,
 html.demo2.demo2-motion .d2-anatomy-list li { opacity: 0; }
 html.demo2.demo2-motion .pipe-diagram .dim { stroke-dasharray: 300; stroke-dashoffset: 300; }
@@ -699,3 +700,369 @@ html.demo2 body.d2-home .d2-chapter[data-motion-chapter="certs"] { background: #
 html.demo2 body.d2-home .d2-chapter[data-motion-chapter="enquire"] { background: #000000; }
 /* Pin a dark base behind everything (in case of any sub-pixel gaps). */
 html.demo2 body.d2-home { background: #000; }
+
+/* =========================================================================
+   REBALANCE — informational sections below the Specs Reel + sticky chip rail.
+   The 3 cinematic chapters (pipe-build / anatomy / specs-reel) are unchanged
+   above. Below "built to scale" the page rises back from black to a calm ink
+   (#070C1F) for Apple-empty-space information density.
+   ========================================================================= */
+
+/* --- Corrected background chain: specs-reel is the black pit; calm sections
+   rise back to ink, then enquire closes dark. Overrides the chain above. --- */
+html.demo2 body.d2-home { background: #070C1F; }
+html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="about"] { background: linear-gradient(to bottom, #000000 0%, #070C1F 100%); }
+html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="range"] { background: #070C1F; }
+html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="why-grp"] { background: linear-gradient(to bottom, #070C1F 0%, #080E22 100%); }
+html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="certs"] { background: linear-gradient(to bottom, #080E22 0%, #070C1F 100%); }
+html.demo2 body.d2-home .d2-chapter[data-motion-chapter="enquire"] { background: linear-gradient(to bottom, #070C1F 0%, #060D2E 100%); }
+
+/* --- Calm chapter base (not forced 100vh; generous padding, restrained type). --- */
+html.demo2 .d2-calmlight {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px, 11vw, 148px) clamp(20px, 5vw, 64px);
+  color: #fff;
+  background: transparent;
+}
+/* Atmospheric spotlight — the same soft radial-glow stage the cinematic
+   chapters use, so the second half reads as one design system, not a cheaper
+   tier. Sits behind content; pointer-events none. */
+html.demo2 .d2-calmlight::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(72% 58% at 50% 32%, rgba(12, 27, 100, 0.34), transparent 70%);
+}
+html.demo2 .d2-calm__inner {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 1100px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 1.4rem; text-align: center;
+}
+html.demo2 .d2-calmlight h2 {
+  font: 700 clamp(1.8rem, 3.6vw, 3rem)/1.04 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: -0.02em; margin: 0; max-width: 20ch; color: #fff;
+}
+html.demo2 .d2-calmlight p {
+  color: #AEBDCD; font-size: clamp(1rem, 1.3vw, 1.12rem); line-height: 1.65; max-width: 60ch; margin: 0;
+}
+html.demo2 .d2-calm__split {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: start; text-align: left;
+}
+@media (max-width: 820px) {
+  html.demo2 .d2-calm__split { grid-template-columns: 1fr; text-align: center; }
+  html.demo2 .d2-calm__split .d2-calm__lead { text-align: center; }
+}
+html.demo2 .d2-calm__lead { display: flex; flex-direction: column; gap: 1rem; }
+html.demo2 .d2-calm__body { display: flex; flex-direction: column; gap: 1rem; }
+html.demo2 .d2-calm__body p { text-align: left; }
+
+/* "bar" reveal: the gate hides [data-motion] with opacity:0, but bars must stay
+   visible (opacity 1) and grow via scaleX. Reduced motion → scaleX:1 (full). */
+html.demo2.demo2-motion [data-motion="bar"] { opacity: 1; transform: scaleX(0); transform-origin: left center; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { html.demo2 [data-motion="bar"] { transform: scaleX(1) !important; } }
+
+/* Hero scroll cue. */
+html.demo2 .d2-scroll-cue {
+  position: absolute; bottom: clamp(20px, 4vw, 40px); left: 50%; transform: translateX(-50%);
+  font: 600 0.7rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.3em; text-transform: uppercase; color: #54657A;
+}
+
+/* ---- WHO WE ARE: text on the left, animated layered ring on the right ---- */
+html.demo2 .d2-about { padding: clamp(96px, 13vw, 176px) clamp(20px, 5vw, 64px); }
+html.demo2 .d2-about__inner {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 1180px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 96px); align-items: center;
+  text-align: left;
+}
+@media (max-width: 860px) { html.demo2 .d2-about__inner { grid-template-columns: 1fr; gap: 2.6rem; } }
+html.demo2 .d2-about__copy { display: flex; flex-direction: column; gap: 1rem; }
+html.demo2 .d2-about__copy h2 { max-width: 16ch; }
+html.demo2 .d2-about__copy p { text-align: left; }
+html.demo2 .d2-about__visual { display: flex; justify-content: center; align-items: center; }
+html.demo2 .d2-ring { width: min(440px, 92%); height: auto; overflow: visible; }
+html.demo2 .d2-ring .ring-float {
+  animation: d2-ring-float 6s ease-in-out infinite;
+  filter: drop-shadow(0 24px 30px rgba(0,0,0,0.55));
+}
+html.demo2 .d2-ring .ring-shadow {
+  transform-box: fill-box; transform-origin: center;
+  animation: d2-ring-shadow 6s ease-in-out infinite;
+}
+html.demo2 .d2-ring .ring-wind {
+  transform-box: fill-box; transform-origin: center;
+  animation: d2-ring-spin 14s linear infinite;
+}
+@keyframes d2-ring-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes d2-ring-shadow { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(0.9); opacity: 0.35; } }
+@keyframes d2-ring-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  html.demo2 .d2-ring .ring-float,
+  html.demo2 .d2-ring .ring-shadow,
+  html.demo2 .d2-ring .ring-wind { animation: none; }
+}
+
+/* Who-we-are facts list. */
+html.demo2 .d2-facts { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+html.demo2 .d2-facts li {
+  display: flex; flex-direction: column; gap: 0.15rem;
+  padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.08); color: #fff; font-size: 0.98rem;
+}
+html.demo2 .d2-facts__label {
+  font: 500 0.7rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent, #DBB85C);
+}
+
+/* ---- PRODUCT RANGE: floating line-art glyphs ---- */
+html.demo2 .d2-glyphs {
+  list-style: none; margin: 1.8rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; width: 100%;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+@media (max-width: 860px) { html.demo2 .d2-glyphs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 540px) { html.demo2 .d2-glyphs { grid-template-columns: 1fr; } }
+html.demo2 .d2-glyphs li {
+  display: flex; flex-direction: column; gap: 0.7rem; align-items: flex-start;
+  padding: clamp(24px, 2.4vw, 36px) clamp(18px, 1.8vw, 28px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+html.demo2 .d2-glyphs li:last-child { border-right: none; }
+@media (max-width: 860px) {
+  html.demo2 .d2-glyphs li:nth-child(2n) { border-right: none; }
+}
+@media (max-width: 540px) {
+  html.demo2 .d2-glyphs li { border-right: none; }
+}
+html.demo2 .d2-glyph {
+  width: clamp(48px, 5vw, 64px); height: auto; aspect-ratio: 1;
+  fill: none; stroke: var(--accent, #DBB85C); stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px rgba(219,184,92,0.18));
+  transition: transform 420ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .d2-glyphs li:hover .d2-glyph { transform: translateY(-4px); }
+html.demo2 .d2-glyphs strong { font: 600 1.1rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: #fff; }
+html.demo2 .d2-glyphs span { color: #AEBDCD; font-size: 0.92rem; line-height: 1.5; }
+
+/* Spec pills row (under product range). */
+html.demo2 .d2-spec-pills {
+  list-style: none; margin: 1.6rem 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem;
+}
+html.demo2 .d2-spec-pills li {
+  font: 500 0.8rem/1 var(--font-mono, "Inter"), sans-serif; letter-spacing: 0.06em; color: #AEBDCD;
+  padding: 0.55rem 0.9rem; border: 1px solid rgba(219,184,92,0.25); border-radius: 999px;
+}
+
+/* ---- WHY GRP: three hoverable pipe cross-sections, stats on hover ---- */
+html.demo2 .d2-why-lead {
+  font: 400 clamp(1.15rem, 1.9vw, 1.55rem)/1.5 var(--font-display, "DM Sans"), sans-serif;
+  color: #C6D2E0; max-width: 52ch; margin: 0.5rem 0 0;
+}
+html.demo2 .d2-mats {
+  list-style: none; margin: 2.6rem 0 0; padding: 0;
+  display: flex; flex-wrap: nowrap; align-items: stretch; gap: clamp(14px, 1.8vw, 22px);
+  width: 100%; max-width: 1000px;
+}
+@media (max-width: 760px) { html.demo2 .d2-mats { flex-direction: column; } }
+html.demo2 .d2-mat {
+  position: relative; overflow: hidden;
+  flex: 1 1 0; min-width: 0;
+  min-height: clamp(420px, 46vh, 480px);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: clamp(24px, 2.6vw, 36px) clamp(18px, 2vw, 28px);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
+  box-shadow: 0 20px 50px -34px rgba(0,0,0,0.85);
+  transition: flex-grow 500ms cubic-bezier(.22,.8,.2,1),
+              border-color 320ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              box-shadow 320ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .d2-mat:hover {
+  flex-grow: 2.6; z-index: 3;
+  border-color: rgba(255,255,255,0.22);
+  box-shadow: 0 34px 70px -30px rgba(0,0,0,0.9);
+}
+/* GRP — permanently dune-highlighted as the best */
+html.demo2 .d2-mat--grp {
+  border-color: rgba(219,184,92,0.5);
+  background:
+    linear-gradient(180deg, rgba(219,184,92,0.09), rgba(219,184,92,0.02)),
+    linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
+  box-shadow: 0 0 0 1px rgba(219,184,92,0.2), 0 26px 64px -30px rgba(219,184,92,0.45);
+}
+html.demo2 .d2-mat--grp:hover {
+  border-color: rgba(219,184,92,0.75);
+  box-shadow: 0 0 0 1px rgba(219,184,92,0.4), 0 38px 84px -30px rgba(219,184,92,0.6);
+}
+html.demo2 .d2-mat__badge {
+  position: absolute; top: 14px; right: 14px; z-index: 4;
+  font: 600 0.62rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #060D2E;
+  background: var(--accent, #DBB85C); padding: 0.35rem 0.55rem; border-radius: 999px;
+}
+html.demo2 .d2-mat__pipe { width: clamp(108px, 8.5vw, 144px); aspect-ratio: 1; margin: 0.2rem 0; }
+html.demo2 .d2-mat__pipe svg {
+  width: 100%; height: 100%;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+}
+html.demo2 .d2-mat__name {
+  font: 700 1.25rem/1.1 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0.2rem 0 0;
+}
+html.demo2 .d2-mat--grp .d2-mat__name { color: var(--accent, #DBB85C); }
+html.demo2 .d2-mat__tag {
+  font: 500 0.78rem/1.3 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.08em; color: #8294a8; margin: 0.3rem 0 0;
+}
+/* Detail area — stats and description SHARE this space (cross-fade). Stats show
+   by default; on hover the description replaces them in the same spot. The card
+   expands wider on hover so the description has room to read. No two-column
+   layout. */
+html.demo2 .d2-mat__detail {
+  position: relative; width: 100%;
+  margin: 1.2rem 0 0; padding: 1.2rem 0 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  min-height: clamp(104px, 12vh, 140px);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+/* On hover the description replaces the stats, so the divider (which separates
+   the graphic from the stats) isn't needed — fade it out. */
+html.demo2 .d2-mat:hover .d2-mat__detail { border-color: transparent; }
+html.demo2 .d2-mat__stats {
+  width: 100%; max-width: 300px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 0.5rem;
+  opacity: 1;
+  transition: opacity 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .d2-mat:hover .d2-mat__stats { opacity: 0; }
+html.demo2 .d2-mat__stats div { display: flex; flex-direction: column; gap: 0.15rem; }
+html.demo2 .d2-mat__stats dt {
+  font: 500 0.66rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #6E7E90;
+}
+html.demo2 .d2-mat__stats dd {
+  font: 600 0.95rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0;
+}
+html.demo2 .d2-mat--grp .d2-mat__stats dd { color: var(--accent, #DBB85C); }
+html.demo2 .d2-mat__desc {
+  position: absolute; top: 1.2rem; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 clamp(6px, 1.4vw, 18px);
+  text-align: center;
+  color: #C6D2E0; font: 400 0.9rem/1.6 var(--font-body, "DM Sans"), sans-serif;
+  opacity: 0; pointer-events: none;
+  transition: opacity 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .d2-mat:hover .d2-mat__desc { opacity: 1; pointer-events: auto; }
+html.demo2 .d2-mat--grp .d2-mat__desc { color: #E4D5A0; }
+/* Touch + reduced motion: stack stats + description (both visible), no expansion. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  html.demo2 .d2-mat { min-height: 0; }
+  html.demo2 .d2-mat:hover { flex-grow: 1; }
+  html.demo2 .d2-mat__detail { min-height: 0; display: block; }
+  html.demo2 .d2-mat__stats { opacity: 1; max-width: 100%; }
+  html.demo2 .d2-mat__desc {
+    position: static; opacity: 1; pointer-events: auto;
+    margin-top: 1.2rem; padding: 1.2rem 0 0; display: block;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  html.demo2 .d2-mat, html.demo2 .d2-mat__stats, html.demo2 .d2-mat__desc { transition: none; }
+}
+
+/* Certifications license table — THE procurement-accessible data. */
+html.demo2 .d2-cert-table {
+  margin: 1.6rem 0 0; width: 100%;
+  display: grid; gap: 0;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; text-align: left;
+}
+html.demo2 .d2-cert-table__row {
+  display: grid; grid-template-columns: 1.1fr 1.1fr 1.3fr; gap: 0;
+  padding: 0.85rem clamp(14px, 1.6vw, 24px);
+  border-bottom: 1px solid rgba(255,255,255,0.06); align-items: center;
+}
+html.demo2 .d2-cert-table__row:last-child { border-bottom: none; }
+html.demo2 .d2-cert-table__row--head {
+  background: rgba(219,184,92,0.08);
+  font: 600 0.72rem/1.3 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent, #DBB85C);
+}
+html.demo2 .d2-cert-table__row:not(.d2-cert-table__row--head) { color: #C6D2E0; font-size: 0.95rem; }
+html.demo2 .d2-cert-table__row span:nth-child(2) { color: #fff; font-weight: 600; }
+@media (max-width: 600px) {
+  html.demo2 .d2-cert-table__row { grid-template-columns: 1fr; gap: 0.2rem; padding: 0.8rem clamp(12px, 4vw, 18px); }
+  html.demo2 .d2-cert-table__row--head { display: none; }
+}
+html.demo2 .d2-cert-badges {
+  list-style: none; margin: 1.4rem 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem;
+}
+html.demo2 .d2-cert-badges li {
+  font: 600 0.8rem/1 var(--font-mono, "Inter"), sans-serif; letter-spacing: 0.06em; color: #AEBDCD;
+  padding: 0.55rem 0.95rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; background: rgba(255,255,255,0.03);
+}
+/* Cert-logo row — static, single line, centered (no carousel). */
+html.demo2 .d2-cert-logos {
+  list-style: none; margin: 2.2rem 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: clamp(20px, 3vw, 44px);
+  width: 100%;
+}
+html.demo2 .d2-cert-logos li { display: flex; align-items: center; justify-content: center; opacity: 0.85; transition: opacity 240ms var(--ease-out, cubic-bezier(.16,1,.3,1)); }
+html.demo2 .d2-cert-logos li:hover { opacity: 1; }
+html.demo2 .d2-cert-logos img { display: block; height: clamp(48px, 4.4vw, 64px); width: auto; filter: grayscale(0.2) brightness(0.95); }
+@media (max-width: 600px) {
+  html.demo2 .d2-cert-logos { gap: 14px 18px; }
+  html.demo2 .d2-cert-logos img { height: 44px; }
+}
+
+/* Enquire inline tel/email links — dune so they don't camo on the dark bg. */
+body.d2-home #enquire a:not(.btn) { color: var(--accent, #DBB85C); }
+body.d2-home #enquire a:not(.btn):hover { color: #fff; }
+
+/* =========================================================================
+   STICKY QUICK-ACCESS CHIP RAIL — procurement shortcut.
+   Hidden until the hero leaves the top; .is-visible reveals it. .is-active
+   highlights the section in view. Click routing is handled in JS (Lenis).
+   ========================================================================= */
+html.demo2 .d2-jumprail {
+  position: fixed; top: clamp(12px, 1.6vw, 20px); left: 50%;
+  transform: translateX(-50%) translateY(-140%);
+  z-index: 200;
+  display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(7, 12, 31, 0.72); border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  opacity: 0; pointer-events: none;
+  transition: transform 480ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              opacity 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .d2-jumprail.is-visible { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+html.demo2 .d2-jumprail__chip {
+  font: 600 0.78rem/1 var(--font-display, "DM Sans"), sans-serif; color: rgba(255,255,255,0.7);
+  text-decoration: none; padding: 0.5rem 0.85rem; border-radius: 999px; white-space: nowrap;
+  transition: color 240ms var(--ease-out, cubic-bezier(.16,1,.3,1)), background 240ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .d2-jumprail__chip:hover { color: #fff; background: rgba(255,255,255,0.06); }
+html.demo2 .d2-jumprail__chip.is-active { color: var(--accent, #DBB85C); background: rgba(219,184,92,0.1); }
+html.demo2 .d2-jumprail__chip--cta { color: #060D2E; background: var(--accent, #DBB85C); font-weight: 700; }
+html.demo2 .d2-jumprail__chip--cta:hover { background: #E8C96A; color: #060D2E; }
+html.demo2 .d2-jumprail__chip--cta.is-active { background: var(--accent, #DBB85C); color: #060D2E; }
+@media (max-width: 600px) {
+  html.demo2 .d2-jumprail { gap: 0.25rem; padding: 0.3rem; }
+  html.demo2 .d2-jumprail__chip { padding: 0.4rem 0.65rem; font-size: 0.72rem; }
+}
+@media (max-width: 380px) {
+  html.demo2 .d2-jumprail__chip:not(.d2-jumprail__chip--cta):not(.is-active) { display: none; }
+}
+
+/* Under reduced motion, force the chip rail visible (no JS reveal) and the
+   calm sections visible (the gate hides [data-motion] until GSAP). The original
+   reduced-motion block already handles [data-motion]; this just ensures the
+   rail is shown if motion is off. */
+@media (prefers-reduced-motion: reduce) {
+  html.demo2 .d2-jumprail { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+}

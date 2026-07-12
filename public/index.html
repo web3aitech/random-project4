@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -16,7 +16,7 @@
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="stylesheet" href="/assets/css/fonts.css?v=6">
   <link rel="stylesheet" href="/assets/css/styles.css?v=7">
-  <link rel="stylesheet" href="/assets/css/demo2.css?v=17">
+  <link rel="stylesheet" href="/assets/css/demo2.css?v=19">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -69,12 +69,11 @@
 
     <nav class="header-flyout" aria-label="Header menu" aria-hidden="true">
       <a class="hf-item" href="/">Home</a>
-      <a class="hf-item" href="/grp-pipes-benefits/">Products</a>
-      <a class="hf-item" href="/certifications-approvals/">Certifications</a>
-      <a class="hf-item" href="/know-how-supplier/">Know-How</a>
-      <a class="hf-item" href="/services/">Services</a>
-      <a class="hf-item" href="/download-catalog/">Catalog</a>
-      <a class="hf-item" href="/contact-us/">Contact</a>
+      <a class="hf-item" href="#range">Products</a>
+      <a class="hf-item" href="#certs">Certifications</a>
+      <a class="hf-item" href="#about">Know-How</a>
+      <a class="hf-item" href="#why-grp">Why GRP</a>
+      <a class="hf-item" href="#enquire">Enquire</a>
     </nav>
 
     <nav class="primary-nav" aria-label="Primary">
@@ -84,16 +83,14 @@
           <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <ul class="primary-nav__menu">
-          <li><a href="/grp-pipes-benefits/">GRP Pipes Benefits</a></li>
-          <li><a href="/grp-pipes-general-information/">GRP Pipes General Information</a></li>
-          <li><a href="/grp-pipe-installation/">GRP Pipe Installation</a></li>
-          <li><a href="/product-testing/">Product Testing</a></li>
+          <li><a href="#range">GRP Pipes &amp; Fittings</a></li>
+          <li><a href="#the-pipe">The Making of a Pipe</a></li>
+          <li><a href="#why-grp">Why GRP</a></li>
         </ul>
       </div>
-      <div class="primary-nav__item"><a class="primary-nav__link" href="/certifications-approvals/">Certifications</a></div>
-      <div class="primary-nav__item"><a class="primary-nav__link" href="/know-how-supplier/">Know-How Supplier</a></div>
-      <div class="primary-nav__item"><a class="primary-nav__link" href="/services/">Services</a></div>
-      <div class="primary-nav__item"><a class="primary-nav__link" href="/download-catalog/">Download Catalog</a></div>
+      <div class="primary-nav__item"><a class="primary-nav__link" href="#certs">Certifications</a></div>
+      <div class="primary-nav__item"><a class="primary-nav__link" href="#about">Know-How</a></div>
+      <div class="primary-nav__item"><a class="primary-nav__link" href="#enquire">Enquire</a></div>
     </nav>
 
     <div class="header-actions">
@@ -124,23 +121,28 @@
         <svg class="mobile-chevron" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <ul class="mobile-sub">
-        <li><a href="/grp-pipes-benefits/">GRP Pipes Benefits</a></li>
-        <li><a href="/grp-pipes-general-information/">General Information</a></li>
-        <li><a href="/grp-pipe-installation/">GRP Pipe Installation</a></li>
-        <li><a href="/product-testing/">Product Testing</a></li>
+        <li><a href="#range">GRP Pipes &amp; Fittings</a></li>
+        <li><a href="#the-pipe">The Making of a Pipe</a></li>
+        <li><a href="#why-grp">Why GRP</a></li>
       </ul>
     </li>
-    <li><a href="/certifications-approvals/">Certifications</a></li>
-    <li><a href="/know-how-supplier/">Know-How Supplier</a></li>
-    <li><a href="/services/">Services</a></li>
-    <li><a href="/download-catalog/">Download Catalog</a></li>
-    <li><a href="/contact-us/">Contact</a></li>
+    <li><a href="#certs">Certifications</a></li>
+    <li><a href="#about">Know-How</a></li>
+    <li><a href="#enquire">Enquire</a></li>
   </ul>
   <div class="mobile-nav__cta">
     <a class="btn btn--primary btn--block" href="#enquire">Request a Quote &rarr;</a>
     <a class="btn btn--ghost btn--block" href="tel:+97148851333">Call +971 4 885 1333</a>
   </div>
 </aside>
+
+<!-- ============ STICKY QUICK-ACCESS CHIPS ============ -->
+<nav class="d2-jumprail" aria-label="Jump to section">
+  <a class="d2-jumprail__chip" href="#range" data-jump>Product range</a>
+  <a class="d2-jumprail__chip" href="#why-grp" data-jump>Why GRP</a>
+  <a class="d2-jumprail__chip" href="#certs" data-jump>Certifications</a>
+  <a class="d2-jumprail__chip d2-jumprail__chip--cta" href="#enquire" data-jump data-magnetic>Enquire</a>
+</nav>
 
 <main id="main">
 
@@ -149,16 +151,16 @@
     <div class="d2-hero__inner">
       <span class="d2-eyebrow" data-motion="fade-up">GRP Pipe Manufacturer &middot; Jebel Ali, Dubai</span>
       <h1 data-motion="mask-reveal">Engineered GRP pipe systems for the Gulf's <em>water &amp; sewerage</em> networks.</h1>
-      <p data-motion="fade-up">Dubai Pipes Factory Co. &mdash; Flowtite&reg; technology, BSI Kitemark-certified, up to 2400&nbsp;mm diameter and 32&nbsp;bar pressure.</p>
+      <p data-motion="fade-up">Dubai Pipes Factory Co. &mdash; the only UAE-licensed Flowtite&reg; producer. Pipes, fittings, manhole liners and tanks up to 2400&nbsp;mm and 32&nbsp;bar, BSI Kitemark-certified.</p>
       <div class="d2-hero__actions" data-motion="fade-up">
         <a class="btn btn--primary btn--lg" href="#enquire" data-magnetic>Request a Quote <span class="btn__arrow">&rarr;</span></a>
-        <a class="btn btn--ghost btn--lg" href="#enquire">Product range</a>
+        <a class="btn btn--ghost btn--lg" href="#range">View product range</a>
       </div>
     </div>
   </section>
 
   <!-- ===================== PIPE BUILD (signature) ===================== -->
-  <section class="pipe-build" data-motion-chapter="pipe-build" data-pipe-build-stage>
+  <section class="pipe-build" id="the-pipe" data-motion-chapter="pipe-build" data-pipe-build-stage>
     <canvas class="pipe-build__canvas" data-pipe-build-canvas aria-hidden="true"></canvas>
     <div class="pipe-build__fallback" aria-hidden="true">
       <span class="pipe-build__eyebrow">The making of a GRP pipe</span>
@@ -228,30 +230,212 @@
     </div>
   </section>
 
-  <!-- ========================= CERTS ========================= -->
-  <section class="d2-chapter" data-motion-chapter="certs">
-    <div class="d2-chapter__inner">
-      <span class="d2-eyebrow" data-motion="fade-up">Certified</span>
-      <h2 data-motion="mask-reveal">Independently certified, regionally approved.</h2>
-      <p data-motion="fade-up">BSI Kitemark licensed, ISO 9001 &amp; ISO 14001 accredited, WRAS approved &mdash; in use across the GCC.</p>
-      <div class="cert-marquee" data-motion="fade">
-        <div class="cert-strip cert-strip--marquee" aria-label="Certifications and approvals - scrolling">
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/9a7af5f8c8.jpg" alt="BSI Kitemark certification" width="150" height="93"></div>
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/e1857f2cd7.jpg" alt="ISO 9001 quality management certification" width="150" height="186"></div>
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/51a9831822.jpg" alt="ISO 14001 environmental management certification" width="150" height="48"></div>
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/eaf1db14dd.jpg" alt="Water Regulations Advisory Scheme approval" width="150" height="100"></div>
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/ce-mark.svg" alt="CE European Conformity marking" height="60"></div>
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/ukca.svg" alt="UKCA UK Conformity Assessed marking" height="60"></div>
-          <div class="cert-strip__item"><img src="/assets/images/certifications-approvals/astm.svg" alt="ASTM International standards" height="60"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/9a7af5f8c8.jpg" alt="" width="150" height="93"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/e1857f2cd7.jpg" alt="" width="150" height="186"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/51a9831822.jpg" alt="" width="150" height="48"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/eaf1db14dd.jpg" alt="" width="150" height="100"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/ce-mark.svg" alt="" height="60"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/ukca.svg" alt="" height="60"></div>
-          <div class="cert-strip__item cert-strip__item--dup" aria-hidden="true"><img src="/assets/images/certifications-approvals/astm.svg" alt="" height="60"></div>
-        </div>
+  <!-- ========================= WHO WE ARE =========================
+       Visual language: text on the left, an animated layered cross-section
+       ring on the right (the GRP signature) with a filament winding that
+       orbits it — ties back to the anatomy + pipe-build chapters. -->
+  <section class="d2-calmlight d2-about" id="about" data-motion-chapter="about">
+    <div class="d2-about__inner">
+      <div class="d2-about__copy">
+        <span class="d2-eyebrow" data-motion="fade-up">Who we are</span>
+        <h2 data-motion="mask-reveal">The only UAE-licensed Flowtite&reg; producer.</h2>
+        <p data-motion="fade-up">Dubai Pipes Factory Co. manufactures Glass Reinforced Plastic pipe systems from a 150,000&nbsp;m&sup2; plant in the Jebel Ali Industrial Area, inside Dubai Investments Park &mdash; around 100&nbsp;km from Abu Dhabi.</p>
+        <p data-motion="fade-up">Pipes are produced under Flowtite&reg; technology and machinery, in continuous-filament and reciprocal helical winding, and are in use across the Middle East, the GCC and the wider UAE &mdash; for water, sewerage, irrigation and seawater networks.</p>
       </div>
+      <div class="d2-about__visual" data-motion="fade-up" aria-hidden="true">
+        <svg class="d2-ring" viewBox="0 0 240 240" role="img" aria-label="Cross-section of a GRP pipe: outer liner, structural layer, inner liner, with a filament winding orbiting it.">
+          <defs>
+            <radialGradient id="ringGlow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%" stop-color="rgba(219,184,92,0.5)"/>
+              <stop offset="60%" stop-color="rgba(219,184,92,0.12)"/>
+              <stop offset="100%" stop-color="rgba(219,184,92,0)"/>
+            </radialGradient>
+            <radialGradient id="ringBore" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%" stop-color="#1A2A3A"/>
+              <stop offset="100%" stop-color="#080F1A"/>
+            </radialGradient>
+            <filter id="ringShadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="6"/>
+            </filter>
+          </defs>
+          <!-- ground shadow -->
+          <ellipse class="ring-shadow" cx="120" cy="212" rx="78" ry="9" fill="#000" opacity="0.5" filter="url(#ringShadow)"/>
+          <g class="ring-float">
+            <!-- gold halo -->
+            <circle cx="120" cy="120" r="104" fill="url(#ringGlow)"/>
+            <!-- the 3-layer cross-section -->
+            <circle cx="120" cy="120" r="92" fill="#B7C2CF"/>
+            <circle cx="120" cy="120" r="84" fill="#214B6E"/>
+            <circle cx="120" cy="120" r="58" fill="#DBB85C"/>
+            <circle cx="120" cy="120" r="48" fill="url(#ringBore)"/>
+            <!-- rim outline -->
+            <circle cx="120" cy="120" r="92" fill="none" stroke="#DBB85C" stroke-width="0.8" opacity="0.45"/>
+            <!-- filament winding that orbits the ring -->
+            <circle class="ring-wind" cx="120" cy="120" r="98" fill="none" stroke="#EFD082" stroke-width="2" stroke-dasharray="5 9" stroke-linecap="round" opacity="0.75"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= PRODUCT RANGE =========================
+       Visual language: a floating catalog of line-art product glyphs —
+       pipe / fitting / manhole liner / tank — not text boxes. -->
+  <section class="d2-calmlight" id="range" data-motion-chapter="range">
+    <div class="d2-calm__inner">
+      <span class="d2-eyebrow" data-motion="fade-up">Product range</span>
+      <h2 data-motion="mask-reveal">Pipes, fittings, liners and tanks.</h2>
+      <ul class="d2-glyphs" data-motion-stagger>
+        <li>
+          <svg class="d2-glyph" viewBox="0 0 48 48" role="img" aria-label="GRP pipe"><ellipse cx="11" cy="24" rx="4" ry="14"/><ellipse cx="37" cy="24" rx="4" ry="14"/><line x1="11" y1="10" x2="37" y2="10"/><line x1="11" y1="38" x2="37" y2="38"/></svg>
+          <strong>GRP Pipes</strong><span>DN 150&ndash;2400, PN to 32&nbsp;bar, 12&nbsp;m sections.</span>
+        </li>
+        <li>
+          <svg class="d2-glyph" viewBox="0 0 48 48" role="img" aria-label="GRP fitting"><path d="M14 9 L14 26 Q14 34 22 34 L37 34"/><ellipse cx="14" cy="9" rx="4" ry="3"/><ellipse cx="37" cy="34" rx="3" ry="4"/><path d="M22 34 L22 40"/></svg>
+          <strong>Fittings</strong><span>Elbows, tees, Y-branches, reducers, nozzles &mdash; any angle.</span>
+        </li>
+        <li>
+          <svg class="d2-glyph" viewBox="0 0 48 48" role="img" aria-label="Manhole liner"><rect x="17" y="15" width="14" height="25"/><ellipse cx="24" cy="15" rx="13" ry="4"/><line x1="17" y1="22" x2="31" y2="22"/></svg>
+          <strong>Manhole liners</strong><span>Any shaft shape; sprayed cover slabs.</span>
+        </li>
+        <li>
+          <svg class="d2-glyph" viewBox="0 0 48 48" role="img" aria-label="GRP tank"><ellipse cx="24" cy="13" rx="14" ry="5"/><line x1="10" y1="13" x2="10" y2="35"/><line x1="38" y1="13" x2="38" y2="35"/><path d="M10 35 Q10 40 24 40 Q38 40 38 35"/></svg>
+          <strong>Tanks</strong><span>Custom GRP tanks for storage and treatment.</span>
+        </li>
+      </ul>
+      <ul class="d2-spec-pills" data-motion="fade-up">
+        <li>SN 2500 / 5000 / 10000&nbsp;N/m&sup2;</li>
+        <li>Double-bell coupler joints</li>
+        <li>AWWA &middot; BS EN &middot; ASTM</li>
+        <li>Custom designs on request</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================= WHY GRP =========================
+       Visual language: an animated comparison bar chart (GRP vs ductile iron
+       vs concrete) + a big-number stat splash. Data-viz, not a card grid. -->
+  <section class="d2-calmlight" id="why-grp" data-motion-chapter="why-grp">
+    <div class="d2-calm__inner">
+      <span class="d2-eyebrow" data-motion="fade-up">Why GRP</span>
+      <h2 data-motion="mask-reveal">Stronger, lighter, longer-lasting.</h2>
+      <p class="d2-why-lead" data-motion="fade-up">A fraction of the weight of steel or concrete &mdash; and built to outlast both. Hover a pipe to compare.</p>
+
+      <ul class="d2-mats" data-motion-stagger>
+        <!-- GRP — layered, gold-highlighted as the best -->
+        <li class="d2-mat d2-mat--grp">
+          <span class="d2-mat__badge">Recommended</span>
+          <div class="d2-mat__pipe" aria-hidden="true">
+            <svg viewBox="0 0 160 160" role="img" aria-label="GRP pipe cross-section">
+              <circle cx="80" cy="80" r="72" fill="#B7C2CF"/>
+              <circle cx="80" cy="80" r="66" fill="#214B6E"/>
+              <circle cx="80" cy="80" r="46" fill="#DBB85C"/>
+              <circle cx="80" cy="80" r="38" fill="#0E3045"/>
+              <circle cx="80" cy="80" r="72" fill="none" stroke="#DBB85C" stroke-width="1" opacity="0.4"/>
+            </svg>
+          </div>
+          <h3 class="d2-mat__name">GRP</h3>
+          <p class="d2-mat__tag">Lightest &middot; longest-lasting</p>
+          <div class="d2-mat__detail">
+            <dl class="d2-mat__stats">
+              <div><dt>Weight</dt><dd>1&times;</dd></div>
+              <div><dt>Service life</dt><dd>50+ yr</dd></div>
+              <div><dt>Corrosion</dt><dd>None</dd></div>
+              <div><dt>Sections</dt><dd>12 m</dd></div>
+            </dl>
+            <p class="d2-mat__desc">A glass-reinforced plastic composite &mdash; resin-rich liners resist corrosion while the structural glass wall carries the load. No cathodic protection, a 50-year service life, at a fraction of the weight of steel or concrete.</p>
+          </div>
+        </li>
+        <!-- Ductile iron — solid steel ring -->
+        <li class="d2-mat d2-mat--iron">
+          <div class="d2-mat__pipe" aria-hidden="true">
+            <svg viewBox="0 0 160 160" role="img" aria-label="Ductile iron pipe cross-section">
+              <defs>
+                <linearGradient id="ironGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#5A6573"/>
+                  <stop offset="50%" stop-color="#8A93A0"/>
+                  <stop offset="100%" stop-color="#3E4654"/>
+                </linearGradient>
+              </defs>
+              <circle cx="80" cy="80" r="72" fill="url(#ironGrad)"/>
+              <circle cx="80" cy="80" r="58" fill="#6E7785"/>
+              <circle cx="80" cy="80" r="44" fill="#1A1F2A"/>
+            </svg>
+          </div>
+          <h3 class="d2-mat__name">Ductile iron</h3>
+          <p class="d2-mat__tag">Heavy &middot; protected</p>
+          <div class="d2-mat__detail">
+            <dl class="d2-mat__stats">
+              <div><dt>Weight</dt><dd>4&times;</dd></div>
+              <div><dt>Service life</dt><dd>20&ndash;30 yr</dd></div>
+              <div><dt>Corrosion</dt><dd>Needs CP</dd></div>
+              <div><dt>Sections</dt><dd>6 m</dd></div>
+            </dl>
+            <p class="d2-mat__desc">Strong in isolation but heavy and corrosion-prone in soil &mdash; it relies on linings and cathodic protection to survive buried service, with a shorter design life and install rigging several times heavier than GRP.</p>
+          </div>
+        </li>
+        <!-- Concrete — chunky, mottled -->
+        <li class="d2-mat d2-mat--concrete">
+          <div class="d2-mat__pipe" aria-hidden="true">
+            <svg viewBox="0 0 160 160" role="img" aria-label="Concrete pipe cross-section">
+              <defs>
+                <linearGradient id="concGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#8A8476"/>
+                  <stop offset="50%" stop-color="#9A9484"/>
+                  <stop offset="100%" stop-color="#6E6858"/>
+                </linearGradient>
+              </defs>
+              <circle cx="80" cy="80" r="74" fill="url(#concGrad)"/>
+              <circle cx="58" cy="52" r="2.2" fill="#645C4A" opacity="0.7"/>
+              <circle cx="104" cy="60" r="1.8" fill="#5A5240" opacity="0.7"/>
+              <circle cx="68" cy="104" r="2" fill="#645C4A" opacity="0.6"/>
+              <circle cx="112" cy="98" r="1.6" fill="#5A5240" opacity="0.6"/>
+              <circle cx="92" cy="120" r="1.4" fill="#645C4A" opacity="0.5"/>
+              <circle cx="46" cy="86" r="1.6" fill="#5A5240" opacity="0.5"/>
+              <circle cx="80" cy="80" r="44" fill="#3A362C"/>
+            </svg>
+          </div>
+          <h3 class="d2-mat__name">Concrete</h3>
+          <p class="d2-mat__tag">Heaviest</p>
+          <div class="d2-mat__detail">
+            <dl class="d2-mat__stats">
+              <div><dt>Weight</dt><dd>10&times;</dd></div>
+              <div><dt>Service life</dt><dd>30&ndash;50 yr</dd></div>
+              <div><dt>Corrosion</dt><dd>Rebar rust</dd></div>
+              <div><dt>Sections</dt><dd>2.5&ndash;5 m</dd></div>
+            </dl>
+            <p class="d2-mat__desc">Massive, brittle and reinforced with steel that rusts &mdash; long joint runs, high hauling weight, and vulnerability to cracking and chemical attack over a shorter, less predictable service life.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================= CERTIFICATIONS ========================= -->
+  <section class="d2-calmlight" id="certs" data-motion-chapter="certs">
+    <div class="d2-calm__inner">
+      <span class="d2-eyebrow" data-motion="fade-up">Certified &amp; approved</span>
+      <h2 data-motion="mask-reveal">Independently certified, regionally approved.</h2>
+      <p data-motion="fade-up">BSI Kitemark-licensed, ISO 9001 &amp; ISO 14001 accredited, WRAS-approved &mdash; in use across the GCC.</p>
+
+      <div class="d2-cert-table" data-motion="fade-up" role="table" aria-label="BSI Kitemark licenses">
+        <div class="d2-cert-table__row d2-cert-table__row--head">
+          <span>Standard</span><span>BSI Kitemark license</span><span>Scope</span>
+        </div>
+        <div class="d2-cert-table__row"><span>ASTM D 3262</span><span>KM 505457</span><span>GRP sewer pipe</span></div>
+        <div class="d2-cert-table__row"><span>ASTM D 3517</span><span>KM 505456</span><span>GRP pressure pipe</span></div>
+        <div class="d2-cert-table__row"><span>ASTM D 3754</span><span>KM 505455</span><span>GRP sewer &amp; industrial</span></div>
+        <div class="d2-cert-table__row"><span>BS 5480</span><span>KM 505454</span><span>GRP pipes (UK)</span></div>
+        <div class="d2-cert-table__row"><span>BS EN 1796</span><span>KM 549259</span><span>GRP pipes (EN)</span></div>
+        <div class="d2-cert-table__row"><span>BS EN 14364</span><span>KM 505454</span><span>GRP fittings</span></div>
+      </div>
+
+      <ul class="d2-cert-logos" data-motion="fade-up" aria-label="Certification and approval logos">
+        <li><img src="/assets/images/certifications-approvals/9a7af5f8c8.jpg" alt="BSI Kitemark certification" height="70"></li>
+        <li><img src="/assets/images/certifications-approvals/e1857f2cd7.jpg" alt="ISO 9001 quality management certification" height="70"></li>
+        <li><img src="/assets/images/certifications-approvals/51a9831822.jpg" alt="ISO 14001 environmental management certification" height="70"></li>
+        <li><img src="/assets/images/certifications-approvals/eaf1db14dd.jpg" alt="Water Regulations Advisory Scheme approval" height="70"></li>
+      </ul>
     </div>
   </section>
 
@@ -319,7 +503,7 @@
 
 </main>
 
-<!-- CTA band omitted on the home page: the 06/ENQUIRE section already carries
+<!-- CTA band omitted on the home page: the ENQUIRE section already carries
      the quote form + call link, so the "Specifying a GRP pipeline?" band would
      duplicate it. Interior pages still render it via build-pages.mjs. -->
 
@@ -337,28 +521,24 @@
       <div class="footer-col">
         <h4>Products</h4>
         <ul>
-          <li><a href="/grp-pipes-benefits/">GRP Pipes Benefits</a></li>
-          <li><a href="/grp-pipes-general-information/">General Information</a></li>
-          <li><a href="/grp-pipe-installation/">Pipe Installation</a></li>
-          <li><a href="/product-testing/">Product Testing</a></li>
+          <li><a href="#range">GRP Pipes &amp; Fittings</a></li>
+          <li><a href="#the-pipe">The Making of a Pipe</a></li>
+          <li><a href="#why-grp">Why GRP</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="/certifications-approvals/">Certifications</a></li>
-          <li><a href="/know-how-supplier/">Know-How Supplier</a></li>
-          <li><a href="/services/">Services</a></li>
-          <li><a href="/contact-us/">Contact</a></li>
+          <li><a href="#certs">Certifications</a></li>
+          <li><a href="#about">Know-How</a></li>
+          <li><a href="#enquire">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Resources</h4>
         <ul>
-          <li><a href="/download-catalog/">Download Catalog</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/projects/">Projects</a></li>
-          <li><a href="/contact-us/">Request a Quote</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#enquire">Request a Quote</a></li>
         </ul>
       </div>
     </div>
