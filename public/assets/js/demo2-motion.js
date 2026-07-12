@@ -419,6 +419,19 @@
       }, { passive: true });
       el.addEventListener("pointerleave", function () { mxTo(0); myTo(0); });
     });
+
+    // Why-GRP material cards: hover scale via GSAP. The stagger reveal leaves an
+    // inline transform on each <li>, which would override a CSS :hover transform
+    // (inline wins). GSAP composes scale with that inline transform, so the card
+    // scales smoothly (composited, no layout) on hover and resets on leave.
+    gsap.utils.toArray(".d2-mat").forEach(function (el) {
+      el.addEventListener("mouseenter", function () {
+        gsap.to(el, { scale: 1.08, duration: 0.42, ease: "power3.out" });
+      });
+      el.addEventListener("mouseleave", function () {
+        gsap.to(el, { scale: 1, duration: 0.42, ease: "power3.out" });
+      });
+    });
   }
 
   // ---- Hero image cinematic reveal (clip-path wipe + settle) on load ----

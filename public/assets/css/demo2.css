@@ -903,20 +903,24 @@ html.demo2 .d2-mats {
 html.demo2 .d2-mat {
   position: relative; overflow: hidden;
   flex: 1 1 0; min-width: 0;
-  min-height: clamp(420px, 46vh, 480px);
+  min-height: clamp(440px, 50vh, 500px);
   display: flex; flex-direction: column; align-items: center; text-align: center;
   padding: clamp(24px, 2.6vw, 36px) clamp(18px, 2vw, 28px);
   border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
   background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
-  box-shadow: 0 20px 50px -34px rgba(0,0,0,0.85);
-  transition: flex-grow 500ms cubic-bezier(.22,.8,.2,1),
-              border-color 320ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
-              box-shadow 320ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+  box-shadow: 0 10px 26px -16px rgba(0,0,0,0.85);
+  will-change: transform;
+  transition: transform 420ms cubic-bezier(.22,.8,.2,1),
+              border-color 260ms var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              box-shadow 260ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
+/* Expand via a GSAP scale (see demo2-motion.js) — a CSS :hover transform would
+   be overridden by the inline transform the stagger reveal leaves on each <li>.
+   CSS still handles z-index / border / shadow (non-transform). */
 html.demo2 .d2-mat:hover {
-  flex-grow: 2.6; z-index: 3;
+  z-index: 5;
   border-color: rgba(255,255,255,0.22);
-  box-shadow: 0 34px 70px -30px rgba(0,0,0,0.9);
+  box-shadow: 0 22px 48px -20px rgba(0,0,0,0.92);
 }
 /* GRP — permanently dune-highlighted as the best */
 html.demo2 .d2-mat--grp {
@@ -924,11 +928,11 @@ html.demo2 .d2-mat--grp {
   background:
     linear-gradient(180deg, rgba(219,184,92,0.09), rgba(219,184,92,0.02)),
     linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
-  box-shadow: 0 0 0 1px rgba(219,184,92,0.2), 0 26px 64px -30px rgba(219,184,92,0.45);
+  box-shadow: 0 0 0 1px rgba(219,184,92,0.2), 0 14px 36px -22px rgba(219,184,92,0.45);
 }
 html.demo2 .d2-mat--grp:hover {
   border-color: rgba(219,184,92,0.75);
-  box-shadow: 0 0 0 1px rgba(219,184,92,0.4), 0 38px 84px -30px rgba(219,184,92,0.6);
+  box-shadow: 0 0 0 1px rgba(219,184,92,0.4), 0 20px 48px -24px rgba(219,184,92,0.6);
 }
 html.demo2 .d2-mat__badge {
   position: absolute; top: 14px; right: 14px; z-index: 4;
@@ -943,11 +947,13 @@ html.demo2 .d2-mat__pipe svg {
 }
 html.demo2 .d2-mat__name {
   font: 700 1.25rem/1.1 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0.2rem 0 0;
+  white-space: nowrap;
 }
 html.demo2 .d2-mat--grp .d2-mat__name { color: var(--accent, #DBB85C); }
 html.demo2 .d2-mat__tag {
   font: 500 0.78rem/1.3 var(--font-mono, "Inter"), sans-serif;
   letter-spacing: 0.08em; color: #8294a8; margin: 0.3rem 0 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
 }
 /* Detail area — stats and description SHARE this space (cross-fade). Stats show
    by default; on hover the description replaces them in the same spot. The card
@@ -957,7 +963,7 @@ html.demo2 .d2-mat__detail {
   position: relative; width: 100%;
   margin: 1.2rem 0 0; padding: 1.2rem 0 0;
   border-top: 1px solid rgba(255,255,255,0.08);
-  min-height: clamp(104px, 12vh, 140px);
+  min-height: clamp(160px, 18vh, 190px);
   display: flex; align-items: center; justify-content: center;
   transition: border-color 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
@@ -974,16 +980,17 @@ html.demo2 .d2-mat:hover .d2-mat__stats { opacity: 0; }
 html.demo2 .d2-mat__stats div { display: flex; flex-direction: column; gap: 0.15rem; }
 html.demo2 .d2-mat__stats dt {
   font: 500 0.66rem/1 var(--font-mono, "Inter"), sans-serif;
-  letter-spacing: 0.1em; text-transform: uppercase; color: #6E7E90;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #6E7E90; white-space: nowrap;
 }
 html.demo2 .d2-mat__stats dd {
-  font: 600 0.95rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0;
+  font: 600 0.95rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0; white-space: nowrap;
 }
 html.demo2 .d2-mat--grp .d2-mat__stats dd { color: var(--accent, #DBB85C); }
 html.demo2 .d2-mat__desc {
-  position: absolute; top: 1.2rem; left: 0; right: 0; bottom: 0;
+  position: absolute; top: 1.2rem; left: 50%; bottom: 0;
+  width: 300px; transform: translateX(-50%);
   display: flex; align-items: center; justify-content: center;
-  padding: 0 clamp(6px, 1.4vw, 18px);
+  padding: 0 8px;
   text-align: center;
   color: #C6D2E0; font: 400 0.9rem/1.6 var(--font-body, "DM Sans"), sans-serif;
   opacity: 0; pointer-events: none;
@@ -994,11 +1001,12 @@ html.demo2 .d2-mat--grp .d2-mat__desc { color: #E4D5A0; }
 /* Touch + reduced motion: stack stats + description (both visible), no expansion. */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   html.demo2 .d2-mat { min-height: 0; }
-  html.demo2 .d2-mat:hover { flex-grow: 1; }
+  html.demo2 .d2-mat:hover { transform: none; }
   html.demo2 .d2-mat__detail { min-height: 0; display: block; }
   html.demo2 .d2-mat__stats { opacity: 1; max-width: 100%; }
   html.demo2 .d2-mat__desc {
     position: static; opacity: 1; pointer-events: auto;
+    width: auto; left: auto; transform: none;
     margin-top: 1.2rem; padding: 1.2rem 0 0; display: block;
     border-top: 1px solid rgba(255,255,255,0.08);
   }
