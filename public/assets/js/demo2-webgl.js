@@ -191,7 +191,7 @@
     var active = false;
     var target = { p: 0 };
     window.__demo2.pipeJourney = { active: false, progress: 0, renderCount: 0 };
-    gsap.to(target, {
+    var journeyTween = gsap.to(target, {
       p: 1, ease: "none",
       scrollTrigger: {
         trigger: stage, start: "top top", end: "+=700%", pin: true, scrub: true,
@@ -260,9 +260,17 @@
       window.__demo2.pipeJourney.renderCount++;
     });
 
-    // Initial frame.
-    camera.position.set(stops[0].px, stops[0].py, stops[0].pz);
-    lookCur.set(stops[0].lx, stops[0].ly, stops[0].lz);
+    // Initial frame: sync to ScrollTrigger's current progress immediately so
+    // reloads at a restored scroll position don't flash the hero overlay.
+    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    target.p = journeyTween.scrollTrigger ? journeyTween.scrollTrigger.progress : 0;
+    smoothP = target.p;
+    updateStations(target.p);
+    var initial = camTargetForProgress(target.p);
+    camera.position.set(initial.px, initial.py, initial.pz);
+    lookCur.set(initial.lx, initial.ly, initial.lz);
+    if (heroEl) heroEl.style.opacity = 1 - smoothstep(0, 0.06, target.p);
+    canvasEl.style.opacity = 1 - smoothstep(0.86, 1.0, target.p);
     camera.lookAt(lookCur); camLight.position.copy(camera.position);
     renderer.render(scene, camera);
 

@@ -1137,7 +1137,6 @@ html.demo2 .pipe-journey {
   position: relative;
   height: 100vh;
   overflow: hidden;
-  margin-bottom: -100vh; /* collapse the section's flow height so the enquire section appears immediately after the pin releases — no blank gap */
   background: #060D2E;
   color: #fff;
   /* Pipe interior is gold/yellow — text is LIGHT (white) to read on the gold. */
@@ -1157,6 +1156,8 @@ html.demo2 .pipe-journey__hero {
   max-width: 880px; width: calc(100% - 40px);
   opacity: 1;
 }
+html.demo2.demo2-motion .pipe-journey__hero { opacity: 0; }
+html.demo2.demo2-no-webgl .pipe-journey__hero { opacity: 1; }
 html.demo2 .pj-hero__eyebrow {
   font: 600 0.7rem/1 var(--font-mono, "Inter"), sans-serif;
   letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent, #DBB85C);

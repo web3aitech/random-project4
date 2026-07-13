@@ -230,7 +230,7 @@
   function injectWebGL() {
     // Order preserved (async=false): three first, then demo2-webgl.js.
     loadScript("/assets/vendor/three/three.min.js", true);
-    loadScript("/assets/js/demo2-webgl.js?v=23", true);
+    loadScript("/assets/js/demo2-webgl.js?v=24", true);
     window.__demo2.webgl = "loading";
   }
   // Defer the WebGL decision until after first paint so it never blocks LCP.
