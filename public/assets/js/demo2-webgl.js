@@ -163,8 +163,8 @@
     // ranges via updateStations(). ----
     var stationEls = gsap.utils.toArray(".pj-station");
     var STATIONS = [
-      { at: 0.24, end: 0.36 }, // capabilities
-      { at: 0.36, end: 0.50 }, // about
+      { at: 0.16, end: 0.38 }, // capabilities — earlier + longer (first info section)
+      { at: 0.38, end: 0.50 }, // about
       { at: 0.50, end: 0.64 }, // range
       { at: 0.64, end: 0.78 }, // why-grp
       { at: 0.78, end: 0.90 }  // certs
