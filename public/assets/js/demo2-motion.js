@@ -20,6 +20,20 @@
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var hasGSAP = typeof window.gsap === "object" && typeof window.ScrollTrigger === "function";
   var hasLenis = typeof window.Lenis === "function";
+  var docEl = document.documentElement;
+
+  function revealPage() {
+    if (window.__demo2RevealFallback) {
+      clearTimeout(window.__demo2RevealFallback);
+      window.__demo2RevealFallback = null;
+    }
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        docEl.classList.remove("demo2-loading");
+      });
+    });
+  }
+  window.__demo2RevealPage = revealPage;
 
   // Debug hook (always defined, even under reduced motion / fallback).
   window.__demo2 = {
@@ -37,13 +51,13 @@
   if (reduce || !hasGSAP) {
     window.__demo2.lenis = false;
     if (!hasGSAP) console.info("[demo2] motion layer idle: gsap missing");
+    revealPage();
     return;
   }
 
   // ---- Libs present + motion allowed → activate the hide gate. ----
   // Adding .demo2-motion is the FIRST action so [data-motion] hides resolve
   // before any animation runs. (Two-class gate: .demo2 + .demo2-motion.)
-  var docEl = document.documentElement;
   docEl.classList.add("demo2-motion");
 
   var gsap = window.gsap;
@@ -230,12 +244,13 @@
   function injectWebGL() {
     // Order preserved (async=false): three first, then demo2-webgl.js.
     loadScript("/assets/vendor/three/three.min.js", true);
-    loadScript("/assets/js/demo2-webgl.js?v=24", true);
+    loadScript("/assets/js/demo2-webgl.js?v=25", true);
     window.__demo2.webgl = "loading";
   }
   // Defer the WebGL decision until after first paint so it never blocks LCP.
   window.addEventListener("load", function () {
     if (shouldInitWebGL()) injectWebGL();
+    else revealPage();
   });
 
   // ---- Overlay nodes (grain + bg-fallback) created ONCE at init ----

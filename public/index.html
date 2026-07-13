@@ -3,7 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>document.documentElement.classList.add("demo2")</script>
+  <script>
+    document.documentElement.classList.add("demo2", "demo2-loading");
+    window.__demo2RevealFallback = setTimeout(function () {
+      document.documentElement.classList.remove("demo2-loading");
+    }, 2600);
+  </script>
   <title>Dubai Pipes Factory Co - Leading GRP pipe manufacturer in Dubai</title>
   <meta name="description" content="Dubai Pipes Factory Co. manufactures Glass Reinforced Plastic (GRP) pipes, fittings, manhole liners and tanks up to 2400 mm diameter and 32 bar pressure, built on Flowtite&reg; technology and BSI Kitemark-certified quality.">
   <link rel="canonical" href="https://dubaipipes.com/">
@@ -16,7 +21,7 @@
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <link rel="stylesheet" href="/assets/css/fonts.css?v=6">
   <link rel="stylesheet" href="/assets/css/styles.css?v=7">
-  <link rel="stylesheet" href="/assets/css/demo2.css?v=25">
+  <link rel="stylesheet" href="/assets/css/demo2.css?v=26">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -386,6 +391,6 @@
 <script src="/assets/vendor/gsap/gsap.min.js" defer></script>
 <script src="/assets/vendor/gsap/ScrollTrigger.min.js" defer></script>
 <script src="/assets/vendor/lenis/lenis.min.js" defer></script>
-<script src="/assets/js/demo2-motion.js?v=23" defer></script>
+<script src="/assets/js/demo2-motion.js?v=24" defer></script>
 </body>
 </html>

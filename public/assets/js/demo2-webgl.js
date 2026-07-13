@@ -273,12 +273,14 @@
     canvasEl.style.opacity = 1 - smoothstep(0.86, 1.0, target.p);
     camera.lookAt(lookCur); camLight.position.copy(camera.position);
     renderer.render(scene, camera);
+    if (window.__demo2RevealPage) window.__demo2RevealPage();
 
     window.addEventListener("resize", function () { if (window.ScrollTrigger) window.ScrollTrigger.refresh(); });
 
     function failNoWebgl() {
       document.documentElement.classList.add("demo2-no-webgl");
       window.__demo2.webgl = false;
+      if (window.__demo2RevealPage) window.__demo2RevealPage();
       console.info("[demo2-webgl] pipe journey: WebGL unavailable — CSS fallback shown");
     }
   }
@@ -404,8 +406,8 @@
     // in, making the pipe→form handoff feel like one continuous motion.
     var enquire = document.querySelector("#enquire");
     if (enquire) {
-      gsap.fromTo(enquire, { opacity: 0, y: 60 }, {
-        opacity: 1, y: 0, duration: 1.0, ease: "power2.out",
+      gsap.fromTo(enquire, { opacity: 0 }, {
+        opacity: 1, duration: 1.0, ease: "power2.out",
         scrollTrigger: { trigger: enquire, start: "top 95%", toggleActions: "play none none reverse" }
       });
     }

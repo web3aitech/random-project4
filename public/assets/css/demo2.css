@@ -17,6 +17,21 @@ html.lenis body { height: auto; }
 /* Lenis owns scrolling under .demo2; neutralize styles.css L61 smooth-scroll. */
 html.demo2 { scroll-behavior: auto; }
 
+/* Page entrance: the inline boot script adds .demo2-loading before first paint.
+   JS removes it after the motion/WebGL layer has synced to the current scroll
+   position, giving visits and reloads one smooth reveal instead of a partial
+   intermediate frame. */
+html.demo2 body {
+  opacity: 1;
+  transition: opacity 700ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2.demo2-loading body {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.demo2 body { transition: none; }
+}
+
 /* --------- Motion hide state (two-class gate — progressive enhancement) ----
    Hidden only when BOTH .demo2 AND .demo2-motion are on <html>. If the JS
    fails, .demo2-motion never lands and content stays visible.
