@@ -1,13 +1,17 @@
 /* =========================================================================
-   demo2-webgl.js — lazy-loaded Three.js layer (Phase D: pipe-build scene)
+   demo2-webgl.js — lazy-loaded Three.js layer (the "Down the Pipe" journey)
    Injected by demo2-motion.js core (async=false, after three.min.js) ONLY on
    capable desktops with motion allowed. Self-inits on load.
 
-   Phase D: the signature "pipes building as you scroll" chapter — a pinned
-   ScrollTrigger scrubs a procedural GRP pipe build (mandrel rotation →
-   filament helix winding → resin cure → saw cut to length → finished pipe
-   stays put). All geometry is procedural; no external 3D model.
-   Phase E (shader bg + post) will be added here too.
+   ONE continuous scroll-driven 3D journey through a vertical GRP pipe:
+   hero (camera outside, side view of the pipe + its top circular opening) →
+   the camera turns to look down into the opening → descends through the bore
+   past each section as a "station" (content overlays cross-fade) → exits the
+   bottom ("poop out") onto the enquire form.
+
+   Reuses the existing patterns: scrubbed camera via a tweened plain object,
+   ONE pinned ScrollTrigger, render-loop-only-while-active, boundary reset on
+   leave, failNoWebgl fallback. Procedural geometry only; no external 3D model.
    ========================================================================= */
 (function () {
   "use strict";
@@ -23,222 +27,243 @@
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ---- Smoothstep helper ----
+  // ---- Helpers ----
   function smoothstep(a, b, x) {
     var t = Math.max(0, Math.min(1, (x - a) / (b - a)));
     return t * t * (3 - 2 * t);
   }
+  function lerp(a, b, t) { return a + (b - a) * t; }
 
-  // ---- Caption steps (verified against the source's Production Process page:
-  // Continuous Filament Winding / Reciprocal Helical Winding — glass roving
-  // impregnated with resin wound onto a rotating steel mandrel, layered, cured,
-  // then cut to length by a synchronized saw. No flanges — those are a separate
-  // fittings product, not a straight-pipe production step.) ----
-  var STEPS = [
-    { at: 0.00, text: "A steel mandrel begins to rotate." },
-    { at: 0.15, text: "Glass roving, impregnated with resin, is wound onto the mandrel in a prescribed pattern." },
-    { at: 0.45, text: "Layers build up — inner liner, structural wall, outer liner — as the resin cures." },
-    { at: 0.72, text: "After curing, a synchronized saw cuts the pipe to length." },
-    { at: 0.90, text: "The finished GRP pipe is ready for testing and dispatch." }
-  ];
-
-  function initPipeBuild() {
-    var stage = document.querySelector("[data-pipe-build-stage]");
-    var canvasEl = document.querySelector("[data-pipe-build-canvas]");
-    var captionEl = document.querySelector("[data-pipe-build-caption]");
+  // =========================================================================
+  //  THE PIPE JOURNEY — the single continuous scroll-driven 3D chapter.
+  // =========================================================================
+  function initPipeJourney() {
+    var stage = document.querySelector("[data-pipe-journey]");
+    var canvasEl = document.querySelector("[data-pipe-journey-canvas]");
     if (!stage || !canvasEl) return;
 
+    // ---- Renderer ----
     var renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: true, alpha: true });
+      renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: true, alpha: true, powerPreference: "high-performance" });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    } catch (e) {
-      failNoWebgl();
-      return;
-    }
-    var gl = renderer.getContext && renderer.getContext();
-    if (!gl) { failNoWebgl(); return; }
+    } catch (e) { failNoWebgl(); return; }
+    if (!renderer.getContext || !renderer.getContext()) { failNoWebgl(); return; }
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-    camera.position.set(0.6, 1.4, 5.6);
-    camera.lookAt(0, 0, 0);
+    scene.background = new THREE.Color(0x060D2E);
+    scene.fog = new THREE.FogExp2(0x060D2E, 0.013); // light fog — the pipe is clearly visible at the hero distance, depth during descent
+    var camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
 
-    // ---- Lighting: industrial key + warm rim + cool fill ----
-    scene.add(new THREE.AmbientLight(0x2a3a5a, 0.7));
-    var key = new THREE.DirectionalLight(0xffffff, 1.15); key.position.set(3, 5, 4); scene.add(key);
-    var rim = new THREE.DirectionalLight(0xDBB85C, 0.7); rim.position.set(-4, 2.5, -3); scene.add(rim);
-    var fill = new THREE.DirectionalLight(0x4a6a9a, 0.4); fill.position.set(0, -3, 2); scene.add(fill);
+    // ---- Lighting: a camera-attached point light (lights the bore around the
+    // camera; far parts fall into fog) + low ambient + a warm rim. ----
+    scene.add(new THREE.AmbientLight(0x4a5a7a, 0.6));
+    var camLight = new THREE.PointLight(0xffffff, 1.5, 30, 1.4);
+    scene.add(camLight);
+    var rim = new THREE.DirectionalLight(0xDBB85C, 0.8); rim.position.set(-8, 4, -6); scene.add(rim);
+    var key = new THREE.DirectionalLight(0xffffff, 0.6); key.position.set(8, 6, 8); scene.add(key);
 
-    // ---- Mandrel (the rotating drum) ----
-    var MANDREL_LEN = 4.2, MANDREL_R = 0.5;
-    var mandrel = new THREE.Mesh(
-      new THREE.CylinderGeometry(MANDREL_R, MANDREL_R, MANDREL_LEN, 48, 1, true),
-      new THREE.MeshStandardMaterial({ color: 0x8a97a8, metalness: 0.75, roughness: 0.35, side: THREE.DoubleSide })
-    );
-    mandrel.rotation.z = Math.PI / 2; // lay along X
-    scene.add(mandrel);
-
-    // Mandrel end caps (so it reads as a solid drum)
-    var capMat = new THREE.MeshStandardMaterial({ color: 0x4a5566, metalness: 0.8, roughness: 0.3 });
-    var capGeo = new THREE.CircleGeometry(MANDREL_R, 48);
-    var capA = new THREE.Mesh(capGeo, capMat); capA.position.x = -MANDREL_LEN / 2; capA.rotation.y = -Math.PI / 2; scene.add(capA);
-    var capB = new THREE.Mesh(capGeo, capMat); capB.position.x = MANDREL_LEN / 2; capB.rotation.y = Math.PI / 2; scene.add(capB);
-
-    // ---- Structural pipe wall (grows opaque as resin cures) ----
-    var pipe = new THREE.Mesh(
-      new THREE.CylinderGeometry(MANDREL_R + 0.02, MANDREL_R + 0.02, MANDREL_LEN, 64, 1, true),
-      new THREE.MeshStandardMaterial({
-        color: 0x214B6E, metalness: 0.1, roughness: 0.65,
-        transparent: true, opacity: 0, side: THREE.DoubleSide
-      })
-    );
-    pipe.rotation.z = Math.PI / 2;
-    scene.add(pipe);
-    var pipeMat = pipe.material;
-
-    // ---- Filament helices (wound glass) ----
-    function makeHelix(turns, radius, length, phase, segments) {
-      var pts = [];
-      for (var i = 0; i <= segments; i++) {
-        var t = i / segments;
-        var ang = t * turns * Math.PI * 2 + phase;
-        pts.push(new THREE.Vector3((t - 0.5) * length, Math.cos(ang) * radius, Math.sin(ang) * radius));
-      }
-      return new THREE.CatmullRomCurve3(pts);
-    }
-    function makeFilament(turns, phase) {
-      var curve = makeHelix(turns, MANDREL_R + 0.025, MANDREL_LEN, phase, 220);
-      var geo = new THREE.TubeGeometry(curve, 220, 0.012, 6, false);
+    // ---- The vertical layered GRP pipe (along Y). 3 nested open cylinders
+    // (outer gray / structural blue / inner gold) + the bore. Open top + bottom
+    // so the cross-section rings (the 3 layers) are visible at both openings. ----
+    var L = 32;   // pipe length
+    var R = 2.4;  // bore radius (inner liner)
+    function layer(r, color, rough, metal, map) {
       var mat = new THREE.MeshStandardMaterial({
-        color: 0xDBB85C, emissive: 0xC9A227, emissiveIntensity: 0.35,
-        metalness: 0.5, roughness: 0.4
+        color: color, metalness: metal != null ? metal : 0.1, roughness: rough,
+        side: THREE.DoubleSide
       });
-      var m = new THREE.Mesh(geo, mat);
-      m.userData.totalVerts = geo.index ? geo.index.count : geo.attributes.position.count;
-      m.userData.indexed = !!geo.index;
+      if (map) { mat.map = map; mat.needsUpdate = true; }
+      var m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, L, 96, 1, true), mat);
+      scene.add(m);
       return m;
     }
-    var filA = makeFilament(7, 0);
-    var filB = makeFilament(7, Math.PI);
-    scene.add(filA, filB);
+    var outerM  = layer(R + 0.20, 0x9AA6B5, 0.5, 0.2);            // outer liner (gray)
+    var structM = layer(R + 0.10, 0x1E4D72, 0.6, 0.1);           // structural (blue)
+    var innerM = layer(R, 0xDBB85C, 0.32, 0.1, makeFilamentTexture()); // inner liner (gold, filament texture)
+    innerM.material.side = THREE.BackSide; // visible from inside the bore, hidden from the exterior hero side-view
+    innerM.material.emissive = new THREE.Color(0x3a2a10);
+    innerM.material.emissiveIntensity = 0.25;
 
-    function setFilamentProgress(m, p) {
-      var n = Math.max(0, Math.floor(m.userData.totalVerts * p));
-      m.geometry.setDrawRange(0, n);
+    // ---- Filament-winding texture: a canvas gold helix on the inner wall.
+    // Reads as the wound-glass pattern scrolling past during descent. ----
+    function makeFilamentTexture() {
+      var c = document.createElement("canvas"); c.width = 256; c.height = 1024;
+      var g = c.getContext("2d");
+      var grd = g.createLinearGradient(0, 0, 0, 1024);
+      grd.addColorStop(0, "#7a5e1a"); grd.addColorStop(0.5, "#C9A227"); grd.addColorStop(1, "#7a5e1a");
+      g.fillStyle = grd; g.fillRect(0, 0, 256, 1024);
+      // diagonal helix bands (gold winding)
+      g.lineCap = "round";
+      for (var pass = 0; pass < 2; pass++) {
+        g.strokeStyle = pass === 0 ? "rgba(255,235,170,0.55)" : "rgba(120,90,30,0.4)";
+        g.lineWidth = pass === 0 ? 3 : 2;
+        var dir = pass === 0 ? 1 : -1;
+        for (var y0 = -300; y0 < 1320; y0 += 36) {
+          g.beginPath();
+          for (var x = -20; x <= 276; x += 4) {
+            var yy = y0 + dir * x * 0.55;
+            if (x <= -16) g.moveTo(x, yy); else g.lineTo(x, yy);
+          }
+          g.stroke();
+        }
+      }
+      var t = new THREE.CanvasTexture(c);
+      if ("SRGBColorSpace" in THREE) t.colorSpace = THREE.SRGBColorSpace;
+      t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(8, 4);
+      return t;
     }
-    setFilamentProgress(filA, 0);
-    setFilamentProgress(filB, 0);
 
-    // ---- Saw (cuts the cured pipe to length — the real post-cure step per
-    // the source, replacing the earlier invented flange-seating) ----
-    var sawGeo = new THREE.TorusGeometry(MANDREL_R + 0.16, 0.014, 8, 48);
-    var sawMat = new THREE.MeshStandardMaterial({
-      color: 0xDBB85C, emissive: 0xC9A227, emissiveIntensity: 0.9,
-      metalness: 0.6, roughness: 0.3, transparent: true, opacity: 0
-    });
-    var saw = new THREE.Mesh(sawGeo, sawMat);
-    saw.rotation.y = Math.PI / 2;
-    saw.visible = false;
-    scene.add(saw);
+    // ---- End rings (torus) at the top + bottom openings — emphasize the
+    // layered cross-section edge (visible at the hero + exit). ----
+    var ringMat = new THREE.MeshStandardMaterial({ color: 0xDBB85C, emissive: 0xC9A227, emissiveIntensity: 0.4, metalness: 0.6, roughness: 0.3 });
+    function endRing(y) {
+      var ring = new THREE.Mesh(new THREE.TorusGeometry(R + 0.22, 0.05, 12, 96), ringMat);
+      ring.position.y = y; ring.rotation.x = Math.PI / 2; // lie in X-Z plane (the opening)
+      scene.add(ring);
+    }
+    endRing(L / 2);   // top opening
+    endRing(-L / 2);  // bottom opening
 
-    // ---- (No end advance — the finished pipe stays put; scroll continues.) ----
+    // ---- Camera keyframes (stops). progress 0→1 → camera pos + lookAt.
+    // 0.00–0.06 hero side → 0.16 rise above the opening → 0.26 dive straight
+    // down through the opening into the bore → 0.50 mid descend → 0.88 near
+    // bottom → 1.00 settle + dissolve into the form. ----
+    var stops = [
+      { at: 0.00, px: 20, py: 5,  pz: 20,  lx: 0, ly: 3,   lz: 0 },   // hero side — pipe visible in the lower frame, below the hero text
+      { at: 0.06, px: 20, py: 5,  pz: 20,  lx: 0, ly: 3,   lz: 0 },   // hero hold (brief)
+      { at: 0.16, px: 0,  py: 24, pz: 0.5, lx: 0, ly: 16,  lz: 0 },   // rise: camera moves up + over the top opening, looking straight down at the gold ring
+      { at: 0.26, px: 0,  py: 14, pz: 0.5, lx: 0, ly: 6,   lz: 0 },   // dive: camera drops straight down through the opening into the bore
+      { at: 0.50, px: 0,  py: 0,  pz: 0.6, lx: 0, ly: -5,  lz: 0 },   // mid descend
+      { at: 0.88, px: 0,  py: -13, pz: 0.6, lx: 0, ly: -18, lz: 0 }, // near bottom — camera slows, approaches the bottom opening
+      { at: 1.00, px: 0,  py: -17, pz: 0.6, lx: 0, ly: -22, lz: 0 }  // settle at the bottom opening → canvas dissolves into the form
+    ];
+    function camTargetForProgress(p) {
+      var i = 0;
+      while (i < stops.length - 1 && p > stops[i + 1].at) i++;
+      var a = stops[Math.max(0, i)];
+      var b = stops[Math.min(stops.length - 1, i + 1)];
+      var t = smoothstep(a.at, b.at, p);
+      return {
+        px: lerp(a.px, b.px, t), py: lerp(a.py, b.py, t), pz: lerp(a.pz, b.pz, t),
+        lx: lerp(a.lx, b.lx, t), ly: lerp(a.ly, b.ly, t), lz: lerp(a.lz, b.lz, t)
+      };
+    }
+    var lookCur = new THREE.Vector3(stops[0].lx, stops[0].ly, stops[0].lz);
+    camera.position.set(stops[0].px, stops[0].py, stops[0].pz);
+    camera.lookAt(lookCur);
+    camLight.position.copy(camera.position);
+
+    // ---- Hero overlay (the small text at the top). Fades out as the camera
+    // begins turning (progress 0 → 0.06). ----
+    var heroEl = document.querySelector("[data-pipe-hero]");
+
+    // ---- Station overlays (HTML .pj-station panels). Fade in/out at progress
+    // ranges via updateStations(). ----
+    var stationEls = gsap.utils.toArray(".pj-station");
+    var STATIONS = [
+      { at: 0.24, end: 0.36 }, // capabilities
+      { at: 0.36, end: 0.50 }, // about
+      { at: 0.50, end: 0.64 }, // range
+      { at: 0.64, end: 0.78 }, // why-grp
+      { at: 0.78, end: 0.90 }  // certs
+    ];
+    function updateStations(p) {
+      for (var i = 0; i < stationEls.length && i < STATIONS.length; i++) {
+        var s = STATIONS[i];
+        var op = smoothstep(s.at, s.at + 0.03, p) * (1 - smoothstep(s.end - 0.03, s.end, p));
+        stationEls[i].style.opacity = op;
+        stationEls[i].style.pointerEvents = op > 0.1 ? "auto" : "none";
+      }
+    }
 
     // ---- Sizing ----
     function resize() {
       var w = stage.clientWidth || 1, h = stage.clientHeight || 1;
       renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      camera.aspect = w / h; camera.updateProjectionMatrix();
     }
     resize();
     window.addEventListener("resize", resize);
 
-    // ---- Caption + progress UI ----
-    var lastStep = -1;
-    function updateCaption(p) {
-      var idx = 0;
-      for (var i = 0; i < STEPS.length; i++) { if (p >= STEPS[i].at) idx = i; }
-      if (idx !== lastStep) {
-        lastStep = idx;
-        if (captionEl) {
-          gsap.fromTo(captionEl, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
-          captionEl.textContent = STEPS[idx].text;
-        }
-      }
-    }
-
-    // ---- Scene state from a single progress value 0→1 ----
-    var cureColor = new THREE.Color(0xDBB85C); // warm curing tint
-    var finalColor = new THREE.Color(0x214B6E); // finished structural blue
-    var tmpColor = new THREE.Color();
-
-    function applyProgress(p) {
-      // Mandrel rotation: spins throughout, faster mid-build.
-      mandrel.rotation.x = p * Math.PI * 14;
-      capA.rotation.y = -Math.PI / 2; capB.rotation.y = Math.PI / 2; // caps don't spin visibly (circles)
-
-      // Filament winding: grows 0→full over 0.1→0.7, second lags slightly.
-      var filP1 = smoothstep(0.10, 0.70, p);
-      var filP2 = smoothstep(0.18, 0.74, p);
-      setFilamentProgress(filA, filP1);
-      setFilamentProgress(filB, filP2);
-
-      // Resin cure / wall opacity: 0.30→0.80, color warms→cools.
-      var cure = smoothstep(0.30, 0.85, p);
-      pipeMat.opacity = cure * 0.92;
-      tmpColor.copy(cureColor).lerp(finalColor, cure);
-      pipeMat.color.copy(tmpColor);
-      pipeMat.emissive = pipeMat.emissive || new THREE.Color();
-      pipeMat.emissive.setScalar(0); // keep simple
-
-      // Saw cut: a glowing ring sweeps along the pipe from left to right
-      // during 0.72–0.88 (the synchronized saw cutting to length), then fades.
-      var sawPos = smoothstep(0.72, 0.88, p);
-      saw.position.x = -MANDREL_LEN / 2 + sawPos * MANDREL_LEN;
-      var sawFade = p < 0.72 ? 0 : (p < 0.88 ? 0.95 : Math.max(0, 0.95 * (1 - smoothstep(0.88, 0.95, p))));
-      sawMat.opacity = sawFade;
-      saw.visible = sawFade > 0.02;
-
-      // No end slide — the finished pipe stays put and the scroll continues to
-      // the next section. (Camera fixed at its build position.)
-
-      updateCaption(p);
-    }
-
-    // ---- ScrollTrigger pin + scrub ----
+    // ---- ONE pinned ScrollTrigger drives the whole journey. ----
     var active = false;
-    var obj = { v: 0 };
-    var st = null;
-    st = gsap.to(obj, {
-      v: 1, ease: "none",
+    var target = { p: 0 };
+    window.__demo2.pipeJourney = { active: false, progress: 0, renderCount: 0 };
+    gsap.to(target, {
+      p: 1, ease: "none",
       scrollTrigger: {
-        trigger: stage, start: "top top", end: "+=220%", pin: true, scrub: true,
+        trigger: stage, start: "top top", end: "+=700%", pin: true, scrub: true,
         anticipatePin: 1, invalidateOnRefresh: true,
         onEnter: function () { active = true; },
-        onLeave: function () { active = false; },
+        onLeave: function () { leaveJourney(1); },
         onEnterBack: function () { active = true; },
-        onLeaveBack: function () { active = false; },
-        onUpdate: function (self) { applyProgress(self.progress); window.__demo2.pipeBuild.progress = self.progress; }
+        onLeaveBack: function () { leaveJourney(0); },
+        onUpdate: function (self) {
+          target.p = self.progress;
+          updateStations(self.progress);
+          window.__demo2.pipeJourney.progress = self.progress;
+        }
       }
     });
 
-    // ---- Render loop (only while the chapter is active) ----
-    var renderCount = 0;
-    window.__demo2.pipeBuild = { active: false, renderCount: 0, progress: 0 };
-    gsap.ticker.add(function () {
-      window.__demo2.pipeBuild.active = active; // reflect closure state every frame
-      if (!active) return;
-      // subtle idle rotation of filaments' emissive pulse
-      filA.material.emissiveIntensity = 0.3 + 0.15 * Math.sin(performance.now() / 400);
-      filB.material.emissiveIntensity = filA.material.emissiveIntensity;
+    // ---- Boundary reset: snap to the boundary frame + render once on leave so
+    // a fast scroll never freezes the canvas on a random mid-frame. The exit
+    // stop is the LAST stop (camera below the pipe, fog-receded → seamless
+    // dark handoff to the enquire form below). ----
+    // ---- Smoothed progress — the single scalar that drives the camera. On
+    // fast scroll-back the raw target.p jumps, but smoothP eases toward it
+    // with a VARIABLE damping factor: high for large deltas (catches up
+    // quickly = no lag/jitter on fast scroll), low for small (silky on slow).
+    // The camera is computed directly from smoothP via camTargetForProgress
+    // (which uses smoothstep between stops) — so the camera follows the eased
+    // path smoothly, no position-lerp jitter. ----
+    var smoothP = 0;
+    function leaveJourney(boundary) {
+      active = false;
+      smoothP = boundary; // snap the smoothed progress to the boundary
+      var stop = boundary >= 1 ? stops[stops.length - 1] : stops[0];
+      camera.position.set(stop.px, stop.py, stop.pz);
+      lookCur.set(stop.lx, stop.ly, stop.lz); camera.lookAt(lookCur);
+      camLight.position.copy(camera.position);
+      updateStations(boundary);
+      if (heroEl) heroEl.style.opacity = boundary >= 1 ? 0 : 1;
+      canvasEl.style.opacity = boundary >= 1 ? 0 : 1;
       renderer.render(scene, camera);
-      renderCount++;
-      window.__demo2.pipeBuild.renderCount = renderCount;
+    }
+
+    // ---- Render loop: smooth the progress, compute camera from it, only while
+    // the journey is active. The camera-attached light follows. ----
+    gsap.ticker.add(function () {
+      window.__demo2.pipeJourney.active = active;
+      if (!active) return;
+      // Variable damping: 0.05 for slow scroll (silky), up to 0.3 for fast
+      // scroll (catches up quickly = no lag on fast scroll-back).
+      var delta = Math.abs(target.p - smoothP);
+      var k = Math.min(0.3, 0.05 + delta * 1.5);
+      smoothP = lerp(smoothP, target.p, k);
+      var t = camTargetForProgress(smoothP);
+      camera.position.set(t.px, t.py, t.pz);
+      lookCur.set(t.lx, t.ly, t.lz);
+      var now = performance.now();
+      camera.position.z += Math.sin(now / 1400) * 0.015; // subtle breath
+      camera.lookAt(lookCur);
+      camLight.position.copy(camera.position);
+      // Hero overlay fades out as the camera turns (using smoothP, not raw).
+      if (heroEl) heroEl.style.opacity = 1 - smoothstep(0, 0.06, smoothP);
+      // Canvas dissolves at the end (smoothP, not raw). Starts earlier (0.86)
+      // so the pipe fades gradually as the form emerges below.
+      canvasEl.style.opacity = 1 - smoothstep(0.86, 1.0, smoothP);
+      camLight.position.copy(camera.position);
+      renderer.render(scene, camera);
+      window.__demo2.pipeJourney.renderCount++;
     });
 
-    // Initial state + one render so it isn't blank before first scroll.
-    applyProgress(0);
+    // Initial frame.
+    camera.position.set(stops[0].px, stops[0].py, stops[0].pz);
+    lookCur.set(stops[0].lx, stops[0].ly, stops[0].lz);
+    camera.lookAt(lookCur); camLight.position.copy(camera.position);
     renderer.render(scene, camera);
 
     window.addEventListener("resize", function () { if (window.ScrollTrigger) window.ScrollTrigger.refresh(); });
@@ -246,34 +271,27 @@
     function failNoWebgl() {
       document.documentElement.classList.add("demo2-no-webgl");
       window.__demo2.webgl = false;
-      console.info("[demo2-webgl] WebGL unavailable — CSS fallback shown");
+      console.info("[demo2-webgl] pipe journey: WebGL unavailable — CSS fallback shown");
     }
   }
 
-  // ---- Fluid shader background (Phase E) ----
-  // A fixed full-screen canvas (z-index:-1) rendering a slow FBM gradient in
-  // brand colors, tinted per chapter. Dark sections are made translucent in
-  // demo2.css so this bleeds through; light sections stay opaque for legibility.
-  // Zoom-aware sizing: html{zoom:0.8} would leave a gap with naive 100vw sizing,
-  // so the canvas is sized to innerWidth/zoom × innerHeight/zoom.
+  // =========================================================================
+  //  Fluid shader background (Phase E) — preserved unchanged.
+  //  Inert on the home one-pager (opaque section gradients hide it); active on
+  //  interior pages (none built in this demo). Desktop-only.
+  // =========================================================================
   var CHAPTER_TINT = {
     hero:        [0x060D2E, 0x0C1B64],
-    stats:       [0x0A1547, 0x0E1E73],
-    intro:       [0x0A1547, 0x0C1B64],
-    process:     [0x060D2E, 0x0C1B64],
-    "pipe-build":[0x03060f, 0x0B1650],
-    anatomy:     [0x060D2E, 0x1a2a55],
+    "pipe-journey":[0x03060f, 0x0B1650],
+    capabilities:[0x0A1547, 0x0C1B64],
+    about:       [0x060D2E, 0x0C1B64],
+    range:       [0x060D2E, 0x0C1B64],
+    "why-grp":   [0x060D2E, 0x0C1B64],
     certs:       [0x0A1547, 0x0C1B64],
-    flowtite:    [0x060D2E, 0x0C1B64],
     enquire:     [0x060D2E, 0x0B1650]
   };
   function initFluidBackground() {
-    // Always-on fluid shader is desktop-only — on phones it would drain GPU/
-    // battery for a background. Mobile falls back to the dark .demo2-bg-fallback
-    // gradient; the pinned pipe-build + specs scenes still load on mobile.
     if (window.matchMedia("(max-width: 767px)").matches) return;
-    // The home one-pager uses opaque chaining section gradients (navy→black)
-    // for its background, so the fluid would be hidden — skip it to save GPU.
     if (document.body && document.body.classList.contains("d2-home")) return;
     var canvas = document.querySelector(".demo2-canvas");
     if (!canvas) {
@@ -291,17 +309,13 @@
     var scene = new THREE.Scene();
     var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     var uniforms = {
-      uTime: { value: 0 },
-      uRes: { value: new THREE.Vector2(1, 1) },
-      uColA: { value: new THREE.Color(0x060D2E) },
-      uColB: { value: new THREE.Color(0x0C1B64) },
+      uTime: { value: 0 }, uRes: { value: new THREE.Vector2(1, 1) },
+      uColA: { value: new THREE.Color(0x060D2E) }, uColB: { value: new THREE.Color(0x0C1B64) },
       uGrain: { value: 0.04 }
     };
     var mat = new THREE.ShaderMaterial({
       uniforms: uniforms,
-      vertexShader: [
-        "void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }"
-      ].join("\n"),
+      vertexShader: ["void main(){ gl_Position = vec4(position.xy, 0.0, 1.0); }"].join("\n"),
       fragmentShader: [
         "precision mediump float;",
         "uniform vec2 uRes; uniform float uTime; uniform vec3 uColA; uniform vec3 uColB; uniform float uGrain;",
@@ -330,15 +344,13 @@
     function resize() {
       var z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
       var w = (window.innerWidth / z) || 1, h = (window.innerHeight / z) || 1;
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
+      canvas.style.width = w + "px"; canvas.style.height = h + "px";
       renderer.setSize(w, h, false);
       uniforms.uRes.value.set(w * (window.devicePixelRatio || 1), h * (window.devicePixelRatio || 1));
     }
     resize();
     window.addEventListener("resize", resize);
 
-    // Chapter tinting: watch <html data-chapter>.
     function applyTint() {
       var ch = document.documentElement.getAttribute("data-chapter");
       var pair = CHAPTER_TINT[ch] || CHAPTER_TINT["hero"];
@@ -366,188 +378,6 @@
     }
   }
 
-  // ---- Specs reel: cinematic metric tour (Phase G) ----
-  // A single GRP pipe; the camera moves through three eased "moments" like a
-  // car-engine ad panning between parts: diameter (end view) → pressure (mid
-  // wall, internal glow pulsing) → length (zoom out, dimension line). Scrubbed,
-  // pinned. Metric UI crossfades per stop.
-  function initSpecsScene() {
-    var stage = document.querySelector("[data-specs-stage]");
-    var canvasEl = document.querySelector("[data-specs-canvas]");
-    if (!stage || !canvasEl) return;
-    var renderer;
-    try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    } catch (e) { return; }
-    if (!renderer.getContext || !renderer.getContext()) return;
-
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 300);
-
-    scene.add(new THREE.AmbientLight(0x2a3a5a, 0.7));
-    var key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(4, 6, 5); scene.add(key);
-    var rim = new THREE.DirectionalLight(0xDBB85C, 0.6); rim.position.set(-5, 3, -4); scene.add(rim);
-
-    // ---- The pipe (along X, length 12, x -6..6) ----
-    var LEN = 12, R = 1.2;
-    var pipe = new THREE.Group();
-    function tube(radius, color, side, rough) {
-      var m = new THREE.Mesh(
-        new THREE.CylinderGeometry(radius, radius, LEN, 64, 1, true),
-        new THREE.MeshStandardMaterial({ color: color, metalness: 0.15, roughness: rough != null ? rough : 0.6, side: side || THREE.DoubleSide })
-      );
-      m.rotation.z = Math.PI / 2;
-      pipe.add(m);
-      return m;
-    }
-    var outerM = tube(R, 0xB7C2CF, THREE.DoubleSide, 0.6);            // outer liner (gray)
-    var structM = tube(R * 0.96, 0x214B6E, THREE.DoubleSide, 0.65);   // structural (blue)
-    var innerM = tube(R * 0.92, 0xDBB85C, THREE.DoubleSide, 0.5);     // inner liner (gold)
-    var boreM = tube(R * 0.88, 0x0E3045, THREE.BackSide, 0.9);        // bore interior
-    scene.add(pipe);
-
-    // Internal pressure glow (visible at the pressure stop)
-    var pressure = new THREE.Mesh(
-      new THREE.CylinderGeometry(R * 0.78, R * 0.78, LEN * 0.92, 48, 1, true),
-      new THREE.MeshStandardMaterial({ color: 0xDBB85C, emissive: 0xC9A227, emissiveIntensity: 0.7, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false })
-    );
-    pressure.rotation.z = Math.PI / 2;
-    scene.add(pressure);
-
-    // Length dimension line + end ticks (visible at the length stop)
-    var dimMat = new THREE.MeshStandardMaterial({ color: 0xDBB85C, emissive: 0xDBB85C, emissiveIntensity: 0.5, transparent: true, opacity: 0 });
-    var dimLine = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, LEN, 8), dimMat);
-    dimLine.rotation.z = Math.PI / 2; dimLine.position.y = R + 1.0; scene.add(dimLine);
-    var tickGeo = new THREE.CylinderGeometry(0.03, 0.03, 0.7, 8);
-    var tickA = new THREE.Mesh(tickGeo, dimMat); tickA.position.set(-LEN / 2, R + 1.0, 0); scene.add(tickA);
-    var tickB = new THREE.Mesh(tickGeo, dimMat); tickB.position.set(LEN / 2, R + 1.0, 0); scene.add(tickB);
-
-    // ---- Camera keyframes (3 stops) ----
-    var stops = [
-      { px: 10.5, py: 0.4, pz: 0.6, lx: 6, ly: 0, lz: 0 },  // 0: diameter — end face; pulled back so full Ø2400 circle fits
-      { px: 0.0, py: 2.6, pz: 4.4, lx: 0, ly: 0, lz: 0 },   // 1: pressure — mid wall, outside
-      { px: 0.0, py: 6.5, pz: 18,  lx: 0, ly: 0, lz: 0 }    // 2: length — far back, full pipe
-    ];
-    var cam = { px: stops[0].px, py: stops[0].py, pz: stops[0].pz, lx: stops[0].lx, ly: stops[0].ly, lz: stops[0].lz };
-    function applyCam() { camera.position.set(cam.px, cam.py, cam.pz); camera.lookAt(cam.lx, cam.ly, cam.lz); }
-    applyCam();
-
-    // ---- Metric UI ----
-    var metricEl = document.querySelector("[data-specs-metric]");
-    var numEl = document.querySelector("[data-specs-num]");
-    var capEl = document.querySelector("[data-specs-caption]");
-    var stepEl = document.querySelector("[data-specs-step]");
-    var gaugeEl = document.querySelector("[data-specs-gauge]");
-    var gaugeNeedle = gaugeEl ? gaugeEl.querySelector(".sg-needle") : null;
-    var gaugeFill = gaugeEl ? gaugeEl.querySelector(".sg-fill") : null;
-    var METRICS = [
-      { metric: "Max diameter", num: "2400<span>mm</span>", cap: "The bore carries the Gulf's largest water and sewerage flows." },
-      { metric: "Pressure rating", num: "32<span>bar</span>", cap: "Engineered to hold extreme internal pressure without yielding." },
-      { metric: "Standard length", num: "12<span>m</span>", cap: "Long 12-metre sections mean fewer joints, faster installation." }
-    ];
-    var lastMetric = -1;
-    function updateMetric(p) {
-      var idx = p < 0.3 ? 0 : (p < 0.7 ? 1 : 2);
-      if (idx === lastMetric) return;
-      lastMetric = idx;
-      var m = METRICS[idx];
-      if (metricEl) { gsap.fromTo(metricEl, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }); metricEl.textContent = m.metric; }
-      if (numEl) { gsap.fromTo(numEl, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }); numEl.innerHTML = m.num; }
-      if (capEl) { gsap.fromTo(capEl, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }); capEl.textContent = m.cap; }
-      if (stepEl) stepEl.textContent = "0" + (idx + 1) + " / 0" + METRICS.length;
-      // Pressure gauge: sweep the needle 0->32 bar and fill the arc when
-      // entering the pressure beat. The "from" values reset to 0 at tween start
-      // (invisible — the gauge is fading/blur in), so leaving the beat just
-      // fades + blurs the gauge out with the needle still at 32 (no snap). The
-      // reset to 0 happens here on the next enter, never on the way out.
-      if (stage) stage.classList.toggle("is-pressure", idx === 1);
-      if (gaugeNeedle && gaugeFill && idx === 1) {
-        // Needle: tween an angle proxy and write the SVG transform attribute
-        // each frame — rotate(angle 100 100) pivots around the base (100,100).
-        // The SVG-native transform repaints reliably (CSS transform-origin and
-        // attr x2/y2 tweens both proved flaky in-browser). 0 bar = -90°,
-        // 32 bar = 54°. The gold arc (strokeDashoffset, a CSS property) uses
-        // the same ease/delay so the needle stays in sync with the fill.
-        var ang = { v: -90 };
-        gsap.fromTo(ang, { v: -90 }, {
-          v: 54, duration: 1.0, delay: 0.15, ease: "power2.out",
-          onUpdate: function () {
-            gaugeNeedle.setAttribute("transform", "rotate(" + ang.v.toFixed(2) + " 100 100)");
-          }
-        });
-        gsap.fromTo(gaugeFill, { strokeDashoffset: 100 }, { strokeDashoffset: 20, duration: 1.0, delay: 0.15, ease: "power2.out" });
-      }
-    }
-
-    // progress-driven viz (pressure glow + length dimension)
-    function applyViz(p) {
-      // Pressure glow (stop 2)
-      var pres = smoothstep(0.25, 0.45, p) * (1 - smoothstep(0.55, 0.75, p));
-      pressure.material.opacity = pres * 0.4;
-      // Length dimension (stop 3)
-      var len = smoothstep(0.7, 0.85, p);
-      dimMat.opacity = len;
-    }
-
-    // ---- Sizing ----
-    function resize() {
-      var w = stage.clientWidth || 1, h = stage.clientHeight || 1;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h; camera.updateProjectionMatrix();
-    }
-    resize();
-    window.addEventListener("resize", resize);
-
-    // On leaving the pin (either direction) the render loop stops, which would
-    // freeze the canvas on whatever mid-progress frame the fast scroll left it
-    // on. Snap to the boundary frame + render once so the frozen frame is
-    // always the start (leaving back) or end (leaving forward), and re-entering
-    // shows the correct first/last frame — not a random mid-frame.
-    function leaveSpecs(boundary) {
-      active = false;
-      updateMetric(boundary); // set the boundary metric + hide the gauge (is-pressure off); sets lastMetric so re-entering pressure re-sweeps
-      var stop = boundary >= 1 ? stops[2] : stops[0];
-      cam.px = stop.px; cam.py = stop.py; cam.pz = stop.pz;
-      cam.lx = stop.lx; cam.ly = stop.ly; cam.lz = stop.lz;
-      applyCam();
-      applyViz(boundary);
-      renderer.render(scene, camera);
-    }
-
-    // ---- Camera timeline (scrubbed, pinned) ----
-    var active = false;
-    var tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: stage, start: "top top", end: "+=200%", pin: true, scrub: true, anticipatePin: 1, invalidateOnRefresh: true,
-        onEnter: function () { active = true; },
-        onLeave: function () { leaveSpecs(1); },
-        onEnterBack: function () { active = true; },
-        onLeaveBack: function () { leaveSpecs(0); },
-        onUpdate: function (self) { updateMetric(self.progress); applyViz(self.progress); window.__demo2.specsReel.progress = self.progress; }
-      }
-    });
-    // Segment 1: stop0 -> stop1 (settles near the pressure view)
-    tl.to(cam, { px: stops[1].px, py: stops[1].py, pz: stops[1].pz, lx: stops[1].lx, ly: stops[1].ly, lz: stops[1].lz, duration: 5, ease: "power2.inOut", onUpdate: applyCam }, 0);
-    // Segment 2: stop1 -> stop2 (zoom out to full length)
-    tl.to(cam, { px: stops[2].px, py: stops[2].py, pz: stops[2].pz, lx: stops[2].lx, ly: stops[2].ly, lz: stops[2].lz, duration: 6, ease: "power2.inOut", onUpdate: applyCam }, 5);
-
-    // ---- Render loop (only while the chapter is active) ----
-    window.__demo2.specsReel = { active: false, renderCount: 0, progress: 0 };
-    gsap.ticker.add(function () {
-      window.__demo2.specsReel.active = active;
-      if (!active) return;
-      var t = performance.now();
-      pressure.material.emissiveIntensity = 0.5 + 0.35 * (0.5 + 0.5 * Math.sin(t / 240));
-      pipe.rotation.x = Math.sin(t / 1600) * 0.02; // subtle live tilt
-      renderer.render(scene, camera);
-      window.__demo2.specsReel.renderCount++;
-    });
-
-    applyCam(); applyViz(0); updateMetric(0);
-    renderer.render(scene, camera);
-  }
-
   // ---- Init (defer guaranteed DOM-ready; three.min.js loaded before this) ----
   if (reduce) {
     window.__demo2.webgl = false;
@@ -559,18 +389,23 @@
     if (inited) return;
     inited = true;
     initFluidBackground();
-    initPipeBuild();
-    // Re-run initAnatomy now (after the pipe-build pin) so its ST measures
-    // against the final layout — a pinned ST's start won't update via refresh().
-    if (window.__demo2 && typeof window.__demo2.initAnatomy === "function") {
-      window.__demo2.initAnatomy();
+    initPipeJourney(); // ONE pin — no ordering fragility (single pinned ST).
+    // Enquire section: smooth fade-in as it enters the viewport after the pipe
+    // exit. The content is NOT gate-hidden (no data-motion) so it's visible
+    // immediately; this just adds a silky opacity + slide as the section scrolls
+    // in, making the pipe→form handoff feel like one continuous motion.
+    var enquire = document.querySelector("#enquire");
+    if (enquire) {
+      gsap.fromTo(enquire, { opacity: 0, y: 60 }, {
+        opacity: 1, y: 0, duration: 1.0, ease: "power2.out",
+        scrollTrigger: { trigger: enquire, start: "top 95%", toggleActions: "play none none reverse" }
+      });
     }
-    // Specs reel last: its ST must be created after the anatomy pin so the
-    // anatomy pin-spacer (which shifts specs) is already in place.
-    initSpecsScene();
+    if (window.__demo2 && typeof window.__demo2.initJumprail === "function") {
+      window.__demo2.initJumprail();
+    }
     if (window.ScrollTrigger) window.ScrollTrigger.refresh();
   }
-  // Wait for fonts/layout to settle before pinning + sizing (single init).
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(start);
   } else {

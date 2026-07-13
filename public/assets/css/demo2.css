@@ -294,6 +294,19 @@ html.demo2 .d2-hero h1 {
   color: #fff;   /* override styles.css base h1/h2 { color: var(--navy) } which camos on the fluid bg */
 }
 html.demo2 .d2-hero h1 em { color: var(--accent, #DBB85C); font-style: normal; }
+/* Hero is smaller (50vh) so the pipe opening + a bit of its length is visible
+   below it at load — the journey begins the moment the page opens. */
+html.demo2 .d2-hero {
+  min-height: 52vh;
+  padding: clamp(24px, 4vw, 48px) clamp(20px, 5vw, 80px);
+  justify-content: flex-end;
+}
+html.demo2 .d2-hero h1 {
+  font: 700 clamp(1.6rem, 4vw, 3rem)/1.04 var(--font-display, "DM Sans"), sans-serif;
+  max-width: 24ch;
+}
+html.demo2 .d2-hero p { font-size: clamp(0.9rem, 1.2vw, 1.05rem); max-width: 48ch; }
+html.demo2 .d2-hero__actions { margin-top: .4rem; }
 /* Hero logo: big, centered, above the eyebrow. */
 html.demo2 .d2-hero__logo {
   height: clamp(64px, 9vw, 116px);
@@ -408,7 +421,7 @@ html.demo2.demo2-motion .site-footer { background: rgba(6, 13, 46, 0.92); }
    Scoped to body.d2-home so interior pages keep their full header for now.
    ========================================================================= */
 body.d2-home .site-header {
-  background: #0C1B64;          /* match the hero's navy top color */
+  background: #060D2E;          /* match the pipe-journey canvas bg — seamless header→hero */
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   border-bottom: none;
@@ -594,7 +607,7 @@ body.d2-home .d2-legal {
   z-index: 2;
   margin: 0;
   padding: 1.1rem clamp(20px, 5vw, 80px) 1.6rem;
-  background: #060D2E;
+  background: #050A1A;
   color: var(--accent, #DBB85C);
   font: 600 0.72rem/1.5 var(--font-mono, "Inter"), sans-serif;
   letter-spacing: 0.08em;
@@ -724,7 +737,7 @@ html.demo2.demo2-motion [data-motion="mask-reveal"] { clip-path: inset(0 0 100% 
    so they chain into one smooth gradient (no hard steps). Opaque so it works
    on desktop AND mobile (no fluid needed). Specs = fully black.
    ========================================================================= */
-html.demo2 body.d2-home .d2-hero { background: linear-gradient(to bottom, #0C1B64 0%, #0A1547 100%); }
+html.demo2 body.d2-home .d2-hero { background: linear-gradient(to bottom, #0C1B64 0%, #060D2E 100%); }
 html.demo2 body.d2-home .pipe-build { background: linear-gradient(to bottom, #0A1547 0%, #060D2E 100%); }
 html.demo2 body.d2-home .d2-chapter[data-motion-chapter="anatomy"] { background: linear-gradient(to bottom, #060D2E 0%, #03060f 100%); }
 html.demo2 body.d2-home .specs-reel { background: linear-gradient(to bottom, #03060f 0%, #000000 100%); }
@@ -747,7 +760,7 @@ html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="about"] { background:
 html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="range"] { background: #070C1F; }
 html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="why-grp"] { background: linear-gradient(to bottom, #070C1F 0%, #080E22 100%); }
 html.demo2 body.d2-home .d2-calmlight[data-motion-chapter="certs"] { background: linear-gradient(to bottom, #080E22 0%, #070C1F 100%); }
-html.demo2 body.d2-home .d2-chapter[data-motion-chapter="enquire"] { background: linear-gradient(to bottom, #070C1F 0%, #060D2E 100%); }
+html.demo2 body.d2-home .d2-chapter[data-motion-chapter="enquire"] { background: linear-gradient(to bottom, #060D2E 0%, #050A1A 100%); }
 
 /* --- Calm chapter base (not forced 100vh; generous padding, restrained type). --- */
 html.demo2 .d2-calmlight {
@@ -946,13 +959,13 @@ html.demo2 .d2-mat__pipe svg {
   filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
 }
 html.demo2 .d2-mat__name {
-  font: 700 1.25rem/1.1 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0.2rem 0 0;
+  font: 700 1.25rem/1.1 var(--font-display, "DM Sans"), sans-serif; color: var(--pipe-fg, #0A0E1A); margin: 0.2rem 0 0;
   white-space: nowrap;
 }
-html.demo2 .d2-mat--grp .d2-mat__name { color: var(--accent, #DBB85C); }
+html.demo2 .d2-mat--grp .d2-mat__name { color: var(--pipe-fg-accent, #DBB85C); }
 html.demo2 .d2-mat__tag {
   font: 500 0.78rem/1.3 var(--font-mono, "Inter"), sans-serif;
-  letter-spacing: 0.08em; color: #8294a8; margin: 0.3rem 0 0;
+  letter-spacing: 0.08em; color: var(--pipe-fg-muted, #3D3D4A); margin: 0.3rem 0 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
 }
 /* Detail area — stats and description SHARE this space (cross-fade). Stats show
@@ -963,41 +976,41 @@ html.demo2 .d2-mat__detail {
   position: relative; width: 100%;
   margin: 1.2rem 0 0; padding: 1.2rem 0 0;
   border-top: 1px solid rgba(255,255,255,0.08);
-  min-height: clamp(160px, 18vh, 190px);
+  min-height: clamp(96px, 11vh, 120px);
   display: flex; align-items: center; justify-content: center;
   transition: border-color 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
-/* On hover the description replaces the stats, so the divider (which separates
-   the graphic from the stats) isn't needed — fade it out. */
-html.demo2 .d2-mat:hover .d2-mat__detail { border-color: transparent; }
+/* Hover just highlights (scale via GSAP + border/shadow via CSS :hover) —
+   no content swap. Stats stay visible, description stays hidden. */
 html.demo2 .d2-mat__stats {
   width: 100%; max-width: 300px;
   display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem 0.5rem;
   opacity: 1;
   transition: opacity 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
-html.demo2 .d2-mat:hover .d2-mat__stats { opacity: 0; }
+html.demo2 .d2-mat:hover .d2-mat__stats { opacity: 1; }
 html.demo2 .d2-mat__stats div { display: flex; flex-direction: column; gap: 0.15rem; }
 html.demo2 .d2-mat__stats dt {
   font: 500 0.66rem/1 var(--font-mono, "Inter"), sans-serif;
   letter-spacing: 0.1em; text-transform: uppercase; color: #6E7E90; white-space: nowrap;
 }
 html.demo2 .d2-mat__stats dd {
-  font: 600 0.95rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: #fff; margin: 0; white-space: nowrap;
+  font: 600 0.95rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: var(--pipe-fg, #0A0E1A); margin: 0; white-space: nowrap;
 }
-html.demo2 .d2-mat--grp .d2-mat__stats dd { color: var(--accent, #DBB85C); }
+html.demo2 .d2-mat--grp .d2-mat__stats dd { color: var(--pipe-fg-accent, #DBB85C); }
 html.demo2 .d2-mat__desc {
   position: absolute; top: 1.2rem; left: 50%; bottom: 0;
   width: 300px; transform: translateX(-50%);
   display: flex; align-items: center; justify-content: center;
   padding: 0 8px;
   text-align: center;
-  color: #C6D2E0; font: 400 0.9rem/1.6 var(--font-body, "DM Sans"), sans-serif;
+  color: var(--pipe-fg-muted, #3D3D4A); font: 400 0.9rem/1.6 var(--font-body, "DM Sans"), sans-serif;
   opacity: 0; pointer-events: none;
   transition: opacity 360ms var(--ease-out, cubic-bezier(.16,1,.3,1));
 }
-html.demo2 .d2-mat:hover .d2-mat__desc { opacity: 1; pointer-events: auto; }
-html.demo2 .d2-mat--grp .d2-mat__desc { color: #E4D5A0; }
+/* Description stays hidden — hover only highlights (no content swap). */
+html.demo2 .d2-mat:hover .d2-mat__desc { opacity: 0; }
+html.demo2 .d2-mat--grp .d2-mat__desc { color: var(--pipe-fg-accent, #DBB85C); }
 /* Touch + reduced motion: stack stats + description (both visible), no expansion. */
 @media (hover: none), (prefers-reduced-motion: reduce) {
   html.demo2 .d2-mat { min-height: 0; }
@@ -1025,13 +1038,19 @@ html.demo2 .d2-cert-table__row {
   border-bottom: 1px solid rgba(255,255,255,0.06); align-items: center;
 }
 html.demo2 .d2-cert-table__row:last-child { border-bottom: none; }
+html.demo2 .d2-cert-table__row--more {
+  justify-content: center;
+  color: var(--pipe-fg-accent, var(--accent, #DBB85C));
+  font: 600 0.78rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.08em;
+}
 html.demo2 .d2-cert-table__row--head {
   background: rgba(219,184,92,0.08);
   font: 600 0.72rem/1.3 var(--font-mono, "Inter"), sans-serif;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent, #DBB85C);
 }
-html.demo2 .d2-cert-table__row:not(.d2-cert-table__row--head) { color: #C6D2E0; font-size: 0.95rem; }
-html.demo2 .d2-cert-table__row span:nth-child(2) { color: #fff; font-weight: 600; }
+html.demo2 .d2-cert-table__row:not(.d2-cert-table__row--head) { color: var(--pipe-fg-muted, #3D3D4A); font-size: 0.95rem; }
+html.demo2 .d2-cert-table__row span:nth-child(2) { color: var(--pipe-fg, #0A0E1A); font-weight: 600; }
 @media (max-width: 600px) {
   html.demo2 .d2-cert-table__row { grid-template-columns: 1fr; gap: 0.2rem; padding: 0.8rem clamp(12px, 4vw, 18px); }
   html.demo2 .d2-cert-table__row--head { display: none; }
@@ -1107,3 +1126,158 @@ html.demo2 .d2-jumprail__chip--cta:hover { background: #E8C96A; color: #060D2E; 
 
 /* Footer legal/credit line — use the dune accent so it reads on the dark base. */
 html.demo2 .site-footer .footer-bottom { color: var(--accent, #DBB85C); }
+
+/* =========================================================================
+   THE PIPE JOURNEY — the scroll-driven 3D chapter.
+   One pinned stage: canvas (3D pipe tunnel) + overlay station panels that
+   cross-fade as the camera descends. Fallback (mobile/no-WebGL/reduced-motion)
+   → stations stack as normal-flow calm sections.
+   ========================================================================= */
+html.demo2 .pipe-journey {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  margin-bottom: -100vh; /* collapse the section's flow height so the enquire section appears immediately after the pin releases — no blank gap */
+  background: #060D2E;
+  color: #fff;
+  /* Pipe interior is gold/yellow — text is LIGHT (white) to read on the gold. */
+  --pipe-fg: #ffffff;
+  --pipe-fg-muted: #AEBDCD;
+  --pipe-fg-accent: var(--accent, #DBB85C);
+}
+html.demo2 .pipe-journey__canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+}
+/* Hero overlay — small text at the top of the pipe canvas. Fades out as the
+   camera begins turning (driven by JS, opacity 1→0 at progress 0→0.06). */
+html.demo2 .pipe-journey__hero {
+  position: absolute; top: clamp(32px, 8vh, 88px); left: 50%; transform: translateX(-50%);
+  z-index: 3; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center;
+  max-width: 880px; width: calc(100% - 40px);
+  opacity: 1;
+}
+html.demo2 .pj-hero__eyebrow {
+  font: 600 0.7rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent, #DBB85C);
+}
+html.demo2 .pj-hero__title {
+  font: 700 clamp(1.4rem, 3.5vw, 2.6rem)/1.06 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: -0.02em; margin: 0; max-width: 20ch; color: #fff;
+}
+html.demo2 .pj-hero__title em { color: var(--accent, #DBB85C); font-style: normal; }
+html.demo2 .pj-hero__body {
+  color: #AEBDCD; font-size: clamp(0.85rem, 1.1vw, 1rem); margin: 0; max-width: 48ch;
+}
+html.demo2 .pj-hero__actions {
+  display: flex; gap: 0.7rem; flex-wrap: wrap; justify-content: center; margin-top: 0.4rem;
+}
+html.demo2 .pj-hero__actions .btn { pointer-events: auto; }
+@media (max-width: 600px) {
+  html.demo2 .pj-hero__actions { flex-direction: column; align-items: center; }
+}
+@media (max-width: 767px) {
+  html.demo2 .pipe-journey__hero { top: clamp(24px, 6vh, 60px); }
+}
+html.demo2 .pipe-journey__stations {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+}
+html.demo2 .pj-station {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1rem; text-align: center;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 48px);
+  opacity: 0; /* driven by updateStations(progress) in demo2-webgl.js */
+  pointer-events: none;
+  transition: opacity 400ms var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+html.demo2 .pj-station__eyebrow {
+  font: 600 0.78rem/1 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.32em; text-transform: uppercase; color: var(--pipe-fg-accent, #DBB85C);
+}
+html.demo2 .pj-station__title {
+  font: 700 clamp(1.8rem, 4vw, 3.4rem)/1.04 var(--font-display, "DM Sans"), sans-serif;
+  letter-spacing: -0.02em; margin: 0; max-width: 18ch; color: var(--pipe-fg, #0A0E1A);
+}
+html.demo2 .pj-station__body {
+  color: var(--pipe-fg-muted, #3D3D4A); font-size: clamp(1rem, 1.4vw, 1.18rem); line-height: 1.6; max-width: 52ch; margin: 0;
+}
+html.demo2 .pj-station__note {
+  color: var(--pipe-fg-muted, #3D3D4A); font: 500 0.8rem/1.4 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.06em; margin: 0.4rem 0 0; max-width: 50ch;
+}
+/* Capabilities station */
+html.demo2 .pj-caps {
+  list-style: none; margin: 0.6rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2vw, 32px);
+}
+@media (max-width: 640px) { html.demo2 .pj-caps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+html.demo2 .pj-caps li { display: flex; flex-direction: column; gap: 0.4rem; align-items: center; }
+html.demo2 .pj-caps__num {
+  font: 700 clamp(1.8rem, 3.4vw, 2.8rem)/1 var(--font-display, "DM Sans"), sans-serif;
+  color: var(--accent, #DBB85C); letter-spacing: -0.02em;
+}
+html.demo2 .pj-caps__num .u { font-size: 0.4em; color: var(--pipe-fg-muted, #3D3D4A); margin-left: .1em; }
+html.demo2 .pj-caps__label {
+  font: 500 0.7rem/1.3 var(--font-mono, "Inter"), sans-serif;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--pipe-fg-muted, #3D3D4A);
+}
+/* Product range station */
+html.demo2 .pj-range {
+  list-style: none; margin: 0.6rem 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(10px, 1.5vw, 18px);
+  max-width: 640px; width: 100%;
+}
+html.demo2 .pj-range li {
+  display: flex; flex-direction: column; gap: 0.3rem;
+  padding: clamp(14px, 1.6vw, 20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
+  background: rgba(255,255,255,0.025); text-align: left;
+}
+html.demo2 .pj-range strong { font: 600 1rem/1.2 var(--font-display, "DM Sans"), sans-serif; color: var(--pipe-fg-accent, #DBB85C); }
+html.demo2 .pj-range span { color: var(--pipe-fg-muted, #3D3D4A); font-size: 0.88rem; line-height: 1.45; }
+html.demo2 .pj-pills {
+  list-style: none; margin: 1rem 0 0; padding: 0;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+}
+html.demo2 .pj-pills li {
+  font: 500 0.76rem/1 var(--font-mono, "Inter"), sans-serif; color: var(--pipe-fg-muted, #3D3D4A);
+  padding: 0.5rem 0.85rem; border: 1px solid rgba(219,184,92,0.25); border-radius: 999px;
+}
+/* Why-GRP mat cards inside a station — constrain + shrink for the overlay */
+html.demo2 .pj-station[data-station="why-grp"] .d2-mats { max-width: 780px; width: 100%; }
+html.demo2 .pj-station[data-station="why-grp"] .d2-mat { min-height: clamp(340px, 40vh, 400px); }
+/* Certifications table inside a station — condensed to fit the viewport overlay */
+html.demo2 .pj-station[data-station="certs"] .d2-cert-table {
+  max-width: 580px;
+  margin: 0.5rem 0 0;
+  padding-bottom: 1rem;
+}
+html.demo2 .pj-station[data-station="certs"] .d2-cert-table__row { padding: 0.45rem clamp(10px, 1.2vw, 16px); }
+html.demo2 .pj-station[data-station="certs"] .d2-cert-table__row--head { font-size: 0.64rem; padding: 0.4rem clamp(10px, 1.2vw, 16px); }
+html.demo2 .pj-station[data-station="certs"] .d2-cert-table__row:not(.d2-cert-table__row--head) { font-size: 0.8rem; }
+html.demo2 .pj-station[data-station="certs"] .d2-cert-logos { margin-top: 0.7rem; gap: 10px 14px; }
+html.demo2 .pj-station[data-station="certs"] .d2-cert-logos img { height: clamp(32px, 3vw, 40px); }
+
+/* Mobile fallback: canvas hidden → stations stack as calm sections */
+@media (max-width: 767px) {
+  html.demo2 .pipe-journey { height: auto; overflow: visible; background: #070C1F; --pipe-fg: #fff; --pipe-fg-muted: #AEBDCD; }
+  html.demo2 .pipe-journey__canvas { display: none; }
+  html.demo2 .pipe-journey__stations { position: static; display: block; }
+  html.demo2 .pj-station {
+    position: static; opacity: 1 !important; pointer-events: auto;
+    min-height: auto; padding: clamp(64px, 12vw, 120px) clamp(20px, 5vw, 48px);
+  }
+}
+/* No-WebGL fallback (desktop without WebGL context) */
+html.demo2.demo2-no-webgl .pipe-journey__canvas { display: none; }
+html.demo2.demo2-no-webgl .pipe-journey__stations { position: static; display: block; }
+html.demo2.demo2-no-webgl .pipe-journey { --pipe-fg: #fff; --pipe-fg-muted: #AEBDCD; }
+html.demo2.demo2-no-webgl .pj-station { position: static; opacity: 1 !important; pointer-events: auto; min-height: auto; padding: clamp(64px, 12vw, 120px) clamp(20px, 5vw, 48px); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html.demo2 .pipe-journey { height: auto; overflow: visible; --pipe-fg: #fff; --pipe-fg-muted: #AEBDCD; }
+  html.demo2 .pipe-journey__canvas { display: none; }
+  html.demo2 .pipe-journey__stations { position: static; display: block; }
+  html.demo2 .pj-station { position: static; opacity: 1 !important; pointer-events: auto; min-height: auto; padding: clamp(64px, 12vw, 120px) clamp(20px, 5vw, 48px); }
+}
+

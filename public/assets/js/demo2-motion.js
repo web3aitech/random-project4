@@ -230,7 +230,7 @@
   function injectWebGL() {
     // Order preserved (async=false): three first, then demo2-webgl.js.
     loadScript("/assets/vendor/three/three.min.js", true);
-    loadScript("/assets/js/demo2-webgl.js?v=20", true);
+    loadScript("/assets/js/demo2-webgl.js?v=23", true);
     window.__demo2.webgl = "loading";
   }
   // Defer the WebGL decision until after first paint so it never blocks LCP.
@@ -444,64 +444,6 @@
     );
   }
 
-  // ---- Anatomy: scrubbed cross-section build with labels in sync (Phase G) ----
-  // Pinned, scrubbed. Reveals each layer outer→structural→inner→bore with its
-  // callout + list item, then draws the Ø2400mm dimension line. Outside-in so
-  // each smaller disk leaves the previous layer visible as a ring.
-  var anatomyTL = null;
-  function initAnatomy() {
-    // Kill any previous instance (re-called by demo2-webgl after the pipe-build
-    // pin is created, so the anatomy ST measures against the final layout — a
-    // pinned ST's start won't otherwise update via refresh() once another pin's
-    // spacer shifts it).
-    if (anatomyTL) {
-      try { anatomyTL.scrollTrigger && anatomyTL.scrollTrigger.kill(); } catch (e) {}
-      try { anatomyTL.kill(); } catch (e) {}
-      anatomyTL = null;
-    }
-    var section = document.querySelector('[data-motion-chapter="anatomy"]');
-    var svg = section && section.querySelector(".pipe-diagram");
-    if (!section || !svg) return;
-    var circles = svg.querySelectorAll("circle");
-    if (circles.length < 5) return;
-    var outer = circles[0], structural = circles[1], inner = circles[2], bore = circles[3], ring = circles[4];
-    var callouts = svg.querySelectorAll("g.callout");       // [0]=01 inner, [1]=02 structural, [2]=03 outer
-    var dimText = svg.querySelector("text.callout");
-    var dims = svg.querySelectorAll(".dim");
-    var list = section.querySelectorAll(".d2-anatomy-list li"); // [0]=l1 inner, [1]=l2 structural, [2]=l3 outer
-
-    // dim lines already hidden via the gate CSS (dashoffset 300); animate to 0.
-    // Build completes by t=4.0 (progress ~0.8); a final 1s hold lets the finished
-    // diagram breathe before the pin releases, so the build never feels cut off.
-    var tl = gsap.timeline({
-      scrollTrigger: { trigger: section, start: "top top", end: "+=200%", pin: true, scrub: true, anticipatePin: 1,
-        invalidateOnRefresh: true }
-    });
-    // 1) Outer liner (gray) + 03 outer label + list l3
-    tl.to(outer, { opacity: 1, duration: 1 }, 0)
-      .to(callouts[2], { opacity: 1, duration: 0.6 }, 0.15)
-      .to(list[2], { opacity: 1, duration: 0.6 }, 0.15)
-      // 2) Structural (blue) + 02 + list l2
-      .to(structural, { opacity: 1, duration: 1 }, 1.0)
-      .to(callouts[1], { opacity: 1, duration: 0.6 }, 1.15)
-      .to(list[1], { opacity: 1, duration: 0.6 }, 1.15)
-      // 3) Inner liner (gold) + 01 + list l1
-      .to(inner, { opacity: 1, duration: 1 }, 2.0)
-      .to(callouts[0], { opacity: 1, duration: 0.6 }, 2.15)
-      .to(list[0], { opacity: 1, duration: 0.6 }, 2.15)
-      // 4) Bore + ring outline + dimension line draw + dimension text
-      .to(bore, { opacity: 1, duration: 0.6 }, 3.0)
-      .to(ring, { opacity: 1, duration: 0.5 }, 3.1)
-      .to(dims, { strokeDashoffset: 0, duration: 0.8, ease: "none" }, 3.2)
-      .to(dimText, { opacity: 1, duration: 0.4 }, 3.6)
-      // 5) Hold on the completed diagram (absorbs scrub lag; pin releases cleanly)
-      .to({}, { duration: 1.0 }, 4.0);
-    anatomyTL = tl;
-    window.__demo2.scrollTriggerCount = (ScrollTrigger.getAll() || []).length;
-  }
-  // Exposed so demo2-webgl can re-run it after the pipe-build pin is created.
-  window.__demo2.initAnatomy = initAnatomy;
-
   // ---- Sticky quick-access chip rail (procurement shortcut) ----
   // Chip href="#id" clicks are already routed through Lenis by the generic
   // a[href^="#"] intercept above. This handles (a) revealing the rail once the
@@ -528,7 +470,6 @@
   initOverlays();          // grain + bg-fallback nodes (once)
   heroReveal();            // Phase E: cinematic hero image reveal
   initChapters();          // Phase C: reveals + chapters + parallax + count-up + wipe
-  initAnatomy();           // Phase G: scrubbed cross-section build with labels
   initJumprail();          // sticky chip rail: reveal + active-section highlight
   initMicroInteractions(); // Phase F: custom cursor + magnetic CTAs
 
