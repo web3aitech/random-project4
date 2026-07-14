@@ -1283,7 +1283,7 @@ html.demo2 .pj-station[data-station="certs"] .d2-cert-logos img { height: clamp(
 
 /* Mobile fallback: canvas hidden → hero + stations stack as calm sections */
 @media (max-width: 767px) {
-  html.demo2 .pipe-journey { height: auto; overflow: visible; background: #070C1F; --pipe-fg: #fff; --pipe-fg-muted: var(--accent, #DBB85C); }
+  html.demo2 .pipe-journey { height: auto; overflow: visible; background: #070C1F; --pipe-fg: #fff; --pipe-fg-muted: #AEBDCD; }
   html.demo2 .pipe-journey__canvas { display: none; }
   /* Hero becomes a real in-flow hero (the .demo2-motion opacity:0 gate is for
      the desktop WebGL fade; WebGL never runs on mobile, so force visible +
@@ -1313,14 +1313,29 @@ html.demo2 .pj-station[data-station="certs"] .d2-cert-logos img { height: clamp(
      content height. */
   html.demo2 .d2-mat { flex: 0 0 auto; }
   html.demo2 .pj-station[data-station="why-grp"] .d2-mat { min-height: 0; }
-  /* The mat stat labels (WEIGHT / LIFE …) are a hardcoded slate-blue; go gold. */
-  html.demo2 .d2-mat__stats dt { color: var(--accent, #DBB85C); }
-  /* Enquire: bring the form closer to the heading/body, and warm the muted
-     blue-grey body text to the brand gold so nothing reads "blue on navy". */
-  html.demo2 .d2-enquire { gap: 1rem; }
-  html.demo2 body.d2-home #enquire .d2-chapter p,
-  html.demo2 body.d2-home #enquire .d2-anatomy-list,
-  html.demo2 body.d2-home #enquire .d2-anatomy-list .l3 strong { color: var(--accent, #DBB85C); }
+  html.demo2 .pj-pills .pj-em { color: var(--accent, #DBB85C); }
+  html.demo2 .d2-mat:hover { transform: none; }
+  html.demo2 .d2-mat__detail { min-height: 0; display: block; }
+  html.demo2 .d2-mat__stats,
+  html.demo2 .d2-mat:hover .d2-mat__stats { opacity: 1; max-width: 100%; }
+  html.demo2 .d2-mat__desc,
+  html.demo2 .d2-mat:hover .d2-mat__desc {
+    position: static; opacity: 1; pointer-events: auto;
+    width: auto; left: auto; transform: none;
+    margin-top: 1.2rem; padding: 1.2rem 0 0; display: block;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  html.demo2 body.d2-home #enquire {
+    min-height: auto;
+    justify-content: flex-start;
+    padding-top: clamp(48px, 10vw, 72px);
+    padding-bottom: clamp(32px, 8vw, 56px);
+  }
+  html.demo2 .d2-enquire { gap: clamp(1.1rem, 4vw, 1.75rem); }
+  html.demo2 body.d2-home #enquire .d2-chapter p { color: #D7DEE8; }
+  html.demo2 body.d2-home #enquire .d2-anatomy-list { color: #AEBDCD; }
+  html.demo2 body.d2-home #enquire .d2-anatomy-list { display: none; }
+  html.demo2 body.d2-home #enquire .d2-anatomy-list strong { color: #fff; }
   /* Use the full-screen drawer, not the desktop horizontal flyout (7 nowrap
      links overflow a phone). The drawer markup + script.js handler already
      exist; demo2-motion.js lets the click through on mobile. Lift the drawer
