@@ -1274,15 +1274,31 @@ html.demo2 .pj-station[data-station="certs"] .d2-cert-table__row:not(.d2-cert-ta
 html.demo2 .pj-station[data-station="certs"] .d2-cert-logos { margin-top: 0.7rem; gap: 10px 14px; }
 html.demo2 .pj-station[data-station="certs"] .d2-cert-logos img { height: clamp(32px, 3vw, 40px); }
 
-/* Mobile fallback: canvas hidden → stations stack as calm sections */
+/* Mobile fallback: canvas hidden → hero + stations stack as calm sections */
 @media (max-width: 767px) {
   html.demo2 .pipe-journey { height: auto; overflow: visible; background: #070C1F; --pipe-fg: #fff; --pipe-fg-muted: #AEBDCD; }
   html.demo2 .pipe-journey__canvas { display: none; }
+  /* Hero becomes a real in-flow hero (the .demo2-motion opacity:0 gate is for
+     the desktop WebGL fade; WebGL never runs on mobile, so force visible +
+     static so it heads the page instead of overlapping the first station). */
+  html.demo2 .pipe-journey__hero {
+    position: static; left: auto; transform: none;
+    opacity: 1 !important;
+    max-width: 640px;
+    padding: calc(var(--header-h, 64px) + clamp(24px, 6vw, 56px)) clamp(20px, 5vw, 48px) clamp(40px, 8vw, 64px);
+  }
   html.demo2 .pipe-journey__stations { position: static; display: block; }
   html.demo2 .pj-station {
     position: static; opacity: 1 !important; pointer-events: auto;
     min-height: auto; padding: clamp(64px, 12vw, 120px) clamp(20px, 5vw, 48px);
   }
+  /* Use the full-screen drawer, not the desktop horizontal flyout (7 nowrap
+     links overflow a phone). The drawer markup + script.js handler already
+     exist; demo2-motion.js lets the click through on mobile. Lift the drawer
+     above the sticky header (z-201) so its close button is tappable. */
+  html.demo2.demo2-motion body.d2-home .header-flyout { display: none !important; }
+  html.demo2.demo2-motion body.d2-home .mobile-nav { display: flex !important; z-index: 202; }
+  html.demo2.demo2-motion body.d2-home .mobile-nav__close { display: flex; }
 }
 /* No-WebGL fallback (desktop without WebGL context) */
 html.demo2.demo2-no-webgl .pipe-journey__canvas { display: none; }

@@ -181,6 +181,9 @@
     }
 
     nt.addEventListener("click", function (e) {
+      // On phones the horizontal flyout overflows; let the click through to
+      // script.js, which opens the full-screen .mobile-nav drawer instead.
+      if (window.matchMedia("(max-width: 767px)").matches) return;
       e.preventDefault();
       e.stopImmediatePropagation();
       if (open) closeMenu();
