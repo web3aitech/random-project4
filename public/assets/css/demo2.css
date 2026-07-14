@@ -1066,9 +1066,16 @@ html.demo2 .d2-cert-table__row--head {
 }
 html.demo2 .d2-cert-table__row:not(.d2-cert-table__row--head) { color: var(--pipe-fg-muted, #3D3D4A); font-size: 0.95rem; }
 html.demo2 .d2-cert-table__row span:nth-child(2) { color: var(--pipe-fg, #0A0E1A); font-weight: 600; }
+/* On phones keep the table structure (3 columns + header) and let it scroll
+   horizontally instead of collapsing to stacked rows. minmax track minimums
+   force the rows' min-content width past the viewport, so overflow-x:auto on
+   the table scrolls the lot together with aligned columns. Desktop untouched. */
 @media (max-width: 600px) {
-  html.demo2 .d2-cert-table__row { grid-template-columns: 1fr; gap: 0.2rem; padding: 0.8rem clamp(12px, 4vw, 18px); }
-  html.demo2 .d2-cert-table__row--head { display: none; }
+  html.demo2 .d2-cert-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  html.demo2 .d2-cert-table__row {
+    grid-template-columns: minmax(112px, 1fr) minmax(118px, 1fr) minmax(148px, 1.3fr);
+    padding: 0.7rem clamp(12px, 4vw, 18px);
+  }
 }
 html.demo2 .d2-cert-badges {
   list-style: none; margin: 1.4rem 0 0; padding: 0;
@@ -1276,15 +1283,17 @@ html.demo2 .pj-station[data-station="certs"] .d2-cert-logos img { height: clamp(
 
 /* Mobile fallback: canvas hidden → hero + stations stack as calm sections */
 @media (max-width: 767px) {
-  html.demo2 .pipe-journey { height: auto; overflow: visible; background: #070C1F; --pipe-fg: #fff; --pipe-fg-muted: #AEBDCD; }
+  html.demo2 .pipe-journey { height: auto; overflow: visible; background: #070C1F; --pipe-fg: #fff; --pipe-fg-muted: var(--accent, #DBB85C); }
   html.demo2 .pipe-journey__canvas { display: none; }
   /* Hero becomes a real in-flow hero (the .demo2-motion opacity:0 gate is for
      the desktop WebGL fade; WebGL never runs on mobile, so force visible +
-     static so it heads the page instead of overlapping the first station). */
+     static so it heads the page instead of overlapping the first station).
+     width:100% + margin-inline:auto resets the desktop calc(100% - 40px) which
+     left a right-side gap and skewed the centered content left. */
   html.demo2 .pipe-journey__hero {
     position: static; left: auto; transform: none;
     opacity: 1 !important;
-    max-width: 640px;
+    width: 100%; max-width: 640px; margin-inline: auto;
     padding: calc(var(--header-h, 64px) + clamp(24px, 6vw, 56px)) clamp(20px, 5vw, 48px) clamp(40px, 8vw, 64px);
   }
   html.demo2 .pipe-journey__stations { position: static; display: block; }
@@ -1292,6 +1301,26 @@ html.demo2 .pj-station[data-station="certs"] .d2-cert-logos img { height: clamp(
     position: static; opacity: 1 !important; pointer-events: auto;
     min-height: auto; padding: clamp(64px, 12vw, 120px) clamp(20px, 5vw, 48px);
   }
+  /* Push the hamburger to the right edge (desktop's small margin-left hugs the
+     brand). */
+  html.demo2 body.d2-home .header-actions { margin-left: auto; }
+  /* Why-GRP cards: the scoped min-height clamp(340,40vh,400) (set for the desktop
+     overlay) otherwise beats the touch min-height:0 and locks cards to ~340px,
+     so overflow:hidden clips the description. Let cards size to their content.
+     Also switch .d2-mat off flex:1 1 0 — that value distributes ROW width; once
+     .d2-mats goes column on phones it collapses card height (flex-basis:0 +
+     grow with no free space). flex:0 0 auto makes each card stack at its own
+     content height. */
+  html.demo2 .d2-mat { flex: 0 0 auto; }
+  html.demo2 .pj-station[data-station="why-grp"] .d2-mat { min-height: 0; }
+  /* The mat stat labels (WEIGHT / LIFE …) are a hardcoded slate-blue; go gold. */
+  html.demo2 .d2-mat__stats dt { color: var(--accent, #DBB85C); }
+  /* Enquire: bring the form closer to the heading/body, and warm the muted
+     blue-grey body text to the brand gold so nothing reads "blue on navy". */
+  html.demo2 .d2-enquire { gap: 1rem; }
+  html.demo2 body.d2-home #enquire .d2-chapter p,
+  html.demo2 body.d2-home #enquire .d2-anatomy-list,
+  html.demo2 body.d2-home #enquire .d2-anatomy-list .l3 strong { color: var(--accent, #DBB85C); }
   /* Use the full-screen drawer, not the desktop horizontal flyout (7 nowrap
      links overflow a phone). The drawer markup + script.js handler already
      exist; demo2-motion.js lets the click through on mobile. Lift the drawer
